@@ -1,0 +1,14 @@
+# Godot generated files
+.godot/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Optional exported builds
+build/
+builds/
+export/
+exports/
