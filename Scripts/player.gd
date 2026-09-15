@@ -11,6 +11,8 @@ var target_cell := Vector2i.ZERO
 var move_pts: PackedVector2Array = PackedVector2Array()
 var cur_pt := 0
 
+@onready var step_decrement: Label = $StepDecrement
+
 var moving := false:
 	set(value):
 		moving = value
@@ -20,7 +22,7 @@ var moving := false:
 
 func _ready():
 	moving = false
-
+	step_decrement.visible = false
 
 func setup(_grid: AStarGrid2D):
 	grid = _grid
@@ -58,8 +60,10 @@ func update_path_preview():
 
 	var mouse_pos := get_global_mouse_position()
 	var target := pos_to_cell(mouse_pos)
-
-	# Don't recalculate if we're still hovering
+	
+	step_decrement.global_position = Vector2((mouse_pos.x - 95), (mouse_pos.y - 45))
+	
+	# Don't recalculate if we're still hoveringx
 	# over the same cell.
 	if target == target_cell:
 		return
@@ -95,13 +99,21 @@ func update_path_preview():
 		)
 
 	$PathPreviz.points = move_pts
+	update_step_number_preview(move_pts.size())
 
+func update_step_number_preview (steps: int) -> void:
+	steps -= 1
+	if steps > 0:
+		step_decrement.visible = true
+		step_decrement.text = "-" + str(steps) + " STEPS"
+	else:
+		step_decrement.visible = false
 
 func start_move():
 
 	if move_pts.is_empty():
 		return
-
+	step_decrement.visible = false
 	# A path generally begins with the cell we're
 	# already standing in.
 	cur_pt = 0
@@ -159,5 +171,6 @@ func finish_move():
 
 	move_pts.clear()
 	$PathPreviz.clear_points()
-
+	
+	step_decrement.visible = true
 	moving = false

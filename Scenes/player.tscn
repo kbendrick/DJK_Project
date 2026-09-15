@@ -23,3 +23,12 @@ texture = ExtResource("2_cvnsp")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1255806961]
 visible = false
 shape = SubResource("RectangleShape2D_7dj0j")
+
+[node name="StepDecrement" type="Label" parent="." unique_id=902485772]
+z_index = 2
+offset_left = -20.0
+offset_top = -23.75
+offset_right = 20.0
+offset_bottom = -9.75
+theme_override_font_sizes/font_size = 10
+text = "TEST"

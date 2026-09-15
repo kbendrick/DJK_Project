@@ -283,7 +283,7 @@ tile_set = SubResource("TileSet_wxlpg")
 
 [node name="Player" parent="." unique_id=248361860 instance=ExtResource("2_fj7yv")]
 unique_name_in_owner = true
-position = Vector2(609, 481)
+position = Vector2(544, 352)
 scale = Vector2(3, 3)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1019217993]
@@ -311,5 +311,9 @@ layout_mode = 2
 [node name="ShowGrid" type="CheckBox" parent="HUD/GridDisplay/MarginContainer/PanelContainer" unique_id=203855576]
 layout_mode = 2
 text = "Show Grid"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=533665414]
+position = Vector2(542, 579)
+zoom = Vector2(2.3, 2.3)
 
 [connection signal="toggled" from="HUD/GridDisplay/MarginContainer/PanelContainer/ShowGrid" to="HUD/GridDisplay" method="toggle_grid_display"]
