@@ -1,6 +1,25 @@
 [gd_scene format=3 uid="uid://bjig1gafjwbcw"]
 
 [ext_resource type="Script" uid="uid://cb27snmcqhsb4" path="res://node_2d.gd" id="1_f3sb7"]
+[ext_resource type="PackedScene" uid="uid://c2ompdjhg2sef" path="res://player.tscn" id="2_fj7yv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7dj0j"]
+size = Vector2(213, 36)
 
 [node name="Node2D" type="Node2D" unique_id=325211523]
 script = ExtResource("1_f3sb7")
+
+[node name="Player" parent="." unique_id=248361860 instance=ExtResource("2_fj7yv")]
+collision_layer = 2
+collision_mask = 2
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1737170936]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2105559775]
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D" unique_id=1409267210]
+polygon = PackedVector2Array(-118, 4, 82, 5, 84, 40, -120, 38)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1956178669]
+position = Vector2(-14.5, 21)
+shape = SubResource("RectangleShape2D_7dj0j")
