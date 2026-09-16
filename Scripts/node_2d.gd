@@ -30,7 +30,7 @@ func set_shelves(marker_count):
 	var shelf_states = []
 
 	# For loops to append a shelf state for every marker in a room with rand_weighted
-	for marker in marker_count:
+	for marker in range(marker_count):
 		shelf_states.append(possible_states[rng.rand_weighted(state_weights)])
 
 	return shelf_states
