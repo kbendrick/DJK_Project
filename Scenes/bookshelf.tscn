@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dtis2o3rk78xa"]
+
+[ext_resource type="Script" uid="uid://70ahirmmeei1" path="res://Scenes/bookshelf.gd" id="1_tgqcj"]
+[ext_resource type="Texture2D" uid="uid://c2slme5udoag2" path="res://icon.svg" id="1_y1qin"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tgqcj"]
+size = Vector2(128, 128)
+
+[node name="Bookshelf" type="Area2D" unique_id=761871019]
+script = ExtResource("1_tgqcj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1069851148]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_y1qin")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=835802618]
+scale = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_tgqcj")
+
+[node name="StateLabel" type="Label" parent="." unique_id=771052152]
+offset_left = -20.0
+offset_top = -55.0
+offset_right = 20.0
+offset_bottom = -32.0
+text = "Test"
+horizontal_alignment = 1
+vertical_alignment = 1

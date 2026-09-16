@@ -12,6 +12,9 @@ var move_pts: PackedVector2Array = PackedVector2Array()
 var cur_pt := 0
 
 @onready var step_decrement: Label = $StepDecrement
+var step_decrement_storage: int = 0
+
+@export var steps: int = 50
 
 var moving := false:
 	set(value):
@@ -101,19 +104,23 @@ func update_path_preview():
 	$PathPreviz.points = move_pts
 	update_step_number_preview(move_pts.size())
 
-func update_step_number_preview (steps: int) -> void:
-	steps -= 1
+func update_step_number_preview (number_of_steps: int) -> void:
+	number_of_steps -= 1
 	if steps > 0:
 		step_decrement.visible = true
-		step_decrement.text = "-" + str(steps) + " STEPS"
+		step_decrement.text = "-" + str(number_of_steps) + " STEPS"
+		step_decrement_storage = number_of_steps
 	else:
 		step_decrement.visible = false
+		step_decrement_storage = 0
 
 func start_move():
 
 	if move_pts.is_empty():
 		return
 	step_decrement.visible = false
+	set_stat("steps", (get_stat("steps") - step_decrement_storage))
+	print("Current Number of Step: ", get_stat("steps"))
 	# A path generally begins with the cell we're
 	# already standing in.
 	cur_pt = 0
@@ -174,3 +181,13 @@ func finish_move():
 	
 	step_decrement.visible = true
 	moving = false
+
+func get_stat (stat: String) -> int:
+	if stat == "steps":
+		return steps
+	return 0
+	
+func set_stat(stat: String, stat_update: int) -> void:
+	if stat == "steps":
+		steps = stat_update
+	
