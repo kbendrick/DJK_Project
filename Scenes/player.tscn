@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cuc2uy66kwog4" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="Texture2D" uid="uid://dgqsudvuvpmeg" path="res://Assets/kenney_scribble-dungeons/PNG/Default (64px)/Characters/purple_character.png" id="2_cvnsp"]
+[ext_resource type="PackedScene" uid="uid://bo11tcx1ju0mg" path="res://blocked_cell_marker.tscn" id="2_fkybt"]
 [ext_resource type="PackedScene" uid="uid://5l73u2j2xj7p" path="res://Scenes/mouse.tscn" id="3_6t5aa"]
 [ext_resource type="Script" uid="uid://ckn8b4p6cmqwf" path="res://Scenes/inventory.gd" id="4_vgqql"]
 
@@ -11,6 +12,7 @@ size = Vector2(22, 22)
 [node name="Player" type="CharacterBody2D" unique_id=248361860 groups=["Player"]]
 scale = Vector2(0.8, 0.8)
 script = ExtResource("1_v0iea")
+blocked_cell_marker_scene = ExtResource("2_fkybt")
 
 [node name="PathPreviz" type="Line2D" parent="." unique_id=1297381758]
 top_level = true

@@ -25,6 +25,18 @@ var adjacent_to_target_cell: bool = false
 
 @onready var inventory: Node2D = $Inventory
 
+# How many previously visited cells remain blocked.
+@export_range(0, 100, 1) var blocked_trail_length: int = 10
+
+# The scene containing the X graphic.
+@export var blocked_cell_marker_scene: PackedScene
+
+# Ordered from oldest blocked cell -> newest blocked cell.
+var blocked_cells: Array[Vector2i] = []
+
+# Lets us find/remove the X corresponding to a particular cell.
+var blocked_cell_markers: Dictionary = {}
+
 var moving := false:
 	set(value):
 		moving = value
@@ -55,6 +67,8 @@ func pos_to_cell(pos: Vector2) -> Vector2i:
 		floori(pos.y / grid.cell_size.y)
 	)
 
+func cell_to_pos(cell: Vector2i) -> Vector2:
+	return grid.get_point_position(cell) + grid.cell_size / 2.0
 
 func _input(event: InputEvent):
 
@@ -159,6 +173,69 @@ func start_move():
 
 	moving = true
 
+func add_blocked_cell(cell: Vector2i) -> void:
+	if blocked_trail_length <= 0:
+		return
+
+	# Safety check. We shouldn't normally get duplicates because
+	# blocked cells can't be walked onto.
+	if blocked_cells.has(cell):
+		return
+
+	# Add this cell to our history.
+	blocked_cells.append(cell)
+
+	# Make it unavailable to AStar.
+	grid.set_point_solid(cell, true)
+
+	# Create the visual X.
+	create_blocked_cell_marker(cell)
+
+	# If we've exceeded our maximum trail length,
+	# release the oldest cells.
+	trim_blocked_trail()
+
+
+func trim_blocked_trail() -> void:
+	while blocked_cells.size() > blocked_trail_length:
+		var oldest_cell: Vector2i = blocked_cells.pop_front()
+
+		# Make the old cell walkable again.
+		grid.set_point_solid(oldest_cell, false)
+
+		# Remove its X.
+		remove_blocked_cell_marker(oldest_cell)
+
+
+func create_blocked_cell_marker(cell: Vector2i) -> void:
+	if blocked_cell_marker_scene == null:
+		return
+
+	var marker := blocked_cell_marker_scene.instantiate() as Node2D
+
+	# Add it to the player's parent, NOT the player.
+	# Otherwise the X would move along with the player.
+	get_parent().add_child(marker)
+
+	marker.global_position = cell_to_pos(cell)
+
+	blocked_cell_markers[cell] = marker
+
+
+func remove_blocked_cell_marker(cell: Vector2i) -> void:
+	if not blocked_cell_markers.has(cell):
+		return
+
+	var marker: Node = blocked_cell_markers[cell]
+
+	if is_instance_valid(marker):
+		marker.queue_free()
+
+	blocked_cell_markers.erase(cell)
+
+func set_blocked_trail_length(new_length: int) -> void:
+	blocked_trail_length = max(new_length, 0)
+	trim_blocked_trail()
 
 func update_mouse_hover():
 	mousehover = mouse_node.mouse_hovering
@@ -167,7 +244,7 @@ func _process(_delta:float) -> void:
 	update_mouse_hover()
 
 func _physics_process(delta: float):
-	
+
 	if move_pts.is_empty():
 		finish_move()
 		return
@@ -181,13 +258,28 @@ func _physics_process(delta: float):
 
 	var distance_to_point := global_position.distance_to(next_point)
 
-	# SPEED * delta prevents us from overshooting
-	# the waypoint during this frame.
 	if distance_to_point <= max(
 		WAYPOINT_TOLERANCE,
 		SPEED * delta
 	):
+		# Remember the tile we're leaving.
+		var previous_cell := current_cell
+
+		# Move onto the next tile.
 		global_position = next_point
+
+		var new_cell := pos_to_cell(global_position)
+
+		# We actually entered a different grid cell.
+		if new_cell != previous_cell:
+
+			# The tile behind us becomes blocked.
+			add_blocked_cell(previous_cell)
+
+			# IMPORTANT:
+			# current_cell now updates EVERY STEP rather
+			# than only at the end of the complete path.
+			current_cell = new_cell
 
 		cur_pt += 1
 
@@ -196,8 +288,6 @@ func _physics_process(delta: float):
 
 		return
 
-	# Always steer from our REAL position toward
-	# the next path point.
 	var dir := global_position.direction_to(next_point)
 
 	velocity = dir * SPEED
@@ -212,11 +302,12 @@ func finish_move():
 	if not move_pts.is_empty():
 		global_position = move_pts[-1]
 
-	current_cell = target_cell
+	current_cell = pos_to_cell(global_position)
+	target_cell = current_cell
 
 	move_pts.clear()
 	$PathPreviz.clear_points()
-	
+
 	step_decrement.visible = true
 	moving = false
 

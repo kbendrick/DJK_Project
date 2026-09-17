@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bo11tcx1ju0mg"]
+
+[ext_resource type="Texture2D" uid="uid://dskmxks2l67x" path="res://stylesheet_red copy.png" id="1_6rwgp"]
+
+[node name="BlockedCellMarker" type="Sprite2D" unique_id=2084631389]
+texture = ExtResource("1_6rwgp")
