@@ -43,6 +43,6 @@ func set_state(state: String) -> void:
 
 func interact(player: CharacterBody2D) -> void:
 	if current_state != "used":
-		player.set_stat("steps", player.get_stat("steps") + step_modifier)
+		player.update_stat("steps", step_modifier)
 		current_state = "used"
 		bookshelf_sprite.self_modulate = Color.DARK_RED

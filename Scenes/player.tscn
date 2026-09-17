@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cuc2uy66kwog4" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="Texture2D" uid="uid://dgqsudvuvpmeg" path="res://Assets/kenney_scribble-dungeons/PNG/Default (64px)/Characters/purple_character.png" id="2_cvnsp"]
 [ext_resource type="PackedScene" uid="uid://5l73u2j2xj7p" path="res://Scenes/mouse.tscn" id="3_6t5aa"]
+[ext_resource type="Script" uid="uid://ckn8b4p6cmqwf" path="res://Scenes/inventory.gd" id="4_vgqql"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dj0j"]
 size = Vector2(22, 22)
@@ -35,5 +36,8 @@ theme_override_font_sizes/font_size = 10
 text = "TEST"
 
 [node name="Mouse" parent="." unique_id=1417884587 instance=ExtResource("3_6t5aa")]
+
+[node name="Inventory" type="Node2D" parent="." unique_id=423759715]
+script = ExtResource("4_vgqql")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]

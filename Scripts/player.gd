@@ -13,11 +13,17 @@ var cur_pt := 0
 
 @onready var step_decrement: Label = $StepDecrement
 var step_decrement_storage: int = 0
-@export var steps: int = 50
+
+@export var starting_steps: int = 50
+@export var starting_sanity: int = 10
+@export var starting_insight: int = 3
+@export var starting_keys: int = 0
 
 @onready var mouse_node: Node2D = $Mouse
 var mousehover: Area2D = null
 var adjacent_to_target_cell: bool = false
+
+@onready var inventory: Node2D = $Inventory
 
 var moving := false:
 	set(value):
@@ -36,6 +42,11 @@ func setup(_grid: AStarGrid2D):
 
 	current_cell = pos_to_cell(global_position)
 	target_cell = current_cell
+	
+	inventory.update_resource("steps", starting_steps)
+	inventory.update_resource("sanity", starting_sanity)
+	inventory.update_resource("insight", starting_insight)
+	inventory.update_resource("keys", starting_keys)
 
 
 func pos_to_cell(pos: Vector2) -> Vector2i:
@@ -140,7 +151,7 @@ func start_move():
 	if move_pts.is_empty():
 		return
 	step_decrement.visible = false
-	set_stat("steps", (get_stat("steps") - step_decrement_storage))
+	update_stat("steps", -step_decrement_storage)
 	print("Current Number of Steps: ", get_stat("steps"))
 	# A path generally begins with the cell we're
 	# already standing in.
@@ -210,11 +221,7 @@ func finish_move():
 	moving = false
 
 func get_stat (stat: String) -> int:
-	if stat == "steps":
-		return steps
-	return 0
+	return inventory.get_resource(stat)
 	
-func set_stat(stat: String, stat_update: int) -> void:
-	if stat == "steps":
-		steps = stat_update
-	
+func update_stat(stat: String, stat_update: int) -> void:
+		inventory.update_resource(stat, stat_update)

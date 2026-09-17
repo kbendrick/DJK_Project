@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://bl3ubikml7jab"]
+
+[ext_resource type="Script" uid="uid://okpds2ta2cy8" path="res://Scenes/resource_display.gd" id="1_3mdst"]
+[ext_resource type="Script" uid="uid://dbdsbiqit3gi" path="res://Scenes/resource_item_dispaly.gd" id="1_ebyp1"]
+[ext_resource type="Texture2D" uid="uid://r10apvj0vioq" path="res://#1 - Transparent Icons copy.png" id="3_p2skx"]
+[ext_resource type="Texture2D" uid="uid://gg6fxxehd5cs" path="res://#1 - Transparent Icons copy 4.png" id="4_ixb3f"]
+[ext_resource type="Texture2D" uid="uid://7fke8tamuggw" path="res://#1 - Transparent Icons copy 3.png" id="5_nme5t"]
+[ext_resource type="Texture2D" uid="uid://dgnu88naxk4ql" path="res://#1 - Transparent Icons copy 2.png" id="6_k61u0"]
+
+[node name="ResourceDisplay" type="GridContainer" unique_id=1854313418]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 7
+script = ExtResource("1_3mdst")
+
+[node name="steps" type="HBoxContainer" parent="." unique_id=1864149432]
+layout_mode = 2
+script = ExtResource("1_ebyp1")
+
+[node name="TextureRect" type="TextureRect" parent="steps" unique_id=2065086621]
+layout_mode = 2
+texture = ExtResource("3_p2skx")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="steps" unique_id=2138943525]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "0"
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1830718095]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="sanity" type="HBoxContainer" parent="." unique_id=913402751]
+layout_mode = 2
+script = ExtResource("1_ebyp1")
+
+[node name="TextureRect" type="TextureRect" parent="sanity" unique_id=584090529]
+layout_mode = 2
+texture = ExtResource("4_ixb3f")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="sanity" unique_id=933479427]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "0"
+
+[node name="MarginContainer2" type="MarginContainer" parent="." unique_id=1883502707]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="insight" type="HBoxContainer" parent="." unique_id=216423532]
+layout_mode = 2
+script = ExtResource("1_ebyp1")
+
+[node name="TextureRect" type="TextureRect" parent="insight" unique_id=848219586]
+layout_mode = 2
+texture = ExtResource("5_nme5t")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="insight" unique_id=1004628483]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "0"
+
+[node name="MarginContainer3" type="MarginContainer" parent="." unique_id=827958836]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="keys" type="HBoxContainer" parent="." unique_id=1586665089]
+layout_mode = 2
+script = ExtResource("1_ebyp1")
+
+[node name="TextureRect" type="TextureRect" parent="keys" unique_id=1850741750]
+layout_mode = 2
+texture = ExtResource("6_k61u0")
+expand_mode = 3
+
+[node name="Label" type="Label" parent="keys" unique_id=1794119044]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "0"

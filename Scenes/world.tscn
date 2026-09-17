@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://c7lyov4b2v7nb" path="res://Scenes/grid_display.gd" id="4_8j60k"]
 [ext_resource type="PackedScene" uid="uid://dmt6dts73gxu5" path="res://Scenes/bookshelves_setup.tscn" id="5_fo5ed"]
 [ext_resource type="PackedScene" uid="uid://dtis2o3rk78xa" path="res://Scenes/bookshelf.tscn" id="6_5ukr8"]
+[ext_resource type="PackedScene" uid="uid://bl3ubikml7jab" path="res://Scenes/resource_display.tscn" id="7_o06y3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8j60k"]
 texture = ExtResource("2_8j60k")
@@ -341,17 +342,11 @@ position = Vector2(542, 579)
 zoom = Vector2(2.3, 2.3)
 
 [node name="HUD" type="Control" parent="." unique_id=1388086199]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="Panel" type="Panel" parent="HUD" unique_id=1196209643]
-layout_mode = 0
-offset_left = 194.0
-offset_top = 236.0
-offset_right = 317.0
-offset_bottom = 276.0
 
 [node name="StepLabel" type="Label" parent="HUD" unique_id=896278185]
 layout_mode = 0
@@ -390,5 +385,23 @@ position = Vector2(224, 415)
 
 [node name="ShelfMarker8" type="Marker2D" parent="RoomSetup/ShelvesLayout" unique_id=731602610]
 position = Vector2(352, 288)
+
+[node name="Panel" type="Panel" parent="." unique_id=1196209643]
+offset_left = 112.0
+offset_top = 234.0
+offset_right = 340.0
+offset_bottom = 274.0
+
+[node name="ResourceDisplay" parent="." unique_id=1854313418 instance=ExtResource("7_o06y3")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 113.0
+offset_top = 236.0
+offset_right = 859.0
+offset_bottom = 346.0
+grow_horizontal = 1
+grow_vertical = 1
+scale = Vector2(0.3, 0.3)
 
 [connection signal="toggled" from="Grid Debug/GridDisplay/MarginContainer/PanelContainer/ShowGrid" to="Grid Debug/GridDisplay" method="toggle_grid_display"]
