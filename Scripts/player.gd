@@ -13,8 +13,11 @@ var cur_pt := 0
 
 @onready var step_decrement: Label = $StepDecrement
 var step_decrement_storage: int = 0
-
 @export var steps: int = 50
+
+@onready var mouse_node: Node2D = $Mouse
+var mousehover: Area2D = null
+var adjacent_to_target_cell: bool = false
 
 var moving := false:
 	set(value):
@@ -26,6 +29,7 @@ var moving := false:
 func _ready():
 	moving = false
 	step_decrement.visible = false
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func setup(_grid: AStarGrid2D):
 	grid = _grid
@@ -55,16 +59,23 @@ func _input(event: InputEvent):
 		update_path_preview()
 
 	elif event is InputEventMouseButton:
-		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT and mousehover == null:
 			start_move()
-
+		elif event.pressed and mousehover != null:
+				if adjacent_to_target_cell:
+					mousehover.interact(self)
 
 func update_path_preview():
 
 	var mouse_pos := get_global_mouse_position()
 	var target := pos_to_cell(mouse_pos)
+	var player_pos := self.global_position
+	var player_current_tile := pos_to_cell(player_pos)
 	
 	step_decrement.global_position = Vector2((mouse_pos.x - 95), (mouse_pos.y - 45))
+	
+	update_step_number_preview(move_pts.size())
+	adjacent_to_target_cell = is_adjacent(target, player_current_tile)
 	
 	# Don't recalculate if we're still hovering
 	# over the same cell.
@@ -102,11 +113,21 @@ func update_path_preview():
 		)
 
 	$PathPreviz.points = move_pts
-	update_step_number_preview(move_pts.size())
 
+func is_adjacent(target: Vector2i, player: Vector2i) -> bool:
+	var x_diff = abs(player.x-target.x)
+	var y_diff = abs(player.y-target.y)
+	
+	if (x_diff + y_diff) == 1:
+		return true
+	if (x_diff + y_diff) == 2:
+		return true
+	return false
+	
 func update_step_number_preview (number_of_steps: int) -> void:
 	number_of_steps -= 1
-	if steps > 0:
+	
+	if number_of_steps > 0:
 		step_decrement.visible = true
 		step_decrement.text = "-" + str(number_of_steps) + " STEPS"
 		step_decrement_storage = number_of_steps
@@ -128,8 +149,14 @@ func start_move():
 	moving = true
 
 
-func _physics_process(delta: float):
+func update_mouse_hover():
+	mousehover = mouse_node.mouse_hovering
 
+func _process(_delta:float) -> void:
+	update_mouse_hover()
+
+func _physics_process(delta: float):
+	
 	if move_pts.is_empty():
 		finish_move()
 		return

@@ -5,6 +5,7 @@ extends Area2D
 @onready var state_label: Label = $StateLabel
 
 var step_modifier: int = 0
+var current_state: String
 
 func _ready() -> void:
 	# Allow bookshelf to recognize when mouse enters/exits
@@ -13,17 +14,18 @@ func _ready() -> void:
 
 func on_mouse_entered() -> void:
 	# Highlight bookshelf chartreuse when mouse hovers
-	bookshelf_sprite.self_modulate = Color.CHARTREUSE
-	pass
+	if current_state != "used":
+		bookshelf_sprite.self_modulate = Color.CHARTREUSE
 
 func on_mouse_exited() -> void:
 	# Unhighlight upon exit
-	bookshelf_sprite.self_modulate = Color.WHITE
+	if current_state != "used":
+		bookshelf_sprite.self_modulate = Color.WHITE
 	pass
 
 func set_state(state: String) -> void:
 	state_label.text = state
-	
+	current_state = state
 	# Change step_modifier based on bookshelf state
 	match state:
 		"very bad":
@@ -36,7 +38,11 @@ func set_state(state: String) -> void:
 			step_modifier = 5
 		"very good":
 			step_modifier = 10
+		"used":
+			step_modifier = 0
 
-func get_state() -> int:
-	# Send step_modifier to player
-	return step_modifier
+func interact(player: CharacterBody2D) -> void:
+	if current_state != "used":
+		player.set_stat("steps", player.get_stat("steps") + step_modifier)
+		current_state = "used"
+		bookshelf_sprite.self_modulate = Color.DARK_RED

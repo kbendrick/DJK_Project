@@ -7,6 +7,8 @@
 size = Vector2(128, 128)
 
 [node name="Bookshelf" type="Area2D" unique_id=761871019 groups=["Bookshelves"]]
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("1_tgqcj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1069851148]

@@ -1,18 +1,24 @@
 [gd_scene format=3 uid="uid://5l73u2j2xj7p"]
 
 [ext_resource type="Script" uid="uid://c4x61ltt621b" path="res://Scenes/mouse.gd" id="1_3ber4"]
-[ext_resource type="Texture2D" uid="uid://c2slme5udoag2" path="res://icon.svg" id="1_dev0r"]
+[ext_resource type="Texture2D" uid="uid://1m3pa2gb5hel" path="res://Assets/4_purple.png" id="2_3ber4"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_fy57j"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_6t5aa"]
+radius = 1.0
 
-[node name="Mouse" type="Area2D" unique_id=1417884587 groups=["Mouse"]]
+[node name="Mouse" type="Node2D" unique_id=598087777 groups=["Mouse"]]
 script = ExtResource("1_3ber4")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1340422274]
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("1_dev0r")
-region_enabled = true
+z_index = 1
+position = Vector2(1, 2)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_3ber4")
 region_rect = Rect2(19.5, 20.75, 92, 89)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1756378123]
-shape = SubResource("RectangleShape2D_fy57j")
+[node name="MouseArea" type="Area2D" parent="." unique_id=1949404292]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseArea" unique_id=1756378123]
+shape = SubResource("CircleShape2D_6t5aa")
