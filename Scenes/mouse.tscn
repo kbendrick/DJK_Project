@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://5l73u2j2xj7p"]
+
+[ext_resource type="Script" uid="uid://c4x61ltt621b" path="res://Scenes/mouse.gd" id="1_3ber4"]
+[ext_resource type="Texture2D" uid="uid://c2slme5udoag2" path="res://icon.svg" id="1_dev0r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fy57j"]
+
+[node name="Mouse" type="Area2D" unique_id=1417884587 groups=["Mouse"]]
+script = ExtResource("1_3ber4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1340422274]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_dev0r")
+region_enabled = true
+region_rect = Rect2(19.5, 20.75, 92, 89)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1756378123]
+shape = SubResource("RectangleShape2D_fy57j")

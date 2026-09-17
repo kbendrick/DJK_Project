@@ -18,7 +18,7 @@ func setup ():
 		return
 	
 	#check how many markers there are and then
-	#create a shelf at each marker
+	#create a shelf at each marker by creating 
 	for marker in shelves_layout.get_children():
 		var shelf: Area2D = (bookshelf.instantiate())
 		add_child(shelf)

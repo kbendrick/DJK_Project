@@ -66,7 +66,7 @@ func update_path_preview():
 	
 	step_decrement.global_position = Vector2((mouse_pos.x - 95), (mouse_pos.y - 45))
 	
-	# Don't recalculate if we're still hoveringx
+	# Don't recalculate if we're still hovering
 	# over the same cell.
 	if target == target_cell:
 		return
@@ -120,7 +120,7 @@ func start_move():
 		return
 	step_decrement.visible = false
 	set_stat("steps", (get_stat("steps") - step_decrement_storage))
-	print("Current Number of Step: ", get_stat("steps"))
+	print("Current Number of Steps: ", get_stat("steps"))
 	# A path generally begins with the cell we're
 	# already standing in.
 	cur_pt = 0

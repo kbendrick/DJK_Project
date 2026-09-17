@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var step_label: Label = $HUD/StepLabel
 @onready var player: CharacterBody2D = %Player
-@onready var bookshelves_setup: Node2D = $BookshelvesSetup
+@onready var room_setup: Node2D = $RoomSetup
 @export var map: TileMapLayer
 var astar_grid: AStarGrid2D
 
@@ -23,7 +23,7 @@ func _ready():
 	%GridDisplay.grid = astar_grid
 	%Player.setup(astar_grid)
 	
-	bookshelves_setup.setup()
+	room_setup.setup()
 
 func _physics_process(_delta: float) -> void:
 	step_label.text = "Steps: " + str(player.get_stat("steps"))

@@ -23,3 +23,9 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=2000
 window/size/viewport_height=2000
+
+[global_group]
+
+Player="Player character"
+Bookshelves="Interactable bookshelves"
+Mouse="Mouse"
