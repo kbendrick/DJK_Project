@@ -13,6 +13,6 @@ func update_resource(type: String, amount: int):
 		if(resources.has(type)):
 			resources[type] = resources[type] + amount
 			emit_signal("resource_count_changed", type, resources[type])
-			print(type + str(amount))
+			print(type +": " + str(amount))
 func get_resource(type: String) -> int:
 	return resources[type]

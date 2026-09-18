@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://v0phl502htb0"]
 
-[ext_resource type="Script" uid="uid://dbdsbiqit3gi" path="res://Resources/resource_item_dispaly.gd" id="1_sp0yu"]
+[ext_resource type="Script" uid="uid://dbdsbiqit3gi" path="res://Resources/resource_item_display.gd" id="1_sp0yu"]
 [ext_resource type="Texture2D" uid="uid://c2slme5udoag2" path="res://icon.svg" id="2_ndmwj"]
 
 [node name="ResourceItemDispaly" type="HBoxContainer" unique_id=1764967918]
