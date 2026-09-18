@@ -24,7 +24,9 @@ func setup ():
 		add_child(shelf)
 		shelves.append(shelf)
 		
-		shelf.global_position = marker.global_position 
+		shelf.global_position = marker.global_position
+		shelf.rotate(marker.rotation)
+		shelf.check_rotate() 
 	
 	#get the state of the shelves
 	var shelf_states: Array = set_shelves(shelves.size())

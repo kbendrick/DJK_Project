@@ -11,6 +11,8 @@ func _ready() -> void:
 	# Allow bookshelf to recognize when mouse enters/exits
 	click_area.mouse_entered.connect(on_mouse_entered)
 	click_area.mouse_exited.connect(on_mouse_exited)
+	state_label.pivot_offset = state_label.size / 2
+	state_label.visible = false
 
 func on_mouse_entered() -> void:
 	# Highlight bookshelf chartreuse when mouse hovers
@@ -46,3 +48,10 @@ func interact(player: CharacterBody2D) -> void:
 		player.update_stat("steps", step_modifier)
 		current_state = "used"
 		bookshelf_sprite.self_modulate = Color.DARK_RED
+
+func reveal_state()->void:
+	state_label.visible = true
+
+func check_rotate () -> void:
+	if self.rotation != 0:
+		state_label.rotation = 0 - self.rotation

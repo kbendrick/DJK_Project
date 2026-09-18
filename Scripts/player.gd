@@ -86,10 +86,12 @@ func _input(event: InputEvent):
 	elif event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT and mousehover == null:
 			start_move()
-		elif event.pressed and mousehover != null:
+		elif event.pressed and event.button_index == MOUSE_BUTTON_LEFT and mousehover != null:
 				if adjacent_to_target_cell:
 					mousehover.interact(self)
-
+		elif event.pressed and event.button_index == MOUSE_BUTTON_RIGHT and mousehover != null and inventory.get_resource("insight") > 0:
+			mousehover.reveal_state()
+			inventory.update_resource("insight", -1)
 func update_path_preview():
 
 	var mouse_pos := get_global_mouse_position()
