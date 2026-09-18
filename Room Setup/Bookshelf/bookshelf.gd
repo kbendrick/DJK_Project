@@ -3,6 +3,7 @@ extends Area2D
 @onready var click_area: Area2D = $ClickArea
 @onready var bookshelf_sprite: Sprite2D = $Sprite2D
 @onready var state_label: Label = $StateLabel
+@onready var room: Node2D = self.get_parent()
 
 var step_modifier: int = 0
 var current_state: String
@@ -48,6 +49,9 @@ func interact(player: CharacterBody2D) -> void:
 		player.update_stat("steps", step_modifier)
 		current_state = "used"
 		bookshelf_sprite.self_modulate = Color.DARK_RED
+		room.shelves_used += 1
+		for i in range(room.shelves_used):
+			room.generate_trap()
 
 func reveal_state()->void:
 	state_label.visible = true

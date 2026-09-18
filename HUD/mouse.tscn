@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://5l73u2j2xj7p"]
 
-[ext_resource type="Script" uid="uid://c4x61ltt621b" path="res://Scenes/mouse.gd" id="1_3ber4"]
+[ext_resource type="Script" uid="uid://c4x61ltt621b" path="res://HUD/mouse.gd" id="1_3ber4"]
 [ext_resource type="Texture2D" uid="uid://1m3pa2gb5hel" path="res://Assets/4_purple.png" id="2_3ber4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6t5aa"]

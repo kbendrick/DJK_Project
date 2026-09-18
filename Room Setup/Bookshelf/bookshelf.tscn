@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dtis2o3rk78xa"]
 
-[ext_resource type="Script" uid="uid://70ahirmmeei1" path="res://Scenes/bookshelf.gd" id="1_tgqcj"]
+[ext_resource type="Script" uid="uid://70ahirmmeei1" path="res://Room Setup/Bookshelf/bookshelf.gd" id="1_tgqcj"]
 [ext_resource type="Texture2D" uid="uid://bv3m6i88bclp5" path="res://bookshelf-with-pixel-art-style_475147-109.png" id="2_tgqcj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tgqcj"]

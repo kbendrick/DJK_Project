@@ -23,7 +23,7 @@ func _ready():
 	%GridDisplay.grid = astar_grid
 	%Player.setup(astar_grid)
 	
-	room_setup.setup()
+	room_setup.setup(astar_grid, player)
 
 func _physics_process(_delta: float) -> void:
 	step_label.text = "Steps: " + str(player.get_stat("steps"))

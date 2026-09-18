@@ -1,12 +1,13 @@
 [gd_scene format=4 uid="uid://bjig1gafjwbcw"]
 
-[ext_resource type="Script" uid="uid://cb27snmcqhsb4" path="res://Scripts/node_2d.gd" id="1_f3sb7"]
+[ext_resource type="Script" uid="uid://cb27snmcqhsb4" path="res://World/world.gd" id="1_f3sb7"]
 [ext_resource type="Texture2D" uid="uid://b45l540ffqse0" path="res://Assets/kenney_scribble-dungeons/Tilesheet/tilesheet.png" id="2_8j60k"]
-[ext_resource type="PackedScene" uid="uid://c2ompdjhg2sef" path="res://Scenes/player.tscn" id="2_fj7yv"]
+[ext_resource type="PackedScene" uid="uid://c2ompdjhg2sef" path="res://Player/player.tscn" id="2_fj7yv"]
 [ext_resource type="Script" uid="uid://c7lyov4b2v7nb" path="res://Scenes/grid_display.gd" id="4_8j60k"]
-[ext_resource type="PackedScene" uid="uid://dmt6dts73gxu5" path="res://Scenes/bookshelves_setup.tscn" id="5_fo5ed"]
-[ext_resource type="PackedScene" uid="uid://dtis2o3rk78xa" path="res://Scenes/bookshelf.tscn" id="6_5ukr8"]
-[ext_resource type="PackedScene" uid="uid://bl3ubikml7jab" path="res://Scenes/resource_display.tscn" id="7_o06y3"]
+[ext_resource type="PackedScene" uid="uid://dmt6dts73gxu5" path="res://Room Setup/room_setup.tscn" id="5_fo5ed"]
+[ext_resource type="PackedScene" uid="uid://dtis2o3rk78xa" path="res://Room Setup/Bookshelf/bookshelf.tscn" id="6_5ukr8"]
+[ext_resource type="PackedScene" uid="uid://bl3ubikml7jab" path="res://Resources/resource_display.tscn" id="7_o06y3"]
+[ext_resource type="PackedScene" uid="uid://b80rsjvlw6f3v" path="res://Room Setup/Trap/trap.tscn" id="8_k7acu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8j60k"]
 texture = ExtResource("2_8j60k")
@@ -359,6 +360,7 @@ text = "STEPS: 50"
 
 [node name="RoomSetup" parent="." unique_id=1502581714 instance=ExtResource("5_fo5ed")]
 bookshelf = ExtResource("6_5ukr8")
+trap = ExtResource("8_k7acu")
 
 [node name="ShelvesLayout" type="Node2D" parent="RoomSetup" unique_id=1558690438]
 
@@ -391,6 +393,8 @@ position = Vector2(224, 415)
 [node name="ShelfMarker8" type="Marker2D" parent="RoomSetup/ShelvesLayout" unique_id=731602610]
 position = Vector2(352, 288)
 rotation = 1.5707964
+
+[node name="TrapsLayout" type="Node2D" parent="RoomSetup" unique_id=1018384367]
 
 [node name="Panel" type="Panel" parent="." unique_id=1196209643]
 offset_left = 112.0

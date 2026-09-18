@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://b80rsjvlw6f3v"]
+
+[ext_resource type="Script" uid="uid://ugfc54g2p8wp" path="res://Room Setup/Trap/trap.gd" id="1_41mx7"]
+[ext_resource type="Texture2D" uid="uid://r10apvj0vioq" path="res://#1 - Transparent Icons copy.png" id="2_g0shh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fy57j"]
+
+[node name="Trap" type="Area2D" unique_id=1106692121]
+scale = Vector2(2, 2)
+collision_layer = 8
+script = ExtResource("1_41mx7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=340796578]
+shape = SubResource("RectangleShape2D_fy57j")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1017196133]
+self_modulate = Color(1, 0, 0, 1)
+texture = ExtResource("2_g0shh")

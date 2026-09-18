@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmt6dts73gxu5"]
 
-[ext_resource type="Script" uid="uid://cqhw0vdb38y5b" path="res://Scenes/bookshelves_setup.gd" id="1_qxvp5"]
+[ext_resource type="Script" uid="uid://cqhw0vdb38y5b" path="res://Room Setup/room_setup.gd" id="1_qxvp5"]
 
 [node name="BookshelvesSetup" type="Node2D" unique_id=1502581714]
 script = ExtResource("1_qxvp5")
