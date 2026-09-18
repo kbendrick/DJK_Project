@@ -13,3 +13,5 @@ func _on_player_inventory_resource_count_changed(type: String, new_count: int)->
 	resource_to_update.update_count(new_count)
 	if new_count == 0:
 		resource_to_update.modulate = Color(0.25, 0.25, 0.25)
+	else:
+		resource_to_update.modulate = Color(1, 1, 1)
