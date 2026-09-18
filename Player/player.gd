@@ -215,13 +215,14 @@ func trim_blocked_trail() -> void:
 		remove_blocked_cell_marker(oldest_cell)
 
 func remove_oldest_blocked_trail()->void:
-	var oldest_cell: Vector2i = blocked_cells.pop_front()
+	if blocked_cells.size() > 0:
+		var oldest_cell: Vector2i = blocked_cells.pop_front()
+	
+		# Make the old cell walkable again.
+		grid.set_point_solid(oldest_cell, false)
 
-	# Make the old cell walkable again.
-	grid.set_point_solid(oldest_cell, false)
-
-	# Remove its X.
-	remove_blocked_cell_marker(oldest_cell)
+		# Remove its X.
+		remove_blocked_cell_marker(oldest_cell)
 
 func create_blocked_cell_marker(cell: Vector2i) -> void:
 	if blocked_cell_marker_scene == null:
