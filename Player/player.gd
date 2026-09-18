@@ -82,7 +82,12 @@ func _input(event: InputEvent):
 
 	if event is InputEventMouseMotion:
 		update_path_preview()
-
+	
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_SPACE and inventory.get_resource("sanity")>0:
+				remove_oldest_blocked_trail()
+				inventory.update_resource("sanity", -1)
+	
 	elif event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT and mousehover == null:
 			start_move()
@@ -92,6 +97,7 @@ func _input(event: InputEvent):
 		elif event.pressed and event.button_index == MOUSE_BUTTON_RIGHT and mousehover != null and inventory.get_resource("insight") > 0:
 			mousehover.reveal_state()
 			inventory.update_resource("insight", -1)
+
 func update_path_preview():
 
 	var mouse_pos := get_global_mouse_position()
@@ -208,6 +214,14 @@ func trim_blocked_trail() -> void:
 		# Remove its X.
 		remove_blocked_cell_marker(oldest_cell)
 
+func remove_oldest_blocked_trail()->void:
+	var oldest_cell: Vector2i = blocked_cells.pop_front()
+
+	# Make the old cell walkable again.
+	grid.set_point_solid(oldest_cell, false)
+
+	# Remove its X.
+	remove_blocked_cell_marker(oldest_cell)
 
 func create_blocked_cell_marker(cell: Vector2i) -> void:
 	if blocked_cell_marker_scene == null:

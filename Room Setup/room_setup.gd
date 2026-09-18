@@ -50,8 +50,8 @@ func setup (grid: AStarGrid2D, player: CharacterBody2D):
 func set_shelves(marker_count: int) -> Array: 
 	
 	# Introduces five possible states of shelves with relative weights below, then initializes array for shelf states
-	var possible_states = ["very bad", "bad", "neutral", "good", "very good"]
-	var state_weights = PackedFloat32Array([0.25, 0.5, 1, 0.5, 0.25])
+	var possible_states = ["curse", "steps", "keys", "insight", "sanity"]
+	var state_weights = PackedFloat32Array([0.25, 1., 0.25, 0.5, 0.5])
 	var shelf_states = []
 
 	# For loops to append a shelf state for every marker in a room with rand_weighted

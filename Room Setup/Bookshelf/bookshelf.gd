@@ -2,10 +2,12 @@ extends Area2D
 
 @onready var click_area: Area2D = $ClickArea
 @onready var bookshelf_sprite: Sprite2D = $Sprite2D
-@onready var state_label: Label = $StateLabel
+@onready var state_label: TextureRect = $TextureRect
 @onready var room: Node2D = self.get_parent()
 
-var step_modifier: int = 0
+var current_texture = null
+
+var modifier: int = 0
 var current_state: String
 
 func _ready() -> void:
@@ -27,28 +29,35 @@ func on_mouse_exited() -> void:
 	pass
 
 func set_state(state: String) -> void:
-	state_label.text = state
 	current_state = state
 	# Change step_modifier based on bookshelf state
 	match state:
-		"very bad":
-			step_modifier = -10
-		"bad":
-			step_modifier = -5
-		"neutral":
-			step_modifier = 0
-		"good":
-			step_modifier = 5
-		"very good":
-			step_modifier = 10
+		"cursed":
+			modifier = randi_range(-2, -1)
+			state = "sanity"
+			state_label.texture = load("res://#1 - Transparent Icons copy 6.png")
+		"steps":
+			modifier = randi_range(3, 5)
+			state_label.texture = load("res://#1 - Transparent Icons copy.png")
+		"keys":
+			modifier = 1
+			state_label.texture = load("res://#1 - Transparent Icons copy 2.png")
+		"sanity":
+			modifier = randi_range(1, 3)
+			state_label.texture = load("res://#1 - Transparent Icons copy 4.png")
+		"insight":
+			modifier = randi_range(1, 3)
+			state_label.texture = load("res://#1 - Transparent Icons copy 3.png")
 		"used":
-			step_modifier = 0
+			modifier = 0
 
 func interact(player: CharacterBody2D) -> void:
 	if current_state != "used":
-		player.update_stat("steps", step_modifier)
+		player.update_stat(current_state, modifier)
+		if not state_label.visible:
+			state_label.visible = true
 		current_state = "used"
-		bookshelf_sprite.self_modulate = Color.DARK_RED
+		bookshelf_sprite.self_modulate = Color.DIM_GRAY
 		room.shelves_used += 1
 		for i in range(room.shelves_used):
 			room.generate_trap()
