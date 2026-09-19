@@ -3,10 +3,10 @@ extends Resource
 
 @export var display_name := "Book Rule"
 @export_multiline var description := ""
-@export_enum("Savvy", "Insight") var penalty_resource := "Savvy"
 @export_range(0, 20) var penalty_amount := 1
 @export_range(0, 10) var book_moves_per_turn := 2
 
+var penalty_resource := "Sanity"
 
 func count_matches(_model: LetterGridModel) -> int:
 	return 0

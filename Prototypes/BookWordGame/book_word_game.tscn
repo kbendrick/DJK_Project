@@ -1,38 +1,78 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene format=3 uid="uid://cytbdknuc0hi7"]
 
-[ext_resource type="Script" path="res://Prototypes/BookWordGame/scripts/book_word_game.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Prototypes/BookWordGame/art/book_closed.svg" id="2_closed"]
-[ext_resource type="Texture2D" path="res://Prototypes/BookWordGame/art/book_half_open.svg" id="3_half"]
-[ext_resource type="Texture2D" path="res://Prototypes/BookWordGame/art/book_open.svg" id="4_open"]
-[ext_resource type="Resource" path="res://Prototypes/BookWordGame/rules/adjacent_vowels_default.tres" id="5_rule"]
+[ext_resource type="Script" uid="uid://c7ayvbeuv0wau" path="res://Prototypes/BookWordGame/scripts/book_word_game.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://qgh7xtkhs2at" path="res://ezgif-split (1)/frame_00_delay-0.1s.png" id="3_1gfxb"]
+[ext_resource type="Texture2D" uid="uid://co6ya51g0a48l" path="res://ezgif-split (1)/frame_01_delay-0.1s.png" id="4_eeuap"]
+[ext_resource type="Texture2D" uid="uid://drbw2yr42ygke" path="res://ezgif-split (1)/frame_02_delay-0.1s.png" id="5_6w62r"]
+[ext_resource type="Texture2D" uid="uid://ci6kxg0mmpu7q" path="res://ezgif-split (1)/frame_03_delay-0.1s.png" id="6_0eeuv"]
+[ext_resource type="Texture2D" uid="uid://cmo03xypuw22t" path="res://ezgif-split (1)/frame_04_delay-0.1s.png" id="7_tqlcg"]
+[ext_resource type="Texture2D" uid="uid://bndkiaj6es1il" path="res://ezgif-split (1)/frame_05_delay-0.1s.png" id="8_04vrw"]
+[ext_resource type="Texture2D" uid="uid://bnv73qfi111jb" path="res://ezgif-split (1)/frame_06_delay-0.1s.png" id="9_wmbfd"]
+[ext_resource type="Texture2D" uid="uid://ddeox5ols06e8" path="res://ezgif-split (1)/frame_07_delay-0.1s.png" id="10_1ocoe"]
+[ext_resource type="Texture2D" uid="uid://ccrmfj8oqor1" path="res://ezgif-split (1)/frame_08_delay-0.1s.png" id="11_l5d1q"]
+[ext_resource type="Texture2D" uid="uid://cxgq64o808pu6" path="res://ezgif-split (1)/frame_09_delay-0.1s.png" id="12_k0dpx"]
+[ext_resource type="Texture2D" uid="uid://cmfr55gtdty8f" path="res://ezgif-split (1)/frame_10_delay-0.1s.png" id="13_svb4q"]
+[ext_resource type="Texture2D" uid="uid://b6lofgripns17" path="res://ezgif-split (1)/frame_11_delay-0.1s.png" id="14_lahsf"]
+[ext_resource type="Texture2D" uid="uid://d2l0hpdbienbk" path="res://ezgif-split (1)/frame_12_delay-0.1s.png" id="15_22eys"]
+[ext_resource type="Texture2D" uid="uid://cn4e6phytdwrb" path="res://ezgif-split (1)/frame_13_delay-0.1s.png" id="16_l8d22"]
+[ext_resource type="Texture2D" uid="uid://bwyi7tg7cygqh" path="res://ezgif-split (1)/frame_14_delay-0.1s.png" id="17_tiwk2"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_open"]
 animations = [{
-"frames": [{"duration": 1.0, "texture": ExtResource("2_closed")}, {"duration": 1.0, "texture": ExtResource("3_half")}, {"duration": 1.0, "texture": ExtResource("4_open")}],
-"loop": false,
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_1gfxb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_eeuap")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_6w62r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_0eeuv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_tqlcg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_04vrw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_wmbfd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_1ocoe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_l5d1q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_k0dpx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_svb4q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_lahsf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_22eys")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_l8d22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_tiwk2")
+}],
+"loop": 0,
 "name": &"open",
-"speed": 3.0
+"speed": 10.0
 }]
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_left_page"]
-bg_color = Color(0.925, 0.855, 0.678, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 3
-border_width_bottom = 8
-border_color = Color(0.32, 0.20, 0.17, 1)
-corner_radius_top_left = 24
-corner_radius_bottom_left = 24
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eeuap"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_right_page"]
-bg_color = Color(0.956, 0.898, 0.760, 1)
-border_width_left = 3
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0.32, 0.20, 0.17, 1)
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6w62r"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_modal"]
 bg_color = Color(0.12, 0.08, 0.16, 0.98)
@@ -46,16 +86,19 @@ corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
-[node name="BookWordGame" type="Node2D"]
+[node name="BookWordGame" type="Node2D" unique_id=1076520996]
 script = ExtResource("1_script")
-book_rule = ExtResource("5_rule")
+button_font_size = 24
 
-[node name="BookOpening" type="AnimatedSprite2D" parent="."]
-position = Vector2(1000, 1000)
+[node name="BookOpening" type="AnimatedSprite2D" parent="." unique_id=2119329841]
+position = Vector2(14.999965, -293.12503)
+scale = Vector2(4.3798885, 5.5887527)
 sprite_frames = SubResource("SpriteFrames_open")
 animation = &"open"
+frame = 14
+frame_progress = 1.0
 
-[node name="Interface" type="Control" parent="."]
+[node name="Interface" type="Control" parent="." unique_id=1162812767]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,17 +106,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Background" type="ColorRect" parent="Interface"]
+[node name="Background" type="ColorRect" parent="Interface" unique_id=19078576]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.08, 0.055, 0.105, 1)
 mouse_filter = 2
+color = Color(0.08, 0.055, 0.105, 1)
 
-[node name="Center" type="CenterContainer" parent="Interface"]
+[node name="Center" type="CenterContainer" parent="Interface" unique_id=357280603]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -81,135 +124,126 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BookSpread" type="HBoxContainer" parent="Interface/Center"]
+[node name="BookSpread" type="HBoxContainer" parent="Interface/Center" unique_id=750848521]
 custom_minimum_size = Vector2(1740, 1280)
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="LeftPage" type="PanelContainer" parent="Interface/Center/BookSpread"]
+[node name="LeftPage" type="PanelContainer" parent="Interface/Center/BookSpread" unique_id=415527835]
 custom_minimum_size = Vector2(858, 1280)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBox_left_page")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_eeuap")
 
-[node name="PageMargin" type="MarginContainer" parent="Interface/Center/BookSpread/LeftPage"]
+[node name="PageMargin" type="MarginContainer" parent="Interface/Center/BookSpread/LeftPage" unique_id=64595240]
 layout_mode = 2
-theme_override_constants/margin_left = 70
+theme_override_constants/margin_left = 100
 theme_override_constants/margin_top = 58
-theme_override_constants/margin_right = 55
+theme_override_constants/margin_right = 25
 theme_override_constants/margin_bottom = 58
 
-[node name="LeftContent" type="VBoxContainer" parent="Interface/Center/BookSpread/LeftPage/PageMargin"]
+[node name="LeftContent" type="VBoxContainer" parent="Interface/Center/BookSpread/LeftPage/PageMargin" unique_id=40467843]
 layout_mode = 2
+offset_transform_enabled = true
 theme_override_constants/separation = 22
 
-[node name="Title" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
+[node name="Title" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent" unique_id=1747515912]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_colors/font_color = Color(0.2, 0.12, 0.12, 1)
 theme_override_font_sizes/font_size = 42
-text = "THE LIVING PAGE"
+text = "title?"
 horizontal_alignment = 1
 
-[node name="ResourceLabel" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
+[node name="ResourceLabel" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent" unique_id=674134832]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_colors/font_color = Color(0.2, 0.12, 0.12, 1)
 theme_override_font_sizes/font_size = 22
 text = "AP 3 / 3"
 horizontal_alignment = 1
 
-[node name="GoalLabel" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
+[node name="GoalLabel" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent" unique_id=38813112]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.24, 0.14, 0.14, 1)
 theme_override_font_sizes/font_size = 24
 text = "TARGET WORDS"
 horizontal_alignment = 1
 
-[node name="LetterGrid" type="GridContainer" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
+[node name="LetterGrid" type="GridContainer" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent" unique_id=1480337890]
 layout_mode = 2
 size_flags_vertical = 3
+offset_transform_position = Vector2(100, 0)
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 8
 
-[node name="Hint" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.32, 0.20, 0.18, 1)
-theme_override_font_sizes/font_size = 18
-text = "Words read left-to-right or top-to-bottom. Gold cells are selected; green cells form a target."
-autowrap_mode = 2
-horizontal_alignment = 1
-
-[node name="RightPage" type="PanelContainer" parent="Interface/Center/BookSpread"]
+[node name="RightPage" type="PanelContainer" parent="Interface/Center/BookSpread" unique_id=1361089475]
 custom_minimum_size = Vector2(858, 1280)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBox_right_page")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_6w62r")
 
-[node name="PageMargin" type="MarginContainer" parent="Interface/Center/BookSpread/RightPage"]
+[node name="PageMargin" type="MarginContainer" parent="Interface/Center/BookSpread/RightPage" unique_id=1451845312]
 layout_mode = 2
 theme_override_constants/margin_left = 55
 theme_override_constants/margin_top = 58
 theme_override_constants/margin_right = 70
 theme_override_constants/margin_bottom = 58
 
-[node name="RightContent" type="VBoxContainer" parent="Interface/Center/BookSpread/RightPage/PageMargin"]
+[node name="RightContent" type="VBoxContainer" parent="Interface/Center/BookSpread/RightPage/PageMargin" unique_id=1396657580]
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="TurnLabel" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+[node name="TurnLabel" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=464382758]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_colors/font_color = Color(0.2, 0.12, 0.12, 1)
 theme_override_font_sizes/font_size = 34
 text = "ROUND 1 • PLAYER TURN"
 horizontal_alignment = 1
 
-[node name="RuleLabel" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+[node name="RuleLabel" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=1679490209]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.32, 0.13, 0.18, 1)
 theme_override_font_sizes/font_size = 20
 text = "BOOK RULE"
-autowrap_mode = 2
 
-[node name="Divider" type="HSeparator" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+[node name="Divider" type="HSeparator" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=1772714483]
 layout_mode = 2
 
-[node name="AbilityHeader" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+[node name="AbilityHeader" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=2029393420]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_colors/font_color = Color(0.2, 0.12, 0.12, 1)
 theme_override_font_sizes/font_size = 26
 text = "ABILITIES"
 
-[node name="AbilityList" type="VBoxContainer" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+[node name="AbilityList" type="VBoxContainer" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=831020496]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="StatusLabel" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+[node name="StatusLabel" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=2026293911]
 custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.27, 0.15, 0.17, 1)
 theme_override_font_sizes/font_size = 20
 text = "Choose an ability."
-autowrap_mode = 2
 
-[node name="EndTurnButton" type="Button" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+[node name="EndTurnButton" type="Button" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=1729383326]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "END TURN"
 
-[node name="LogHeader" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+[node name="LogHeader" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=1309940482]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_colors/font_color = Color(0.2, 0.12, 0.12, 1)
 theme_override_font_sizes/font_size = 22
 text = "PAGE HISTORY"
 
-[node name="Log" type="RichTextLabel" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+[node name="Log" type="RichTextLabel" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=1923743742]
 custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.22, 0.13, 0.13, 1)
 theme_override_font_sizes/normal_font_size = 18
-scroll_active = true
 
-[node name="LetterPicker" type="Control" parent="."]
+[node name="LetterPicker" type="Control" parent="." unique_id=2093923765]
 z_index = 20
 layout_mode = 3
 anchors_preset = 15
@@ -218,7 +252,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Shade" type="ColorRect" parent="LetterPicker"]
+[node name="Shade" type="ColorRect" parent="LetterPicker" unique_id=1426684003]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -227,7 +261,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.02, 0.01, 0.03, 0.82)
 
-[node name="Center" type="CenterContainer" parent="LetterPicker"]
+[node name="Center" type="CenterContainer" parent="LetterPicker" unique_id=539852114]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -235,41 +269,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="LetterPicker/Center"]
+[node name="Panel" type="PanelContainer" parent="LetterPicker/Center" unique_id=2064327610]
 custom_minimum_size = Vector2(720, 650)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBox_modal")
 
-[node name="Margin" type="MarginContainer" parent="LetterPicker/Center/Panel"]
+[node name="Margin" type="MarginContainer" parent="LetterPicker/Center/Panel" unique_id=492114486]
 layout_mode = 2
 theme_override_constants/margin_left = 42
 theme_override_constants/margin_top = 38
 theme_override_constants/margin_right = 42
 theme_override_constants/margin_bottom = 38
 
-[node name="Content" type="VBoxContainer" parent="LetterPicker/Center/Panel/Margin"]
+[node name="Content" type="VBoxContainer" parent="LetterPicker/Center/Panel/Margin" unique_id=425600136]
 layout_mode = 2
 theme_override_constants/separation = 22
 
-[node name="Title" type="Label" parent="LetterPicker/Center/Panel/Margin/Content"]
+[node name="Title" type="Label" parent="LetterPicker/Center/Panel/Margin/Content" unique_id=75880841]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "CHOOSE A LETTER TO INSERT"
 horizontal_alignment = 1
 
-[node name="Letters" type="GridContainer" parent="LetterPicker/Center/Panel/Margin/Content"]
+[node name="Letters" type="GridContainer" parent="LetterPicker/Center/Panel/Margin/Content" unique_id=1433962101]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 columns = 7
 
-[node name="Cancel" type="Button" parent="LetterPicker/Center/Panel/Margin/Content"]
+[node name="Cancel" type="Button" parent="LetterPicker/Center/Panel/Margin/Content" unique_id=653054158]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 text = "CANCEL"
 
-[node name="VictoryOverlay" type="Control" parent="."]
+[node name="VictoryOverlay" type="Control" parent="." unique_id=997287967]
 z_index = 30
 layout_mode = 3
 anchors_preset = 15
@@ -278,7 +312,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Shade" type="ColorRect" parent="VictoryOverlay"]
+[node name="Shade" type="ColorRect" parent="VictoryOverlay" unique_id=1305919222]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -287,7 +322,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.02, 0.01, 0.03, 0.88)
 
-[node name="Center" type="CenterContainer" parent="VictoryOverlay"]
+[node name="Center" type="CenterContainer" parent="VictoryOverlay" unique_id=662907793]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -295,62 +330,39 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="VictoryOverlay/Center"]
+[node name="Panel" type="PanelContainer" parent="VictoryOverlay/Center" unique_id=978876936]
 custom_minimum_size = Vector2(760, 820)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBox_modal")
 
-[node name="Margin" type="MarginContainer" parent="VictoryOverlay/Center/Panel"]
+[node name="Margin" type="MarginContainer" parent="VictoryOverlay/Center/Panel" unique_id=1001387408]
 layout_mode = 2
 theme_override_constants/margin_left = 48
 theme_override_constants/margin_top = 44
 theme_override_constants/margin_right = 48
 theme_override_constants/margin_bottom = 44
 
-[node name="Content" type="VBoxContainer" parent="VictoryOverlay/Center/Panel/Margin"]
+[node name="Content" type="VBoxContainer" parent="VictoryOverlay/Center/Panel/Margin" unique_id=168640140]
 layout_mode = 2
 theme_override_constants/separation = 22
 
-[node name="Title" type="Label" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+[node name="Title" type="Label" parent="VictoryOverlay/Center/Panel/Margin/Content" unique_id=1933425205]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.78, 0.38, 1)
 theme_override_font_sizes/font_size = 44
 text = "PAGE COMPLETE"
 horizontal_alignment = 1
 
-[node name="Summary" type="Label" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+[node name="Summary" type="Label" parent="VictoryOverlay/Center/Panel/Margin/Content" unique_id=1365071737]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Reward summary"
 horizontal_alignment = 1
 
-[node name="KeepPage" type="CheckButton" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+[node name="KeepPage" type="CheckButton" parent="VictoryOverlay/Center/Panel/Margin/Content" unique_id=903274825]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = "Keep this completed page"
 button_pressed = true
+text = "Keep this completed page"
 
-[node name="UpgradeActions" type="Button" parent="VictoryOverlay/Center/Panel/Margin/Content"]
-custom_minimum_size = Vector2(0, 88)
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "+1 MAXIMUM ACTION POINT"
-
-[node name="UpgradeSavvy" type="Button" parent="VictoryOverlay/Center/Panel/Margin/Content"]
-custom_minimum_size = Vector2(0, 88)
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "REDUCE ALL SAVVY COSTS BY 1"
-
-[node name="UpgradeInsight" type="Button" parent="VictoryOverlay/Center/Panel/Margin/Content"]
-custom_minimum_size = Vector2(0, 88)
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "REDUCE ALL INSIGHT COSTS BY 1"
-
-[node name="ContinueHint" type="Label" parent="VictoryOverlay/Center/Panel/Margin/Content"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "Choosing an upgrade begins a new page while retaining gold and upgrades."
-autowrap_mode = 2
-horizontal_alignment = 1
+[node name="Camera2D" type="Camera2D" parent="." unique_id=931091289]

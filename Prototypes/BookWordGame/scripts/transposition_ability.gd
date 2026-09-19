@@ -6,7 +6,7 @@ func _init() -> void:
 	ability_id = &"transposition"
 	display_name = "Transposition"
 	description = "Exchange two horizontally or vertically adjacent letters."
-	action_point_cost = 2
+	action_point_cost = 1
 	savvy_cost = 1
 	insight_cost = 0
 	required_targets = 2

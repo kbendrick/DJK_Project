@@ -6,7 +6,7 @@ func _init() -> void:
 	ability_id = &"substitution"
 	display_name = "Substitution"
 	description = "Replace one selected letter with a different random letter."
-	action_point_cost = 2
+	action_point_cost = 1
 	savvy_cost = 1
 	insight_cost = 1
 	required_targets = 1

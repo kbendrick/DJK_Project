@@ -6,7 +6,7 @@ func _init() -> void:
 	ability_id = &"insertion"
 	display_name = "Insertion"
 	description = "Choose a new letter, insert it at a selected cell, shift later letters down, and discard the last letter."
-	action_point_cost = 1
+	action_point_cost = 2
 	savvy_cost = 2
 	insight_cost = 2
 	required_targets = 1

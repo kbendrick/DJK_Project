@@ -11,7 +11,7 @@ var _action_cursor := 0
 func _init() -> void:
 	display_name = "Crowded Vowels"
 	description = "Vowels cannot be horizontally or vertically adjacent."
-	penalty_resource = "Savvy"
+	penalty_resource = "Sanity"
 	penalty_amount = 1
 	book_moves_per_turn = 2
 

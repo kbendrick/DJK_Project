@@ -3,13 +3,16 @@ extends Node2D
 
 enum Phase { OPENING, PLAYER, BOOK, VICTORY }
 
-@export var target_words := PackedStringArray(["BOOK", "MIND", "PAGE"])
+@export var target_words := PackedStringArray(["BOOK"])
 @export_range(1, 20) var starting_action_points := 3
+@export_range(0, 999) var starting_sanity := 10
 @export_range(0, 999) var starting_savvy := 20
 @export_range(0, 999) var starting_insight := 20
 @export_range(0, 999) var gold_reward := 25
-@export var book_rule: BookRule
+@export var book_rule_script: Script = preload("res://Prototypes/BookWordGame/rules/adjacent_vowels_rule.gd")
+var book_rule: BookRule
 @export var extra_abilities: Array[BookAbility] = []
+@export var button_font_size = 16
 
 @onready var opening_sprite: AnimatedSprite2D = $BookOpening
 @onready var interface: Control = $Interface
@@ -27,9 +30,7 @@ enum Phase { OPENING, PLAYER, BOOK, VICTORY }
 @onready var victory_overlay: Control = $VictoryOverlay
 @onready var victory_summary: Label = $VictoryOverlay/Center/Panel/Margin/Content/Summary
 @onready var keep_page_check: CheckButton = $VictoryOverlay/Center/Panel/Margin/Content/KeepPage
-@onready var upgrade_action_button: Button = $VictoryOverlay/Center/Panel/Margin/Content/UpgradeActions
-@onready var upgrade_savvy_button: Button = $VictoryOverlay/Center/Panel/Margin/Content/UpgradeSavvy
-@onready var upgrade_insight_button: Button = $VictoryOverlay/Center/Panel/Margin/Content/UpgradeInsight
+
 
 var grid_model := LetterGridModel.new()
 var rng := RandomNumberGenerator.new()
@@ -42,6 +43,7 @@ var phase := Phase.OPENING
 
 var maximum_action_points := 3
 var action_points := 3
+var sanity := 0
 var savvy := 0
 var insight := 0
 var gold := 0
@@ -56,15 +58,22 @@ func _ready() -> void:
 	maximum_action_points = starting_action_points
 	savvy = starting_savvy
 	insight = starting_insight
+	sanity = starting_sanity
 	if book_rule == null:
-		book_rule = AdjacentVowelsRule.new()
+		book_rule = book_rule_script.new() as BookRule
+		if book_rule == null:
+			print("The selected script does not extend BookRule.")
+			return
+		book_rule.penalty_resource = "Sanity"
+		book_rule.penalty_amount = 1
+		book_rule.book_moves_per_turn = 2
 	else:
 		book_rule = book_rule.duplicate(true)
 	_build_abilities()
 	_build_grid_buttons()
 	_build_ability_buttons()
 	_build_letter_picker()
-	_connect_reward_buttons()
+	#_connect_reward_buttons()
 	grid_model.randomize_grid(rng)
 	end_turn_button.pressed.connect(_end_player_turn)
 	opening_sprite.animation_finished.connect(_on_book_opened)
@@ -76,9 +85,9 @@ func _ready() -> void:
 
 func _build_abilities() -> void:
 	abilities.assign([
-		SubstitutionAbility.new(),
-		DeletionAbility.new(),
 		TranspositionAbility.new(),
+		DeletionAbility.new(),
+		SubstitutionAbility.new(),
 		InsertionAbility.new()
 	])
 	for extra_ability in extra_abilities:
@@ -111,6 +120,7 @@ func _build_ability_buttons() -> void:
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		button.pressed.connect(_on_ability_pressed.bind(ability))
+		button.add_theme_font_size_override("font_size", button_font_size)
 		ability_container.add_child(button)
 		ability_buttons[ability] = button
 
@@ -128,14 +138,13 @@ func _build_letter_picker() -> void:
 	$LetterPicker/Center/Panel/Margin/Content/Cancel.pressed.connect(_cancel_letter_picker)
 
 
-func _connect_reward_buttons() -> void:
-	upgrade_action_button.pressed.connect(_apply_upgrade.bind(&"actions"))
-	upgrade_savvy_button.pressed.connect(_apply_upgrade.bind(&"savvy"))
-	upgrade_insight_button.pressed.connect(_apply_upgrade.bind(&"insight"))
+#func _connect_reward_buttons() -> void:
+	#upgrade_action_button.pressed.connect(_apply_upgrade.bind(&"actions"))
+	#upgrade_savvy_button.pressed.connect(_apply_upgrade.bind(&"savvy"))
+	#upgrade_insight_button.pressed.connect(_apply_upgrade.bind(&"insight"))
 
 
 func _on_book_opened() -> void:
-	opening_sprite.hide()
 	interface.show()
 	_start_player_turn()
 	_add_log("The book opens. Create %s horizontally or vertically." % ", ".join(target_words))
@@ -225,16 +234,13 @@ func _end_player_turn() -> void:
 	active_ability = null
 	selected_cells.clear()
 	letter_picker.hide()
-	status_label.text = "The book studies the page..."
+	status_label.text = "The book takes its turn"
 	_refresh_all()
 	await get_tree().create_timer(0.45).timeout
 
 	var violations := book_rule.count_matches(grid_model)
 	if violations > 0 and book_rule.penalty_amount > 0:
-		if book_rule.penalty_resource == "Insight":
-			insight = maxi(0, insight - book_rule.penalty_amount)
-		else:
-			savvy = maxi(0, savvy - book_rule.penalty_amount)
+		sanity = maxi(0, sanity - book_rule.penalty_amount)
 		_add_log("%s found %d violation%s. You lose %d %s." % [book_rule.display_name, violations, "" if violations == 1 else "s", book_rule.penalty_amount, book_rule.penalty_resource])
 	else:
 		_add_log("The page satisfies %s. No penalty." % book_rule.display_name)
@@ -293,9 +299,9 @@ func _refresh_all() -> void:
 
 
 func _refresh_resources() -> void:
-	resource_label.text = "AP  %d / %d     SAVVY  %d     INSIGHT  %d     GOLD  %d" % [action_points, maximum_action_points, savvy, insight, gold]
+	resource_label.text = "AP  %d / %d     SAVVY  %d     INSIGHT  %d     GOLD  %d     SANITY  %d" % [action_points, maximum_action_points, savvy, insight, gold, sanity]
 	turn_label.text = "ROUND %d   •   %s TURN" % [round_number, "PLAYER" if phase == Phase.PLAYER else "BOOK"]
-	rule_label.text = "BOOK RULE — %s\n%s\nPenalty: %d %s when violated" % [book_rule.display_name, book_rule.description, book_rule.penalty_amount, book_rule.penalty_resource]
+	rule_label.text = "BOOK RULE — %s\n%s\nPenalty: %d %s" % [book_rule.display_name, book_rule.description, book_rule.penalty_amount, book_rule.penalty_resource]
 
 
 func _refresh_grid() -> void:
@@ -343,7 +349,7 @@ func _insight_cost(ability: BookAbility) -> int:
 
 
 func _all_goals_complete() -> bool:
-	if target_words.size() != 3:
+	if target_words.size() != 1:
 		return false
 	for word in target_words:
 		if not grid_model.contains_word(word):
@@ -352,5 +358,5 @@ func _all_goals_complete() -> bool:
 
 
 func _add_log(message: String) -> void:
-	log_label.append_text("• %s\n" % message)
-	log_label.scroll_to_line(maxi(0, log_label.get_line_count() - 1))
+	log_label.text = "• %s\n" % message
+	#log_label.scroll_to_line(maxi(0, log_label.get_line_count() - 1))
