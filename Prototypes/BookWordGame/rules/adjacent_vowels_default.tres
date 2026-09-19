@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AdjacentVowelsRule" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Prototypes/BookWordGame/scripts/adjacent_vowels_rule.gd" id="1_rule"]
+
+[resource]
+script = ExtResource("1_rule")
+display_name = "Crowded Vowels"
+description = "Vowels cannot be horizontally or vertically adjacent."
+penalty_resource = "Savvy"
+penalty_amount = 1
+book_moves_per_turn = 2
+action_cycle = PackedStringArray("substitution", "transposition", "insertion", "deletion")

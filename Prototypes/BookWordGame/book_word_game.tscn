@@ -1,0 +1,356 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://Prototypes/BookWordGame/scripts/book_word_game.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Prototypes/BookWordGame/art/book_closed.svg" id="2_closed"]
+[ext_resource type="Texture2D" path="res://Prototypes/BookWordGame/art/book_half_open.svg" id="3_half"]
+[ext_resource type="Texture2D" path="res://Prototypes/BookWordGame/art/book_open.svg" id="4_open"]
+[ext_resource type="Resource" path="res://Prototypes/BookWordGame/rules/adjacent_vowels_default.tres" id="5_rule"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_open"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": ExtResource("2_closed")}, {"duration": 1.0, "texture": ExtResource("3_half")}, {"duration": 1.0, "texture": ExtResource("4_open")}],
+"loop": false,
+"name": &"open",
+"speed": 3.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_left_page"]
+bg_color = Color(0.925, 0.855, 0.678, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 3
+border_width_bottom = 8
+border_color = Color(0.32, 0.20, 0.17, 1)
+corner_radius_top_left = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_right_page"]
+bg_color = Color(0.956, 0.898, 0.760, 1)
+border_width_left = 3
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.32, 0.20, 0.17, 1)
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_modal"]
+bg_color = Color(0.12, 0.08, 0.16, 0.98)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.81, 0.64, 0.34, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="BookWordGame" type="Node2D"]
+script = ExtResource("1_script")
+book_rule = ExtResource("5_rule")
+
+[node name="BookOpening" type="AnimatedSprite2D" parent="."]
+position = Vector2(1000, 1000)
+sprite_frames = SubResource("SpriteFrames_open")
+animation = &"open"
+
+[node name="Interface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.055, 0.105, 1)
+mouse_filter = 2
+
+[node name="Center" type="CenterContainer" parent="Interface"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BookSpread" type="HBoxContainer" parent="Interface/Center"]
+custom_minimum_size = Vector2(1740, 1280)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LeftPage" type="PanelContainer" parent="Interface/Center/BookSpread"]
+custom_minimum_size = Vector2(858, 1280)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_left_page")
+
+[node name="PageMargin" type="MarginContainer" parent="Interface/Center/BookSpread/LeftPage"]
+layout_mode = 2
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = 58
+theme_override_constants/margin_right = 55
+theme_override_constants/margin_bottom = 58
+
+[node name="LeftContent" type="VBoxContainer" parent="Interface/Center/BookSpread/LeftPage/PageMargin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 42
+text = "THE LIVING PAGE"
+horizontal_alignment = 1
+
+[node name="ResourceLabel" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 22
+text = "AP 3 / 3"
+horizontal_alignment = 1
+
+[node name="GoalLabel" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.14, 0.14, 1)
+theme_override_font_sizes/font_size = 24
+text = "TARGET WORDS"
+horizontal_alignment = 1
+
+[node name="LetterGrid" type="GridContainer" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 8
+
+[node name="Hint" type="Label" parent="Interface/Center/BookSpread/LeftPage/PageMargin/LeftContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.20, 0.18, 1)
+theme_override_font_sizes/font_size = 18
+text = "Words read left-to-right or top-to-bottom. Gold cells are selected; green cells form a target."
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="RightPage" type="PanelContainer" parent="Interface/Center/BookSpread"]
+custom_minimum_size = Vector2(858, 1280)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_right_page")
+
+[node name="PageMargin" type="MarginContainer" parent="Interface/Center/BookSpread/RightPage"]
+layout_mode = 2
+theme_override_constants/margin_left = 55
+theme_override_constants/margin_top = 58
+theme_override_constants/margin_right = 70
+theme_override_constants/margin_bottom = 58
+
+[node name="RightContent" type="VBoxContainer" parent="Interface/Center/BookSpread/RightPage/PageMargin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="TurnLabel" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 34
+text = "ROUND 1 • PLAYER TURN"
+horizontal_alignment = 1
+
+[node name="RuleLabel" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.13, 0.18, 1)
+theme_override_font_sizes/font_size = 20
+text = "BOOK RULE"
+autowrap_mode = 2
+
+[node name="Divider" type="HSeparator" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+layout_mode = 2
+
+[node name="AbilityHeader" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 26
+text = "ABILITIES"
+
+[node name="AbilityList" type="VBoxContainer" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StatusLabel" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.27, 0.15, 0.17, 1)
+theme_override_font_sizes/font_size = 20
+text = "Choose an ability."
+autowrap_mode = 2
+
+[node name="EndTurnButton" type="Button" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "END TURN"
+
+[node name="LogHeader" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 22
+text = "PAGE HISTORY"
+
+[node name="Log" type="RichTextLabel" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.22, 0.13, 0.13, 1)
+theme_override_font_sizes/normal_font_size = 18
+scroll_active = true
+
+[node name="LetterPicker" type="Control" parent="."]
+z_index = 20
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="LetterPicker"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.01, 0.03, 0.82)
+
+[node name="Center" type="CenterContainer" parent="LetterPicker"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="LetterPicker/Center"]
+custom_minimum_size = Vector2(720, 650)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_modal")
+
+[node name="Margin" type="MarginContainer" parent="LetterPicker/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 38
+theme_override_constants/margin_right = 42
+theme_override_constants/margin_bottom = 38
+
+[node name="Content" type="VBoxContainer" parent="LetterPicker/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="LetterPicker/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "CHOOSE A LETTER TO INSERT"
+horizontal_alignment = 1
+
+[node name="Letters" type="GridContainer" parent="LetterPicker/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 7
+
+[node name="Cancel" type="Button" parent="LetterPicker/Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "CANCEL"
+
+[node name="VictoryOverlay" type="Control" parent="."]
+z_index = 30
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="VictoryOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.01, 0.03, 0.88)
+
+[node name="Center" type="CenterContainer" parent="VictoryOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="VictoryOverlay/Center"]
+custom_minimum_size = Vector2(760, 820)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_modal")
+
+[node name="Margin" type="MarginContainer" parent="VictoryOverlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 44
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 44
+
+[node name="Content" type="VBoxContainer" parent="VictoryOverlay/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.78, 0.38, 1)
+theme_override_font_sizes/font_size = 44
+text = "PAGE COMPLETE"
+horizontal_alignment = 1
+
+[node name="Summary" type="Label" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Reward summary"
+horizontal_alignment = 1
+
+[node name="KeepPage" type="CheckButton" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Keep this completed page"
+button_pressed = true
+
+[node name="UpgradeActions" type="Button" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "+1 MAXIMUM ACTION POINT"
+
+[node name="UpgradeSavvy" type="Button" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "REDUCE ALL SAVVY COSTS BY 1"
+
+[node name="UpgradeInsight" type="Button" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "REDUCE ALL INSIGHT COSTS BY 1"
+
+[node name="ContinueHint" type="Label" parent="VictoryOverlay/Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Choosing an upgrade begins a new page while retaining gold and upgrades."
+autowrap_mode = 2
+horizontal_alignment = 1

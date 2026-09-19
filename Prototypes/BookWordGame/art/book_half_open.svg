@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="760" viewBox="0 0 1100 760">
+  <defs><filter id="shadow"><feDropShadow dx="0" dy="22" stdDeviation="20" flood-color="#120d18" flood-opacity="0.55"/></filter></defs>
+  <g filter="url(#shadow)">
+    <path d="M135 585L525 120l55 490-410 40z" fill="#4b2e55" stroke="#ba925d" stroke-width="15"/>
+    <path d="M525 120l445 170-60 330-330-10z" fill="#f0dfb5" stroke="#ba925d" stroke-width="15"/>
+    <path d="M525 120l55 490" fill="none" stroke="#6f5238" stroke-width="16"/>
+    <path d="M585 185l300 112M595 245l278 102M605 305l255 88" stroke="#bda77e" stroke-width="10" stroke-linecap="round"/>
+  </g>
+</svg>
