@@ -3,8 +3,10 @@ extends BookRule
 
 const VOWELS := "AEIOU"
 
+# Possible book actions
 @export var action_cycle := PackedStringArray(["substitution", "transposition", "insertion", "deletion"])
 
+# Variable to store where book is acting upon the grid
 var _action_cursor := 0
 
 
@@ -22,6 +24,7 @@ func count_matches(model: LetterGridModel) -> int:
 	# Check grid for adjacent pairs of vowels
 	for y in LetterGridModel.GRID_SIZE:
 		for x in LetterGridModel.GRID_SIZE:
+			# If letter isn't a vowel, continue through loop; otherwise, check letter immediately to the right and down for vowels and add to match count if it is a vowel
 			if not _is_vowel(model.get_letter(Vector2i(x, y))):
 				continue
 			if x + 1 < LetterGridModel.GRID_SIZE and _is_vowel(model.get_letter(Vector2i(x + 1, y))):
@@ -35,7 +38,9 @@ func take_book_turn(model: LetterGridModel, rng: RandomNumberGenerator) -> Array
 	var results: Array[String] = []
 	if action_cycle.is_empty():
 		return results
+
 	for move_index in book_moves_per_turn:
+		# Sets action variable to where the current cursor is, then moves the cursor forward
 		var action := action_cycle[_action_cursor % action_cycle.size()]
 		_action_cursor += 1
 		var result := _perform_action(action, model, rng)
@@ -92,6 +97,7 @@ func _transpose_toward_vowels(model: LetterGridModel) -> String:
 
 
 func _insert_vowel(model: LetterGridModel, rng: RandomNumberGenerator) -> String:
+	# Search for a cell that has a neighboring vowel
 	for y in LetterGridModel.GRID_SIZE:
 		for x in LetterGridModel.GRID_SIZE:
 			var cell := Vector2i(x, y)
@@ -103,14 +109,20 @@ func _insert_vowel(model: LetterGridModel, rng: RandomNumberGenerator) -> String
 
 
 func _delete_consonant(model: LetterGridModel, rng: RandomNumberGenerator) -> String:
+	var consonant_cells: Array[Vector2i] = []
+
+	# Iterate over grid, adding all consonant cell locations
 	for index in LetterGridModel.LETTER_COUNT:
 		var cell := model.index_to_cell(index)
 		if not _is_vowel(model.get_letter(cell)):
-			model.delete_at(cell, rng)
-			return "The book deleted the letter at (%d, %d)." % [cell.x + 1, cell.y + 1]
-	return ""
+			consonant_cells.append(cell)
+	
+	var selected_cell: Vector2i = consonant_cells[rng.randi_range(0, consonant_cells.size()-1)]
+	model.delete_at(selected_cell, rng)
+	return "The book deleted the letter at (%d, %d)." % [selected_cell.x + 1, selected_cell.y + 1]
 
 
+# Checks the adjancent letters for vowels
 func _has_vowel_neighbor(model: LetterGridModel, cell: Vector2i) -> bool:
 	for direction in [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]:
 		var neighbor: Vector2i = cell + direction
