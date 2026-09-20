@@ -117,6 +117,7 @@ func _delete_consonant(model: LetterGridModel, rng: RandomNumberGenerator) -> St
 		if not _is_vowel(model.get_letter(cell)):
 			consonant_cells.append(cell)
 	
+	# Choose a random cell that has a consonant, and delete
 	var selected_cell: Vector2i = consonant_cells[rng.randi_range(0, consonant_cells.size()-1)]
 	model.delete_at(selected_cell, rng)
 	return "The book deleted the letter at (%d, %d)." % [selected_cell.x + 1, selected_cell.y + 1]

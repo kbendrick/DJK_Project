@@ -104,7 +104,8 @@ func _build_abilities() -> void:
 		TranspositionAbility.new(),
 		DeletionAbility.new(),
 		SubstitutionAbility.new(),
-		InsertionAbility.new()
+		InsertionAbility.new(),
+		RotationAbility.new()
 	])
 	# Checks for any extra abilities and sets them up as well
 	for extra_ability in extra_abilities:

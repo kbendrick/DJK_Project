@@ -101,6 +101,34 @@ func transpose(first: Vector2i, second: Vector2i) -> bool:
 	return true
 
 
+# Rotates all nearby letters clockwise (maybe player could choose between clockwise/counterclockwise?)
+func rotate(cell: Vector2i) -> bool:
+	# Checks that cell is on grid
+	if not is_valid_cell(cell):
+		return false
+	
+	# Checks that neighboring cells are valid, adds them to an array
+	var neighbor_cells: Array[Vector2i] = []
+	for direction in [Vector2i.UP, Vector2i.UP + Vector2i.RIGHT, Vector2i.RIGHT, Vector2i.DOWN + Vector2i.RIGHT, Vector2i.DOWN, Vector2i.DOWN + Vector2i.LEFT, Vector2i.LEFT, Vector2i.UP + Vector2i.LEFT]:
+		var neighbor: Vector2i = cell + direction
+		if is_valid_cell(neighbor):
+			neighbor_cells.append(neighbor)
+	
+	# Checks to make sure cells were added	
+	if neighbor_cells.size() <= 2:
+		return false
+
+	# Uses temporary variable to rotate all letters in the array
+	var temporary: String = get_letter(neighbor_cells[0])
+	for index in range(neighbor_cells.size()):
+		var next_up: String = get_letter(neighbor_cells[(index + 1) % (neighbor_cells.size())])
+		print("Moving " + temporary + " into " + next_up)
+		set_letter(neighbor_cells[(index + 1) % (neighbor_cells.size())], temporary)
+		temporary = next_up
+
+	return true
+
+
 # Creates an 1D array of letters for processing
 func flatten() -> Array[String]:
 	var result: Array[String] = []
