@@ -11,13 +11,16 @@ func _init() -> void:
 	insight_cost = 0
 	required_targets = 2
 
-
+# Checks for valid cell choices using the transposition ability
 func is_valid_next_target(_model: LetterGridModel, current_targets: Array[Vector2i], cell: Vector2i) -> bool:
+	# If there aren't any cell chosen, they're all valid; return true
 	if current_targets.is_empty():
 		return true
 	if current_targets.size() != 1:
 		return false
 	var first := current_targets[0]
+	
+	# If cell is adjacent to first cell, return true, else false
 	return absi(first.x - cell.x) + absi(first.y - cell.y) == 1
 
 

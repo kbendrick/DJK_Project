@@ -12,5 +12,6 @@ func _init() -> void:
 	required_targets = 1
 
 
+# If there is a target cell and it can be deleted, return true
 func apply(model: LetterGridModel, targets: Array[Vector2i], _letter_choice: String, rng: RandomNumberGenerator) -> bool:
 	return targets.size() == 1 and model.delete_at(targets[0], rng)

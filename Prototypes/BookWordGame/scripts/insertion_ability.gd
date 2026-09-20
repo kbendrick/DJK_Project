@@ -12,6 +12,6 @@ func _init() -> void:
 	required_targets = 1
 	requires_letter_choice = true
 
-
+# If a cell is selected and insert_at() works, return true
 func apply(model: LetterGridModel, targets: Array[Vector2i], letter_choice: String, _rng: RandomNumberGenerator) -> bool:
 	return targets.size() == 1 and model.insert_at(targets[0], letter_choice)

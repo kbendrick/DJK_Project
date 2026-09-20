@@ -28,6 +28,7 @@ func random_letter(rng: RandomNumberGenerator, pool: String = ALPHABET) -> Strin
 	return pool[rng.randi_range(0, pool.length() - 1)]
 
 
+# Check that cell is on the grid
 func is_valid_cell(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.x < GRID_SIZE and cell.y >= 0 and cell.y < GRID_SIZE
 
@@ -56,11 +57,16 @@ func substitute(cell: Vector2i, rng: RandomNumberGenerator) -> bool:
 
 
 func delete_at(cell: Vector2i, rng: RandomNumberGenerator) -> bool:
+	# Check that cell is on the grid
 	if not is_valid_cell(cell):
 		return false
+
+	# Remove letter from array and append a random letter
 	var flat := flatten()
 	flat.remove_at(cell_to_index(cell))
 	flat.append(random_letter(rng))
+
+	# Rebuild grid, return true for apply() function
 	_rebuild_from_flat(flat)
 	return true
 
@@ -68,24 +74,34 @@ func delete_at(cell: Vector2i, rng: RandomNumberGenerator) -> bool:
 func insert_at(cell: Vector2i, letter: String) -> bool:
 	if not is_valid_cell(cell) or letter.is_empty():
 		return false
+	
+	# Insert letter into array and adjust other letters accordingly, removing extraneous letters at the end
 	var flat := flatten()
 	flat.insert(cell_to_index(cell), letter.left(1).to_upper())
 	flat.resize(LETTER_COUNT)
+
+	# Rebuild grid, return true for apply() function
 	_rebuild_from_flat(flat)
 	return true
 
 
 func transpose(first: Vector2i, second: Vector2i) -> bool:
+	# Checks that cell is on grid and that the two selected cells are adjacent
 	if not is_valid_cell(first) or not is_valid_cell(second):
 		return false
 	if absi(first.x - second.x) + absi(first.y - second.y) != 1:
 		return false
+	
+	# Uses a temporary variable to help swap the two letters between each other
 	var temporary := get_letter(first)
 	set_letter(first, get_letter(second))
 	set_letter(second, temporary)
+
+	# Return true for apply() function
 	return true
 
 
+# Creates an 1D array of letters for processing
 func flatten() -> Array[String]:
 	var result: Array[String] = []
 	for row in letters:
@@ -94,20 +110,28 @@ func flatten() -> Array[String]:
 	return result
 
 
+# Math to return the integer position of the cell on the grid (left to right, top to bottom)
 func cell_to_index(cell: Vector2i) -> int:
 	return cell.y * GRID_SIZE + cell.x
 
 
+#Returns a Vector2i based on the cell's number on the grid (left to right, top to bottom)
 func index_to_cell(index: int) -> Vector2i:
 	return Vector2i(index % GRID_SIZE, index / GRID_SIZE)
 
 
 func find_word_positions(word: String) -> Array[Vector2i]:
+	# Takes the word passed in, removes whitespace, puts to uppercase
 	var normalized := word.strip_edges().to_upper()
+
+	# Establishes a empty "found" array to place a found word in
 	var found: Array[Vector2i] = []
+
+	# If the word passed in is empty or longer than the grid size, return
 	if normalized.is_empty() or normalized.length() > GRID_SIZE:
 		return found
 
+	# For each row in the grid, check for the word; if word is found, pass array of letter coordinates
 	for y in GRID_SIZE:
 		for x in range(GRID_SIZE - normalized.length() + 1):
 			var matches := true
@@ -120,6 +144,7 @@ func find_word_positions(word: String) -> Array[Vector2i]:
 					found.append(Vector2i(x + offset, y))
 				return found
 
+	# For each column in the grid, check for the word; if word is found, pass array of letter coordinates
 	for x in GRID_SIZE:
 		for y in range(GRID_SIZE - normalized.length() + 1):
 			var matches := true
@@ -135,10 +160,12 @@ func find_word_positions(word: String) -> Array[Vector2i]:
 	return found
 
 
+# If the word is found in the grid, return true
 func contains_word(word: String) -> bool:
 	return not find_word_positions(word).is_empty()
 
 
+# After using flatten(), rebuild the letter grid
 func _rebuild_from_flat(flat: Array[String]) -> void:
 	letters.clear()
 	for y in GRID_SIZE:

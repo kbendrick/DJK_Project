@@ -68,3 +68,7 @@ func reveal_state()->void:
 func check_rotate () -> void:
 	if self.rotation != 0:
 		state_label.rotation = 0 - self.rotation
+		
+func get_state() -> String:
+	print("bookshelf state is " + current_state)
+	return current_state

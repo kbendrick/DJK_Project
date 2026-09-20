@@ -11,6 +11,6 @@ func _init() -> void:
 	insight_cost = 1
 	required_targets = 1
 
-
+# If a cell is selected and substitute() works, return true
 func apply(model: LetterGridModel, targets: Array[Vector2i], _letter_choice: String, rng: RandomNumberGenerator) -> bool:
 	return targets.size() == 1 and model.substitute(targets[0], rng)

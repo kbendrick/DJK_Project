@@ -94,7 +94,7 @@ func _input(event: InputEvent):
 		elif event.pressed and event.button_index == MOUSE_BUTTON_LEFT and mousehover != null:
 				if adjacent_to_target_cell:
 					mousehover.interact(self)
-		elif event.pressed and event.button_index == MOUSE_BUTTON_RIGHT and mousehover != null and inventory.get_resource("insight") > 0:
+		elif event.pressed and event.button_index == MOUSE_BUTTON_RIGHT and mousehover != null and not mousehover.get_state() == "used" and inventory.get_resource("insight") > 0:
 			mousehover.reveal_state()
 			inventory.update_resource("insight", -1)
 
