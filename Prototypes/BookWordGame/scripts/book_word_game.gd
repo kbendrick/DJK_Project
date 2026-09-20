@@ -296,24 +296,28 @@ func _end_player_turn() -> void:
 
 	# Check for any cases where the book rule can affect the player/grid state
 	var violations := book_rule.count_matches(grid_model)
-
-
 	if violations > 0 and book_rule.penalty_amount > 0:
 		sanity = maxi(0, sanity - book_rule.penalty_amount)
 		_add_log("%s found %d violation%s. You lose %d %s." % [book_rule.display_name, violations, "" if violations == 1 else "s", book_rule.penalty_amount, book_rule.penalty_resource])
 	else:
 		_add_log("The page satisfies %s. No penalty." % book_rule.display_name)
 
+	# Take book's turn
 	var book_actions := book_rule.take_book_turn(grid_model, rng)
 	for action_text in book_actions:
 		_add_log(action_text)
 	_refresh_all()
 	await get_tree().create_timer(0.45).timeout
 
+	# Check for victory conditions
 	if _all_goals_complete():
 		_show_victory()
 		return
+	
+	# Increment round count
 	round_number += 1
+
+	# Go to player turn
 	_start_player_turn()
 
 

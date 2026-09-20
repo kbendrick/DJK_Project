@@ -18,6 +18,8 @@ func _init() -> void:
 
 func count_matches(model: LetterGridModel) -> int:
 	var matches := 0
+
+	# Check grid for adjacent pairs of vowels
 	for y in LetterGridModel.GRID_SIZE:
 		for x in LetterGridModel.GRID_SIZE:
 			if not _is_vowel(model.get_letter(Vector2i(x, y))):
