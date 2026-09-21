@@ -45,6 +45,7 @@ var rng := RandomNumberGenerator.new()
 var abilities: Array[BookAbility] = []
 var grid_buttons: Array[Button] = []
 var ability_buttons: Dictionary = {}
+var book_rule_cells: Array[Vector2i] =  []
 var selected_cells: Array[Vector2i] = []
 var active_ability: BookAbility
 var phase := Phase.OPENING
@@ -296,7 +297,7 @@ func _end_player_turn() -> void:
 	await get_tree().create_timer(0.45).timeout
 
 	# Check for any cases where the book rule can affect the player/grid state
-	var violations := book_rule.count_matches(grid_model)
+	var violations := book_rule.collect_matches(grid_model).size()
 	if violations > 0 and book_rule.penalty_amount > 0:
 		sanity = maxi(0, sanity - book_rule.penalty_amount)
 		_add_log("%s found %d violation%s. You lose %d %s." % [book_rule.display_name, violations, "" if violations == 1 else "s", book_rule.penalty_amount, book_rule.penalty_resource])
@@ -373,10 +374,14 @@ func _refresh_resources() -> void:
 func _refresh_grid() -> void:
 	# Creates a variable for cells that have a completed word objective inside
 	var completed_cells: Array[Vector2i] = []
+	book_rule_cells = []
 
 	# Checks to see if any of the target words have been completed
 	for word in target_words:
 		completed_cells.append_array(grid_model.find_word_positions(word))
+
+	# Checks for book rule violations
+	book_rule_cells = book_rule.collect_matches(grid_model)
 	
 	# Updates button text and color to match any changes from ability usage or no longer being player turn
 	for index in grid_buttons.size():
@@ -390,9 +395,12 @@ func _refresh_grid() -> void:
 			button.modulate = Color("ffd166")
 		elif completed_cells.has(cell):
 			button.modulate = Color("8bd17c")
+		elif book_rule_cells.has(cell):
+			button.modulate = Color("ff7575")
 		else:
 			button.modulate = Color.WHITE
 
+# TODO - Add red color for cells that are affected by the book rule
 
 # Displays target word with either an empty circle or a checkmark depending on if the target word is found
 func _refresh_goals() -> void:

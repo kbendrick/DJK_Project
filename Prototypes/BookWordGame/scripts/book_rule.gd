@@ -8,8 +8,8 @@ extends Resource
 
 var penalty_resource := "Sanity"
 
-func count_matches(_model: LetterGridModel) -> int:
-	return 0
+func collect_matches(_model: LetterGridModel) -> Array:
+	return []
 
 
 func take_book_turn(_model: LetterGridModel, _rng: RandomNumberGenerator) -> Array[String]:

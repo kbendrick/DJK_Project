@@ -18,8 +18,8 @@ func _init() -> void:
 	book_moves_per_turn = 2
 
 
-func count_matches(model: LetterGridModel) -> int:
-	var matches := 0
+func collect_matches(model: LetterGridModel) -> Array[Vector2i]:
+	var matches: Array[Vector2i] = []
 
 	# Check grid for adjacent pairs of vowels
 	for y in LetterGridModel.GRID_SIZE:
@@ -28,9 +28,15 @@ func count_matches(model: LetterGridModel) -> int:
 			if not _is_vowel(model.get_letter(Vector2i(x, y))):
 				continue
 			if x + 1 < LetterGridModel.GRID_SIZE and _is_vowel(model.get_letter(Vector2i(x + 1, y))):
-				matches += 1
+				if not matches.has(Vector2i(x, y)):
+					matches.append(Vector2i(x, y))
+				if not matches.has(Vector2i(x + 1, y)):
+					matches.append(Vector2i(x + 1, y))
 			if y + 1 < LetterGridModel.GRID_SIZE and _is_vowel(model.get_letter(Vector2i(x, y + 1))):
-				matches += 1
+				if not matches.has(Vector2i(x, y)):
+					matches.append(Vector2i(x, y))
+				if not matches.has(Vector2i(x, y + 1)):
+					matches.append(Vector2i(x, y + 1))
 	return matches
 
 
@@ -88,9 +94,9 @@ func _transpose_toward_vowels(model: LetterGridModel) -> String:
 				var consonant_cell: Vector2i = vowel_cell + direction
 				if not model.is_valid_cell(consonant_cell) or _is_vowel(model.get_letter(consonant_cell)):
 					continue
-				var before := count_matches(model)
+				var before := collect_matches(model).size()
 				model.transpose(vowel_cell, consonant_cell)
-				if count_matches(model) > before:
+				if collect_matches(model).size() > before:
 					return "The book transposed adjacent letters at (%d, %d) and (%d, %d)." % [vowel_cell.x + 1, vowel_cell.y + 1, consonant_cell.x + 1, consonant_cell.y + 1]
 				model.transpose(vowel_cell, consonant_cell)
 	return ""
