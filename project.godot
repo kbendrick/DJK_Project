@@ -29,3 +29,7 @@ window/size/viewport_height=2000
 Player="Player character"
 Bookshelves="Interactable bookshelves"
 Mouse="Mouse"
+
+[gui]
+
+theme/custom_font="uid://0h18i6wqsufe"
