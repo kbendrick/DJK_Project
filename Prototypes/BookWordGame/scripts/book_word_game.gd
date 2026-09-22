@@ -203,8 +203,11 @@ func _on_ability_pressed(ability: BookAbility) -> void:
 		status_label.text = "You cannot afford %s." % ability.display_name
 		return
 
-	# Set active ability and clear the selected cells array
-	active_ability = ability
+	# Set active ability (or cancel active ability if already selected) and clear the selected cells array
+	if active_ability == ability:
+		active_ability = null
+	else:
+		active_ability = ability
 	selected_cells.clear()
 	status_label.text = "%s selected: choose %d letter%s." % [ability.display_name, ability.required_targets, "" if ability.required_targets == 1 else "s"]
 	_refresh_grid()
