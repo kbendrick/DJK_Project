@@ -48,6 +48,7 @@ var ability_buttons: Dictionary = {}
 var book_rule_cells: Array[Vector2i] =  []
 var selected_cells: Array[Vector2i] = []
 var active_ability: BookAbility
+var planned_book_moves: Array = []
 var phase := Phase.OPENING
 
 var maximum_action_points := 3
@@ -192,6 +193,7 @@ func _start_player_turn() -> void:
 	active_ability = null
 	selected_cells.clear()
 	status_label.text = "Choose an ability, then select letter cells."
+	planned_book_moves = book_rule.calculate_book_turn(grid_model, rng)
 	_refresh_all()
 
 
@@ -206,10 +208,11 @@ func _on_ability_pressed(ability: BookAbility) -> void:
 	# Set active ability (or cancel active ability if already selected) and clear the selected cells array
 	if active_ability == ability:
 		active_ability = null
+		status_label.text = "Choose an ability, then select letter cells."
 	else:
 		active_ability = ability
+		status_label.text = "%s selected: choose %d letter%s." % [ability.display_name, ability.required_targets, "" if ability.required_targets == 1 else "s"]
 	selected_cells.clear()
-	status_label.text = "%s selected: choose %d letter%s." % [ability.display_name, ability.required_targets, "" if ability.required_targets == 1 else "s"]
 	_refresh_grid()
 	_refresh_abilities()
 
@@ -308,9 +311,9 @@ func _end_player_turn() -> void:
 		_add_log("The page satisfies %s. No penalty." % book_rule.display_name)
 
 	# Take book's turn
-	var book_actions := book_rule.take_book_turn(grid_model, rng)
-	for action_text in book_actions:
-		_add_log(action_text)
+	var book_actions := book_rule.take_book_turn(grid_model, planned_book_moves)
+	for action in book_actions:
+		_add_log(action)
 	_refresh_all()
 	await get_tree().create_timer(0.45).timeout
 
@@ -377,6 +380,7 @@ func _refresh_resources() -> void:
 func _refresh_grid() -> void:
 	# Creates a variable for cells that have a completed word objective inside
 	var completed_cells: Array[Vector2i] = []
+	var book_turn_cells: Array[Vector2i] = []
 	book_rule_cells = []
 
 	# Checks to see if any of the target words have been completed
@@ -385,6 +389,13 @@ func _refresh_grid() -> void:
 
 	# Checks for book rule violations
 	book_rule_cells = book_rule.collect_matches(grid_model)
+
+	# Checks for the cells the book plans on affecting
+	for move in planned_book_moves:
+		for item in move:
+			if item is Vector2i:
+				book_turn_cells.append(item)
+
 	
 	# Updates button text and color to match any changes from ability usage or no longer being player turn
 	for index in grid_buttons.size():
@@ -396,6 +407,8 @@ func _refresh_grid() -> void:
 		# If cell is selected, color it yellow; if it's part of a completed word, color it green
 		if selected_cells.has(cell):
 			button.modulate = Color("ffd166")
+		elif book_turn_cells.has(cell):
+			button.modulate = Color("ff75ff")
 		elif completed_cells.has(cell):
 			button.modulate = Color("8bd17c")
 		elif book_rule_cells.has(cell):

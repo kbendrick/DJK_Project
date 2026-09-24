@@ -12,5 +12,9 @@ func collect_matches(_model: LetterGridModel) -> Array:
 	return []
 
 
-func take_book_turn(_model: LetterGridModel, _rng: RandomNumberGenerator) -> Array[String]:
+func calculate_book_turn(_model: LetterGridModel, _rng: RandomNumberGenerator) -> Array[Array]:
+	return []
+
+
+func take_book_turn(_model: LetterGridModel, _moves: Array) -> Array[String]:
 	return []
