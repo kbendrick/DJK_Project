@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b80rsjvlw6f3v"]
 
 [ext_resource type="Script" uid="uid://ugfc54g2p8wp" path="res://Room Setup/Trap/trap.gd" id="1_41mx7"]
-[ext_resource type="Texture2D" uid="uid://drm15x406hceg" path="res://trap.png" id="2_23yfg"]
+[ext_resource type="Texture2D" uid="uid://drm15x406hceg" path="res://Assets/trap.png" id="2_23yfg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fy57j"]
 

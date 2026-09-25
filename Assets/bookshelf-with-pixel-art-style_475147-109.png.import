@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drm15x406hceg"
-path="res://.godot/imported/trap.png-4542655019af2a2c9f525852e74bfdd2.ctex"
+uid="uid://bv3m6i88bclp5"
+path="res://.godot/imported/bookshelf-with-pixel-art-style_475147-109.png-c73c8a9be1afb72bb0ec5e7b404613d5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://trap.png"
-dest_files=["res://.godot/imported/trap.png-4542655019af2a2c9f525852e74bfdd2.ctex"]
+source_file="res://Assets/bookshelf-with-pixel-art-style_475147-109.png"
+dest_files=["res://.godot/imported/bookshelf-with-pixel-art-style_475147-109.png-c73c8a9be1afb72bb0ec5e7b404613d5.ctex"]
 
 [params]
 

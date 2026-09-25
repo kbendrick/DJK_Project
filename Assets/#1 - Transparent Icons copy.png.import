@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://r10apvj0vioq"
-path="res://.godot/imported/#1 - Transparent Icons copy.png-edab81390d4f71906f05579a80b43817.ctex"
+path="res://.godot/imported/#1 - Transparent Icons copy.png-83686bb47aae884a934b413a1f95006e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://#1 - Transparent Icons copy.png"
-dest_files=["res://.godot/imported/#1 - Transparent Icons copy.png-edab81390d4f71906f05579a80b43817.ctex"]
+source_file="res://Assets/#1 - Transparent Icons copy.png"
+dest_files=["res://.godot/imported/#1 - Transparent Icons copy.png-83686bb47aae884a934b413a1f95006e.ctex"]
 
 [params]
 

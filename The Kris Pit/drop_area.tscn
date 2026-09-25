@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ba7wkjpx306nn"]
+
+[ext_resource type="Script" uid="uid://ci4nxeus6kpe6" path="res://The Kris Pit/drop_area.gd" id="1_jif0b"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7dj0j"]
+size = Vector2(128, 129)
+
+[node name="drop_area" type="StaticBody2D" unique_id=394131837 groups=["dropable"]]
+script = ExtResource("1_jif0b")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1692982675]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 65.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2020075168]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_7dj0j")
