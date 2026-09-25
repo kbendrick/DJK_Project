@@ -6,6 +6,13 @@
 [node name="Level" type="Node2D" unique_id=30047133]
 
 [node name="Companion" parent="." unique_id=1726157132 instance=ExtResource("1_c6h41")]
+position = Vector2(651, 473)
 
-[node name="drop_area" parent="." unique_id=394131837 instance=ExtResource("2_o7t1i")]
+[node name="drop_area3" parent="." unique_id=394131837 instance=ExtResource("2_o7t1i")]
+position = Vector2(345, 300)
+
+[node name="drop_area" parent="." unique_id=2042615073 instance=ExtResource("2_o7t1i")]
 position = Vector2(1147, 494)
+
+[node name="drop_area2" parent="." unique_id=1365832012 instance=ExtResource("2_o7t1i")]
+position = Vector2(531, 817)
