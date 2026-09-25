@@ -14,8 +14,6 @@ enum Phase { OPENING, PLAYER, BOOK, VICTORY }
 @export_range(0, 999) var starting_insight := 20
 @export_range(0, 999) var gold_reward := 25
 
-# Variables to load rules and extra abilities for the specific book puzzle
-@export var book_rule_script: Script = preload("res://Prototypes/BookWordGame/rules/adjacent_vowels_rule.gd")
 var book_rule: BookRule
 @export var extra_abilities: Array[BookAbility] = []
 
@@ -73,7 +71,7 @@ func _ready() -> void:
 
 	#? Load a book rule if none is set yet?
 	if book_rule == null:
-		book_rule = book_rule_script.new() as BookRule
+		book_rule = AdjacentVowelsRule.new() as BookRule
 		if book_rule == null:
 			print("The selected script does not extend BookRule.")
 			return

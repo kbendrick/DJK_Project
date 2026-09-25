@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://b6lofgripns17" path="res://ezgif-split (1)/frame_11_delay-0.1s.png" id="14_lahsf"]
 [ext_resource type="Texture2D" uid="uid://d2l0hpdbienbk" path="res://ezgif-split (1)/frame_12_delay-0.1s.png" id="15_22eys"]
 [ext_resource type="Texture2D" uid="uid://cn4e6phytdwrb" path="res://ezgif-split (1)/frame_13_delay-0.1s.png" id="16_l8d22"]
+[ext_resource type="Texture2D" uid="uid://b7nixx36d7fp6" path="res://Resources/Black Scroll.png" id="17_1gfxb"]
 [ext_resource type="Texture2D" uid="uid://bwyi7tg7cygqh" path="res://ezgif-split (1)/frame_14_delay-0.1s.png" id="17_tiwk2"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_open"]
@@ -73,6 +74,16 @@ animations = [{
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eeuap"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6w62r"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mknb3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7dj0j"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wxlpg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_biw3d"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tboxt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_modal"]
 bg_color = Color(0.12, 0.08, 0.16, 0.98)
@@ -228,7 +239,15 @@ text = "Choose an ability."
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_mknb3")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_7dj0j")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wxlpg")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_biw3d")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tboxt")
 text = "END TURN"
+icon = ExtResource("17_1gfxb")
+icon_alignment = 1
+expand_icon = true
 
 [node name="LogHeader" type="Label" parent="Interface/Center/BookSpread/RightPage/PageMargin/RightContent" unique_id=1309940482]
 layout_mode = 2
@@ -244,6 +263,7 @@ theme_override_colors/default_color = Color(0.22, 0.13, 0.13, 1)
 theme_override_font_sizes/normal_font_size = 18
 
 [node name="LetterPicker" type="Control" parent="." unique_id=2093923765]
+visible = false
 z_index = 20
 layout_mode = 3
 anchors_preset = 15
@@ -304,6 +324,7 @@ theme_override_font_sizes/font_size = 22
 text = "CANCEL"
 
 [node name="VictoryOverlay" type="Control" parent="." unique_id=997287967]
+visible = false
 z_index = 30
 layout_mode = 3
 anchors_preset = 15
