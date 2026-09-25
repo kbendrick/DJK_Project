@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://cr7j80e3ctaj8"]
+
+[ext_resource type="Script" uid="uid://bjrecgvycpkde" path="res://the drew stew/drew_stew.gd" id="1_script"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5w58i"]
+
+[node name="DrewStew" type="Control" unique_id=2145756930]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+valid_words = PackedStringArray("Books", "Hello", "World", "Faces", "")
+seconds_per_step = 1.5
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1906548155]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center" unique_id=719417186]
+custom_minimum_size = Vector2(680, 810)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5w58i")
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel" unique_id=1146009997]
+layout_mode = 2
+theme_override_constants/margin_left = 55
+theme_override_constants/margin_top = 45
+theme_override_constants/margin_right = 55
+theme_override_constants/margin_bottom = 45
+
+[node name="Layout" type="VBoxContainer" parent="Center/Panel/Margin" unique_id=1708213245]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="Center/Panel/Margin/Layout" unique_id=946108923]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "THE DREW STEW"
+horizontal_alignment = 1
+
+[node name="LetterGrid" type="GridContainer" parent="Center/Panel/Margin/Layout" unique_id=1991396022]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 5
+
+[node name="Controls" type="HBoxContainer" parent="Center/Panel/Margin/Layout" unique_id=728193952]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PauseButton" type="Button" parent="Center/Panel/Margin/Layout/Controls" unique_id=1808905123]
+custom_minimum_size = Vector2(180, 58)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "PAUSE"
+
+[node name="RerollButton" type="Button" parent="Center/Panel/Margin/Layout/Controls" unique_id=1323133134]
+custom_minimum_size = Vector2(180, 58)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "REROLL LETTERS"
