@@ -1,0 +1,102 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://the drew stew/drew_stew.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+bg_color = Color(0.11, 0.12, 0.16, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.42, 0.46, 0.58, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="DrewStew" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.045, 0.05, 0.075, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(680, 810)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 55
+theme_override_constants/margin_top = 45
+theme_override_constants/margin_right = 55
+theme_override_constants/margin_bottom = 45
+
+[node name="Layout" type="VBoxContainer" parent="Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="Center/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "THE DREW STEW"
+horizontal_alignment = 1
+
+[node name="Instructions" type="Label" parent="Center/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.74, 0.76, 0.84, 1)
+theme_override_font_sizes/font_size = 18
+text = "Columns 1, 3, and 5 rotate down. Columns 2 and 4 rotate up."
+horizontal_alignment = 1
+
+[node name="LetterGrid" type="GridContainer" parent="Center/Panel/Margin/Layout"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 5
+
+[node name="StatusLabel" type="Label" parent="Center/Panel/Margin/Layout"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "No five-letter words currently visible."
+horizontal_alignment = 1
+
+[node name="Controls" type="HBoxContainer" parent="Center/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PauseButton" type="Button" parent="Center/Panel/Margin/Layout/Controls"]
+custom_minimum_size = Vector2(180, 58)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "PAUSE"
+
+[node name="RerollButton" type="Button" parent="Center/Panel/Margin/Layout/Controls"]
+custom_minimum_size = Vector2(180, 58)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "REROLL LETTERS"
