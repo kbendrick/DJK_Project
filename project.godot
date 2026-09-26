@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 global="*uid://dxvyvgpe4mppb"
+companion_database="*uid://cf3h0lgig6k3j"
 
 [display]
 
