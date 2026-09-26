@@ -8,7 +8,7 @@ enum CompanionList {Hilda, Impa, Jack, Olive, Squeaks}
 var current_position: Vector2
 var draggable: bool = false
 var is_inside_droppable: bool = false
-var body_ref
+var body_ref: StaticBody2D = null
 var initial_position: Vector2
 var offset: Vector2
 
@@ -51,7 +51,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var show_panel: bool = false
-	if draggable:
+	if draggable and not global.is_locked:
 		show_panel = true
 		if Input.is_action_just_pressed("left_click"):
 			initial_position = global_position
@@ -64,8 +64,9 @@ func _process(_delta: float) -> void:
 		elif Input.is_action_just_released("left_click"):
 			global.is_dragging =false
 			var tween = get_tree().create_tween()
-			if is_inside_droppable:
-				tween.tween_property(self, "position", body_ref.position,0.2).set_ease(Tween.EASE_OUT)
+			if is_inside_droppable and body_ref.companion == null:
+				tween.tween_property(self, "position", body_ref.global_position,0.2).set_ease(Tween.EASE_OUT)
+				body_ref.companion = self
 			else:
 				tween.tween_property(self, "global_position", initial_position,0.2).set_ease(Tween.EASE_OUT)
 			
@@ -91,12 +92,14 @@ func _on_mouse_exited() -> void:
 		scale = Vector2(1,1)
 	
 func _on_area_2d_body_entered(body:StaticBody2D):
-	if body.is_in_group('dropable'):
+	if body.is_in_group('dropable') and body.companion == null:
 		is_inside_droppable = true
 		body.modulate = Color(Color.REBECCA_PURPLE, 1)
 		body_ref = body
 		
 func _on_area_2d_body_exited(body):
-	if body.is_in_group('dropable'):
+	if body.is_in_group('dropable') and  body.companion != null:
 		is_inside_droppable = false
 		body.modulate = Color(Color.MEDIUM_PURPLE, 0.7)
+		if body.companion == self:
+			body.companion = null

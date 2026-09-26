@@ -1322,7 +1322,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dj0j"]
-size = Vector2(229, 215)
+size = Vector2(100, 124)
 
 [sub_resource type="Theme" id="Theme_rcayy"]
 
@@ -1336,14 +1336,12 @@ script = ExtResource("1_3svlm")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=845303022]
 scale = Vector2(10, 10)
 sprite_frames = SubResource("SpriteFrames_7dj0j")
-animation = &"jack_idle"
-frame_progress = 0.8453582
+animation = &"impa_idle"
 
 [node name="Area2D" type="Area2D" parent="." unique_id=326750926]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1945464624]
-visible = false
-position = Vector2(0.5, -34.5)
+position = Vector2(-2, -21)
 shape = SubResource("RectangleShape2D_7dj0j")
 
 [node name="Control" type="Control" parent="." unique_id=1143604747]

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d2ngaa0qkibn" path="res://The Kris Pit/point_of_interest.gd" id="1_stdry"]
 [ext_resource type="Texture2D" uid="uid://dlj3ekgn05kii" path="res://The Kris Pit/Mystic RPG icon pack/bookshelf_front.png" id="1_xpy4l"]
 [ext_resource type="Texture2D" uid="uid://de26prfknl2me" path="res://The Kris Pit/Mystic RPG icon pack/bookshelf_side.png" id="2_q74n6"]
+[ext_resource type="PackedScene" uid="uid://ba7wkjpx306nn" path="res://The Kris Pit/drop_area.tscn" id="2_tmkko"]
 [ext_resource type="Texture2D" uid="uid://dykimtum7gu4b" path="res://The Kris Pit/Shelf Icons/currency.png" id="4_t7rpf"]
 [ext_resource type="Texture2D" uid="uid://cbf5vfxbvidb0" path="res://The Kris Pit/Shelf Icons/hazard.png" id="4_x5waj"]
 [ext_resource type="Texture2D" uid="uid://rk6n65cj5qlg" path="res://The Kris Pit/Shelf Icons/heal.png" id="5_84p8i"]
@@ -10,6 +11,12 @@
 [ext_resource type="Texture2D" uid="uid://7d5rsexdl8u0" path="res://The Kris Pit/Shelf Icons/interact_complete.png" id="6_qqclr"]
 [ext_resource type="Texture2D" uid="uid://b082qxhlvl4s5" path="res://The Kris Pit/Shelf Icons/rest.png" id="8_1c3yu"]
 [ext_resource type="Texture2D" uid="uid://eb8olyxvo04r" path="res://The Kris Pit/Shelf Icons/upgrade.png" id="8_8r3hs"]
+[ext_resource type="Texture2D" uid="uid://tar5ftrcw4ay" path="res://The Kris Pit/Mystic RPG icon pack/Charisma.png" id="12_i103l"]
+[ext_resource type="Texture2D" uid="uid://dv4ujj46eoba0" path="res://The Kris Pit/Mystic RPG icon pack/Icon_Background.png" id="12_y6cje"]
+[ext_resource type="Texture2D" uid="uid://clyrnlkv51e8y" path="res://The Kris Pit/Mystic RPG icon pack/Cult.png" id="13_k44uh"]
+[ext_resource type="Texture2D" uid="uid://dixd7jf7nkk4m" path="res://The Kris Pit/Mystic RPG icon pack/Medicine.png" id="14_y6cje"]
+[ext_resource type="Texture2D" uid="uid://bsep6lhuaiqil" path="res://The Kris Pit/Mystic RPG icon pack/Perception.png" id="15_7gh52"]
+[ext_resource type="Texture2D" uid="uid://b4qkldj0lyf05" path="res://The Kris Pit/Mystic RPG icon pack/Study.png" id="16_1bs54"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qence"]
 atlas = ExtResource("4_t7rpf")
@@ -150,7 +157,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_k44uh")
 }],
 "loop": 1,
-"name": &"interact_complete",
+"name": &"interact_ready",
 "speed": 3.0
 }, {
 "frames": [{
@@ -196,8 +203,76 @@ animations = [{
 "speed": 3.0
 }]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l6wls"]
+texture = ExtResource("12_y6cje")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v8obl"]
+atlas = ExtResource("12_i103l")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hagmn"]
+atlas = ExtResource("13_k44uh")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2yb5t"]
+atlas = ExtResource("14_y6cje")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mhrph"]
+atlas = ExtResource("15_7gh52")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nmodi"]
+atlas = ExtResource("16_1bs54")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wxlpg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v8obl")
+}],
+"loop": 1,
+"name": &"charisma",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hagmn")
+}],
+"loop": 1,
+"name": &"cult",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2yb5t")
+}],
+"loop": 1,
+"name": &"medicine",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mhrph")
+}],
+"loop": 1,
+"name": &"perception",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nmodi")
+}],
+"loop": 1,
+"name": &"study",
+"speed": 5.0
+}]
+
 [node name="Points_of_Interest" type="Node2D" unique_id=331202193]
+scale = Vector2(3, 3)
 script = ExtResource("1_stdry")
+interactable_square = ExtResource("2_tmkko")
 shelf_type = 1
 
 [node name="FrontShelf" type="Sprite2D" parent="." unique_id=146429450]
@@ -212,38 +287,32 @@ texture = ExtResource("2_q74n6")
 [node name="POI_Icon" type="AnimatedSprite2D" parent="." unique_id=251189446]
 position = Vector2(0, -49)
 sprite_frames = SubResource("SpriteFrames_7dj0j")
-animation = &"currency"
-frame_progress = 0.76188356
+animation = &"interact_ready"
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=390559672]
-zoom = Vector2(3, 3)
+[node name="PanelContainer" type="PanelContainer" parent="POI_Icon" unique_id=1008814354]
+offset_left = -20.333334
+offset_top = 16.333334
+offset_right = 19.666666
+offset_bottom = 31.333334
+theme_override_styles/panel = SubResource("StyleBoxTexture_l6wls")
+
+[node name="SkillIcon1" type="AnimatedSprite2D" parent="POI_Icon/PanelContainer" unique_id=602800043]
+position = Vector2(12.666691, 7.6666756)
+scale = Vector2(0.34375, 0.3333333)
+sprite_frames = SubResource("SpriteFrames_wxlpg")
+animation = &"cult"
+
+[node name="SkillIcon2" type="AnimatedSprite2D" parent="POI_Icon/PanelContainer" unique_id=26905463]
+position = Vector2(28.000004, 7.6666718)
+scale = Vector2(0.34375, 0.3333333)
+sprite_frames = SubResource("SpriteFrames_wxlpg")
+animation = &"cult"
 
 [node name="InteractableMarker1" type="Marker2D" parent="." unique_id=530141365]
 position = Vector2(127, 103)
 
-[node name="ColorRect" type="ColorRect" parent="InteractableMarker1" unique_id=1281334220]
-offset_left = -7.0
-offset_top = -7.0
-offset_right = 7.0
-offset_bottom = 8.0
-metadata/_edit_use_anchors_ = true
-
 [node name="InteractableMarker2" type="Marker2D" parent="." unique_id=1735906280]
 position = Vector2(127, 68)
 
-[node name="ColorRect" type="ColorRect" parent="InteractableMarker2" unique_id=408852984]
-offset_left = -7.0
-offset_top = -7.0
-offset_right = 7.0
-offset_bottom = 8.0
-metadata/_edit_use_anchors_ = true
-
 [node name="InteractableMarker3" type="Marker2D" parent="." unique_id=2068080148]
 position = Vector2(127, 33)
-
-[node name="ColorRect" type="ColorRect" parent="InteractableMarker3" unique_id=411296775]
-offset_left = -7.0
-offset_top = -7.0
-offset_right = 7.0
-offset_bottom = 8.0
-metadata/_edit_use_anchors_ = true

@@ -1,6 +1,6 @@
 extends Node
 
-var companion_dict = {
+var companion_dict: Dictionary = {
 	"Hilda": {
 		"perception": 1,
 		"cult": 1,
