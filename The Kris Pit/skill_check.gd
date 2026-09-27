@@ -10,7 +10,7 @@ const BAR_WIDTH := 760.0
 const BALL_BOUNCE_COUNT := 6
 const BALL_SETTLE_CURVE := 2.4
 const BALL_FINAL_DISTANCE := 0.08
-const BALL_BOUNCE_VARIATION := 0.10
+const BALL_BOUNCE_VARIATION := 0.04
 const BALL_FIRST_TRAVEL_TIME := 0.18
 const BALL_LAST_TRAVEL_TIME := 0.70
 const BALL_FINAL_APPROACH_TIME := 1.8
@@ -151,6 +151,7 @@ func _run_skill_check() -> void:
 # The result is already fixed; only the displayed motion converges toward it.
 func _animate_ball(right_edge: float, stop_x: float) -> void:
 	var base_y := ball.position.y
+	var previous_distance := 1.0
 
 	for bounce_index in BALL_BOUNCE_COUNT:
 		var bounce_progress := (
@@ -168,16 +169,23 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 		)
 
 		# Slightly vary each intermediate amplitude so players cannot reliably
-		# find stop_x by averaging the left and right endpoints.
-		var variation := random.randf_range(
-			1.0 - BALL_BOUNCE_VARIATION,
-			1.0 + BALL_BOUNCE_VARIATION
+		# find stop_x by averaging the left and right endpoints. The variation
+		# fades out at the end, and the clamp guarantees every bounce is closer.
+		var variation_range := BALL_BOUNCE_VARIATION * (1.0 - settle_progress)
+		distance_from_result += random.randf_range(
+			-variation_range,
+			variation_range
 		)
-		distance_from_result = clampf(
-			distance_from_result * variation,
-			BALL_FINAL_DISTANCE,
-			1.0
-		)
+
+		if bounce_index == 0:
+			distance_from_result = 1.0
+		else:
+			distance_from_result = clampf(
+				distance_from_result,
+				BALL_FINAL_DISTANCE,
+				previous_distance - 0.01
+			)
+		previous_distance = distance_from_result
 
 		var edge_target := right_edge if bounce_index % 2 == 0 else 0.0
 		var target_x := lerpf(stop_x, edge_target, distance_from_result)
