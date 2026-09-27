@@ -144,7 +144,7 @@ func _run_skill_check() -> void:
 # the stopping point, guaranteeing a visible final movement.
 func _animate_ball(right_edge: float, stop_x: float) -> void:
 	var base_y := ball.position.y
-	var bounce_count := 7 if stop_x < right_edge / 2.0 else 8
+	var bounce_count := 6
 
 	for bounce_index in bounce_count:
 		var target_x := right_edge if bounce_index % 2 == 0 else 0.0
