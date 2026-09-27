@@ -221,7 +221,7 @@ texture = ExtResource("2_tu187")
 position = Vector2(478, 477)
 
 [node name="BarArea" type="Control" parent="Screen/Center/Panel/Margin/Layout" unique_id=504971476]
-custom_minimum_size = Vector2(900, 90)
+custom_minimum_size = Vector2(900, 140)
 layout_mode = 2
 
 [node name="BlackBar" type="Panel" parent="Screen/Center/Panel/Margin/Layout/BarArea" unique_id=492883427]
@@ -230,21 +230,21 @@ layout_mode = 0
 offset_left = 95.0
 offset_top = 112.0
 offset_right = 855.0
-offset_bottom = 162.0
+offset_bottom = 212.0
 theme_override_styles/panel = SubResource("StyleBox_black_bar")
 
 [node name="PurpleFill" type="ColorRect" parent="Screen/Center/Panel/Margin/Layout/BarArea/BlackBar" unique_id=1423407987]
 layout_mode = 0
 offset_right = 1.0
-offset_bottom = 50.0
+offset_bottom = 100.0
 mouse_filter = 2
 color = Color(0.45, 0.12, 0.72, 1)
 
 [node name="Ball" type="Panel" parent="Screen/Center/Panel/Margin/Layout/BarArea/BlackBar" unique_id=1250743815]
 layout_mode = 0
-offset_top = 11.0
+offset_top = 36.0
 offset_right = 28.0
-offset_bottom = 39.0
+offset_bottom = 64.0
 theme_override_styles/panel = SubResource("StyleBox_ball")
 
 [node name="MarginContainer" type="MarginContainer" parent="Screen/Center/Panel/Margin/Layout" unique_id=1203069915]
