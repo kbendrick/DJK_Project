@@ -91,17 +91,26 @@ func _create_random_challenge() -> void:
 	for key in selected_poi_database:
 		current_state[key] = selected_poi_database[key]
 
-	if current_state["name"] == "hazard":
-		var i: int = rng.randi_range(0, 4)
-		current_state["skill_1"] = current_state["skill_1"][i]
-		current_state["skill_2"] = current_state["skill_2"][i]
+	var hazard_skill_index := rng.randi_range(0, 4)
+	var combined_skill_values := 0
+	var skill_number := 1
 
-	current_state["skill_1_value"] = rng.randi_range(2, 8)
-	current_state["skill_2_value"] = rng.randi_range(2, 8)
+	# Numbered skills make the challenge expandable. Adding skill_3 or
+	# skill_4 to the database also gives that skill a requirement here.
+	while true:
+		var skill_key := "skill_" + str(skill_number)
+		var requirement_key := skill_key + "_value"
 
-	var combined_skill_values: int = (
-		current_state["skill_1_value"] + current_state["skill_2_value"]
-	)
+		if not current_state.has(skill_key):
+			break
+
+		if current_state[skill_key] is Array:
+			current_state[skill_key] = current_state[skill_key][hazard_skill_index]
+
+		var requirement := rng.randi_range(2, 8)
+		current_state[requirement_key] = requirement
+		combined_skill_values += requirement
+		skill_number += 1
 
 	if combined_skill_values > 9:
 		current_state["difficulty_level"] = 3
@@ -202,9 +211,62 @@ func _open_skill_check() -> void:
 	)
 
 
-func _on_skill_check_finished(_succeeded: bool) -> void:
+func _on_skill_check_finished(succeeded: bool) -> void:
 	skill_check_open = false
+
+	# Run the result on the next frame, after the skill-check overlay closes.
+	call_deferred("_finish_skill_check", succeeded)
+
+
+func _finish_skill_check(succeeded: bool) -> void:
+	_apply_skill_check_result(succeeded)
 	_complete_challenge()
+
+
+func _apply_skill_check_result(succeeded: bool) -> void:
+	if succeeded:
+		if current_state["name"] == "hazard":
+			print("Hazard succeeded. Nothing happens.")
+		else:
+			print(
+				"Challenge reward: ",
+				current_state["reward_amount"],
+				" ",
+				current_state["reward"]
+			)
+		return
+
+	if current_state["name"] == "hazard":
+		_apply_assigned_hazard_failure()
+		return
+
+	var assigned_companions := _get_assigned_companions()
+
+	for companion in assigned_companions:
+		companion.lose_sanity(1)
+
+	print("Challenge failed. Assigned companions lose 1 sanity.")
+
+
+func _apply_assigned_hazard_failure() -> void:
+	var penalty_amount: int = current_state["reward_amount"]
+
+	if current_state["reward"] == "steps":
+		global.steps = maxi(0, global.steps - penalty_amount)
+		print(
+			"Hazard failed. Lost ",
+			penalty_amount,
+			" steps. Steps remaining: ",
+			global.steps
+		)
+	else:
+		var all_companions: Array[Node] = []
+		all_companions.assign(get_tree().get_nodes_in_group("companions"))
+
+		for companion in all_companions:
+			companion.lose_sanity(1)
+
+		print("Hazard failed. Every companion loses 1 sanity.")
 
 
 func _complete_challenge() -> void:
