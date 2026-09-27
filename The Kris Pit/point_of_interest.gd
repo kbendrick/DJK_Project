@@ -95,16 +95,16 @@ func _create_random_challenge() -> void:
 		current_state["skill_1"] = _choose_random_value(current_state["skill_1"])
 		current_state["skill_2"] = _choose_random_value(current_state["skill_2"])
 
-	current_state["skill_1_value"] = rng.randi_range(1, 5)
-	current_state["skill_2_value"] = rng.randi_range(1, 5)
+	current_state["skill_1_value"] = rng.randi_range(2, 8)
+	current_state["skill_2_value"] = rng.randi_range(2, 8)
 
 	var combined_skill_values: int = (
 		current_state["skill_1_value"] + current_state["skill_2_value"]
 	)
 
-	if combined_skill_values > 6:
+	if combined_skill_values > 9:
 		current_state["difficulty_level"] = 3
-	elif combined_skill_values > 3:
+	elif combined_skill_values > 5:
 		current_state["difficulty_level"] = 2
 	else:
 		current_state["difficulty_level"] = 1

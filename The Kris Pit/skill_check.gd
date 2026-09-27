@@ -8,7 +8,7 @@ const BAR_WIDTH := 760.0
 @onready var title_label: Label = $Screen/Center/Panel/Margin/Layout/Title
 @onready var skill_label: Label = $Screen/Center/Panel/Margin/Layout/SkillLabel
 @onready var requirement_label: Label = $Screen/Center/Panel/Margin/Layout/RequirementLabel
-@onready var bookshelf: Sprite2D = $Screen/Center/Panel/Margin/Layout/Stage/Bookshelf
+#@onready var bookshelf: Sprite2D = $Screen/Center/Panel/Margin/Layout/Stage/Bookshelf
 @onready var character_layer: Node2D = $Screen/Center/Panel/Margin/Layout/Stage/CharacterLayer
 @onready var black_bar: Panel = $Screen/Center/Panel/Margin/Layout/BarArea/BlackBar
 @onready var purple_fill: ColorRect = $Screen/Center/Panel/Margin/Layout/BarArea/BlackBar/PurpleFill
@@ -34,14 +34,13 @@ func setup(
 	new_challenge_state: Dictionary,
 	new_assigned_companions: Array[Node],
 	new_all_companions: Array[Node],
-	shelf_texture: Texture2D,
-	flip_shelf: bool
+	_shelf_texture: Texture2D,
+	_flip_shelf: bool
 ) -> void:
 	challenge_state = new_challenge_state.duplicate(true)
 	assigned_companions = new_assigned_companions
 	all_companions = new_all_companions
-	bookshelf.texture = shelf_texture
-	bookshelf.flip_h = flip_shelf
+
 
 	_create_companion_displays()
 	call_deferred("_run_skill_check")
@@ -62,7 +61,7 @@ func _create_companion_displays() -> void:
 		display_sprite.sprite_frames = source_sprite.sprite_frames
 		display_sprite.animation = source_sprite.animation
 		display_sprite.position = Vector2(first_x + index * spacing, 80)
-		display_sprite.scale = Vector2(3.0, 3.0)
+		display_sprite.scale = Vector2(10, 10)
 		display_sprite.play()
 		character_layer.add_child(display_sprite)
 
@@ -132,15 +131,10 @@ func _run_skill_check() -> void:
 
 	for bounce_index in 6:
 		var target_x := right_edge if bounce_index % 2 == 0 else 0.0
-		ball_tween.tween_property(
-			ball,
-			"position:x",
-			target_x,
-			0.20 + bounce_index * 0.06
-		)
+		ball_tween.tween_property(ball,"position:x",target_x,0.20 + bounce_index*3 * 0.06)
 
 	var stop_ratio := random.randf()
-	ball_tween.tween_property(ball, "position:x", right_edge * stop_ratio, 0.8)
+	ball_tween.tween_property(ball, "position:x", right_edge * stop_ratio, 5)
 	await ball_tween.finished
 
 	var ball_center_ratio := (ball.position.x + ball.size.x / 2.0) / BAR_WIDTH

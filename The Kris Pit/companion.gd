@@ -42,7 +42,7 @@ func _ready() -> void:
 	area_2d.body_entered.connect(_on_area_2d_body_entered)
 	area_2d.body_exited.connect(_on_area_2d_body_exited)
 
-	var companion_name := CompanionList.keys()[companion]
+	var companion_name = CompanionList.keys()[companion]
 	var selected_companion = companion_database.companion_dict[companion_name]
 
 	perception = selected_companion["perception"]
