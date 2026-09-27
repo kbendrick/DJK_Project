@@ -232,7 +232,7 @@ func _apply_unassigned_hazard_failure() -> void:
 		)
 	else:
 		for companion in all_companions:
-			companion.lose_sanity(penalty_amount)
+			companion.lose_sanity(1)
 		print(
 			"Hazard had no assigned companion. Every companion loses ",
 			penalty_amount,

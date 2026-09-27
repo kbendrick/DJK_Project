@@ -131,7 +131,7 @@ func _run_skill_check() -> void:
 
 	for bounce_index in 6:
 		var target_x := right_edge if bounce_index % 2 == 0 else 0.0
-		ball_tween.tween_property(ball,"position:x",target_x,0.20 + bounce_index*3 * 0.06)
+		ball_tween.tween_property(ball,"position:x",target_x,0.20 + (bounce_index*5) * 0.06)
 
 	var stop_ratio := random.randf()
 	ball_tween.tween_property(ball, "position:x", right_edge * stop_ratio, 5)
@@ -171,7 +171,10 @@ func _get_companion_skill_total(skill_1: String, skill_2: String) -> int:
 func _resolve_result(succeeded: bool) -> void:
 	if succeeded:
 		result_label.text = "SUCCESS"
-
+		var i = 0
+		for companion in assigned_companions:
+			character_layer.get_child(i).play(companion.companion_name.to_lower() + "_success")
+			i += 1
 		if challenge_state["name"] == "hazard":
 			print("Hazard succeeded. Nothing happens.")
 		else:
@@ -187,8 +190,11 @@ func _resolve_result(succeeded: bool) -> void:
 		if challenge_state["name"] == "hazard":
 			_apply_hazard_failure()
 		else:
+			var i = 0
 			for companion in assigned_companions:
 				companion.lose_sanity(1)
+				character_layer.get_child(i).play(companion.companion_name.to_lower() + "_hurt")
+				i += 1
 			print("Challenge failed. Assigned companions lose 1 sanity.")
 
 	continue_button.show()
@@ -203,8 +209,8 @@ func _apply_hazard_failure() -> void:
 		print("Hazard failed. Lost ", penalty_amount, " steps. Steps remaining: ", global.steps)
 	else:
 		for companion in all_companions:
-			companion.lose_sanity(penalty_amount)
-		print("Hazard failed. Every companion loses ", penalty_amount, " sanity.")
+			companion.lose_sanity(1)
+		print("Hazard failed. Every companion loses ", 1, " sanity.")
 
 
 func _close() -> void:

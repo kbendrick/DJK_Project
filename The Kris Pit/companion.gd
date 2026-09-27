@@ -23,6 +23,9 @@ var study: int
 var medicine: int
 var sanity: int
 
+var companion_name: String
+var hurt: bool = false
+
 @onready var stat_panel: Panel = $Control/Panel
 @onready var perception_label: Label = $Control/Panel/GridContainer/Perception/Label
 @onready var cult_label: Label = $Control/Panel/GridContainer/Cult/Label
@@ -42,7 +45,7 @@ func _ready() -> void:
 	area_2d.body_entered.connect(_on_area_2d_body_entered)
 	area_2d.body_exited.connect(_on_area_2d_body_exited)
 
-	var companion_name = CompanionList.keys()[companion]
+	companion_name = CompanionList.keys()[companion]
 	var selected_companion = companion_database.companion_dict[companion_name]
 
 	perception = selected_companion["perception"]
@@ -101,9 +104,13 @@ func _process(_delta: float) -> void:
 				).set_ease(Tween.EASE_OUT)
 
 			_clear_drop_area_highlights()
-
+	
+	if draggable and global.is_locked:
+		show_panel = true
+	
 	stat_panel.visible = show_panel
-	sanity_bar.visible = show_panel
+	if not hurt:
+		sanity_bar.visible = show_panel
 	perception_label.text = str(perception)
 	charisma_label.text = str(charisma)
 	study_label.text = str(study)
@@ -205,3 +212,10 @@ func get_stat_value(stat_name: String) -> int:
 func lose_sanity(amount: int = 1) -> void:
 	sanity = maxi(0, sanity - amount)
 	sanity_bar.set_current_sanity(sanity)
+	animated_sprite.play(companion_name.to_lower() + "_hurt")
+	hurt = true
+	sanity_bar.visible = true
+	await animated_sprite.animation_finished
+	animated_sprite.play(companion_name.to_lower() + "_idle")
+	sanity_bar.visible = false
+	hurt = false
