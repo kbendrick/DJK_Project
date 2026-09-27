@@ -104,6 +104,9 @@ func _create_random_challenge() -> void:
 		if not current_state.has(skill_key):
 			break
 
+		if current_state[skill_key] == null:
+			break
+
 		if current_state[skill_key] is Array:
 			current_state[skill_key] = current_state[skill_key][hazard_skill_index]
 
