@@ -6,7 +6,7 @@ signal finished(success: bool)
 const MAX_BAR_WIDTH := 760.0
 const MIN_BAR_WIDTH := 140.0
 const PIXELS_PER_REQUIREMENT_POINT := 45.0
-const CHUNK_ANIMATION_TIME := 0.8
+const CHUNK_ANIMATION_TIME := 2.5
 
 @onready var title_label: Label = $Screen/Center/Panel/Margin/Layout/Title
 @onready var character_layer: Node2D = $Screen/Center/Panel/Margin/Layout/Stage/CharacterLayer
@@ -21,6 +21,12 @@ const CHUNK_ANIMATION_TIME := 0.8
 # The animated indicators used during the check are created below in code.
 @onready var skill_icon_1: AnimatedSprite2D = $Screen/Center/Panel/Margin/Layout/SkillIcon1
 @onready var skill_icon_2: AnimatedSprite2D = $Screen/Center/Panel/Margin/Layout/SkillIcon2
+@onready var requirement_1: Label = $Screen/Center/Panel/Margin/Layout/SkillIcon1/SkillRequirement1
+@onready var requirement_2: Label = $Screen/Center/Panel/Margin/Layout/SkillIcon2/SkillRequirement2
+var skill_icon_1_name: String
+var skill_icon_2_name: String
+
+var animated_sprite_array: Array[Dictionary]
 
 var challenge_state: Dictionary
 var assigned_companions: Array[Node] = []
@@ -47,11 +53,6 @@ func _ready() -> void:
 	ball.hide()
 	result_label.text = ""
 
-	# The original fixed icons are replaced by indicators that can support
-	# any number of required skills.
-	skill_icon_1.hide()
-	skill_icon_2.hide()
-
 
 func setup(
 	new_challenge_state: Dictionary,
@@ -64,11 +65,33 @@ func setup(
 	assigned_companions = new_assigned_companions
 	all_companions = new_all_companions
 
+	var skill_checks := _get_skill_checks()
+	skill_icon_1.play(skill_checks[0]["name"])
+	requirement_1.text = str(skill_checks[0]["requirement"])
+	skill_icon_1_name = skill_checks[0]["name"]
+	skill_icon_2.play(skill_checks[1]["name"])
+	requirement_2.text = str(skill_checks[1]["requirement"])
+	skill_icon_2_name = skill_checks[1]["name"]
+	
+	
+	
+	animated_sprite_array.append({
+		"name": skill_checks[0]["name"],
+		"requirement": skill_checks[0]["requirement"],
+		"sprite": skill_icon_1
+	})
+	
+	animated_sprite_array.append({
+		"name": skill_checks[1]["name"],
+		"requirement": skill_checks[1]["requirement"],
+		"sprite": skill_icon_2
+	})
+	
 	_create_companion_displays()
 	_create_requirement_indicator()
 	_create_companion_skill_indicators()
 	call_deferred("_run_skill_check")
-
+	
 
 func _create_companion_displays() -> void:
 	for old_display in character_layer.get_children():
@@ -160,7 +183,7 @@ func _run_skill_check() -> void:
 		MAX_BAR_WIDTH
 	)
 
-	title_label.text = challenge_state["name"].capitalize() + " Challenge"
+	title_label.text = challenge_state["name"].capitalize()
 	black_bar.size.x = 0.0
 	purple_fill.size.x = 0.0
 	ball.hide()
@@ -237,10 +260,7 @@ func _get_skill_checks() -> Array[Dictionary]:
 	return skill_checks
 
 
-func _animate_requirement_chunks(
-	skill_checks: Array[Dictionary],
-	total_requirement: int
-) -> void:
+func _animate_requirement_chunks(skill_checks: Array[Dictionary], total_requirement: int) -> void:
 	var current_width := 0.0
 
 	for skill_check in skill_checks:
@@ -256,7 +276,10 @@ func _animate_requirement_chunks(
 			black_bar.position.y + 25.0
 		)
 		requirement_indicator.show()
-
+		
+		print(skill_name)
+		enlarge_skill_icon(skill_name, true)
+		
 		var chunk_tween := create_tween()
 		chunk_tween.set_parallel(true)
 		chunk_tween.set_trans(Tween.TRANS_QUAD)
@@ -280,10 +303,12 @@ func _animate_requirement_chunks(
 			CHUNK_ANIMATION_TIME
 		)
 		await chunk_tween.finished
-
+		
+		enlarge_skill_icon(skill_name, false)
+		
 		current_width = target_width
 		await get_tree().create_timer(0.15).timeout
-
+	requirement_indicator.hide()
 
 func _get_weighted_requirement_total(
 	skill_checks: Array[Dictionary],
@@ -357,7 +382,10 @@ func _animate_companion_chunks(
 
 		await fill_tween.finished
 		await get_tree().create_timer(0.15).timeout
-
+	
+	for companion_index in assigned_companions.size():
+		companion_skill_indicators[companion_index].hide()
+	
 	return weighted_companion_total
 
 
@@ -503,20 +531,31 @@ func _resolve_result(succeeded: bool) -> void:
 		for index in assigned_companions.size():
 			var companion = assigned_companions[index]
 			var display = companion_displays[index]
-			display.play(companion.companion_name.to_lower() + "_success")
+			#display.play(companion.companion_name.to_lower() + "_success")
 	else:
 		result_label.text = "FAILURE"
 
 		for index in assigned_companions.size():
 			var companion = assigned_companions[index]
 			var display = companion_displays[index]
-			display.play(companion.companion_name.to_lower() + "_hurt")
+			#display.play(companion.companion_name.to_lower() + "_hurt")
 
 	# Rewards and penalties are intentionally not applied here. They are
 	# applied by the point of interest after this scene closes.
 	continue_button.show()
 	continue_button.set_meta("success", succeeded)
 
+func enlarge_skill_icon(skill_name: String, enlarge: bool) -> void:
+	for sprites in animated_sprite_array:
+		if sprites["name"] == skill_name:
+			if enlarge:
+				sprites["sprite"].scale = Vector2(2.5, 2.5)
+				print(sprites["name"] + " enlarge")
+				break
+			else:
+				sprites["sprite"].scale = Vector2(1.5, 1.5)
+				print(sprites["name"] + " shrink")
+				break
 
 func _close() -> void:
 	var succeeded: bool = continue_button.get_meta("success", false)

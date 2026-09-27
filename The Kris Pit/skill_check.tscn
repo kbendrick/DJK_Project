@@ -177,15 +177,15 @@ theme_override_font_sizes/font_size = 28
 horizontal_alignment = 1
 
 [node name="SkillIcon1" type="AnimatedSprite2D" parent="Screen/Center/Panel/Margin/Layout" unique_id=406201960]
-position = Vector2(386.00006, 77)
-scale = Vector2(2, 1.936)
+position = Vector2(394.00006, 77)
+scale = Vector2(1.5, 1.452)
 sprite_frames = SubResource("SpriteFrames_gy53g")
 animation = &"cult"
 
 [node name="SkillRequirement1" type="Label" parent="Screen/Center/Panel/Margin/Layout/SkillIcon1" unique_id=1895207273]
-offset_left = 8.000027
+offset_left = 12.500027
 offset_top = -22.21074
-offset_right = 34.500027
+offset_right = 39.000027
 offset_bottom = 22.78926
 theme_override_font_sizes/font_size = 45
 text = "1"
@@ -193,15 +193,15 @@ horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="SkillIcon2" type="AnimatedSprite2D" parent="Screen/Center/Panel/Margin/Layout" unique_id=185469086]
-position = Vector2(527, 77)
-scale = Vector2(2, 1.936)
+position = Vector2(506.00006, 77)
+scale = Vector2(1.5, 1.452)
 sprite_frames = SubResource("SpriteFrames_gy53g")
 animation = &"cult"
 
 [node name="SkillRequirement2" type="Label" parent="Screen/Center/Panel/Margin/Layout/SkillIcon2" unique_id=74546050]
-offset_left = 8.000027
+offset_left = 16.000027
 offset_top = -22.21074
-offset_right = 34.500027
+offset_right = 42.500027
 offset_bottom = 22.78926
 theme_override_font_sizes/font_size = 45
 text = "1"
