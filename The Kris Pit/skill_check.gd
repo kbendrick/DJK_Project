@@ -3,30 +3,41 @@ extends CanvasLayer
 
 signal finished(success: bool)
 
-const BAR_WIDTH := 760.0
+const MAX_BAR_WIDTH := 760.0
+const MIN_BAR_WIDTH := 140.0
+const PIXELS_PER_REQUIREMENT_POINT := 45.0
+const CHUNK_ANIMATION_TIME := 0.8
 
 @onready var title_label: Label = $Screen/Center/Panel/Margin/Layout/Title
-#@onready var skill_label: Label = $Screen/Center/Panel/Margin/Layout/SkillLabel
-@onready var requirement_label: Label = $Screen/Center/Panel/Margin/Layout/RequirementLabel
-#@onready var bookshelf: Sprite2D = $Screen/Center/Panel/Margin/Layout/Stage/Bookshelf
 @onready var character_layer: Node2D = $Screen/Center/Panel/Margin/Layout/Stage/CharacterLayer
+@onready var bar_area: Control = $Screen/Center/Panel/Margin/Layout/BarArea
 @onready var black_bar: Panel = $Screen/Center/Panel/Margin/Layout/BarArea/BlackBar
 @onready var purple_fill: ColorRect = $Screen/Center/Panel/Margin/Layout/BarArea/BlackBar/PurpleFill
 @onready var ball: Panel = $Screen/Center/Panel/Margin/Layout/BarArea/BlackBar/Ball
 @onready var result_label: Label = $Screen/Center/Panel/Margin/Layout/ResultLabel
 @onready var continue_button: Button = $Screen/Center/Panel/Margin/Layout/ContinueButton
 
+# These scene icons provide the SpriteFrames shared by all five skills.
+# The animated indicators used during the check are created below in code.
 @onready var skill_icon_1: AnimatedSprite2D = $Screen/Center/Panel/Margin/Layout/SkillIcon1
 @onready var skill_icon_2: AnimatedSprite2D = $Screen/Center/Panel/Margin/Layout/SkillIcon2
-@onready var skill_icon_requirement_1: Label = $Screen/Center/Panel/Margin/Layout/SkillIcon1/SkillRequirement1
-@onready var skill_icon_requirement_2: Label = $Screen/Center/Panel/Margin/Layout/SkillIcon2/SkillRequirement2
 
 var challenge_state: Dictionary
 var assigned_companions: Array[Node] = []
 var all_companions: Array[Node] = []
 var random := RandomNumberGenerator.new()
 
-var BALL_TIME_SCALE: float = 1
+var ball_time_scale: float = 1.0
+var bar_width: float = MAX_BAR_WIDTH
+
+var companion_displays: Array[AnimatedSprite2D] = []
+var companion_skill_icons: Array[AnimatedSprite2D] = []
+var companion_skill_numbers: Array[Label] = []
+
+var requirement_indicator: Node2D
+var requirement_icon: AnimatedSprite2D
+var requirement_number: Label
+
 
 func _ready() -> void:
 	random.randomize()
@@ -34,6 +45,11 @@ func _ready() -> void:
 	continue_button.hide()
 	ball.hide()
 	result_label.text = ""
+
+	# The original fixed icons are replaced by indicators that can support
+	# any number of required skills.
+	skill_icon_1.hide()
+	skill_icon_2.hide()
 
 
 func setup(
@@ -47,14 +63,17 @@ func setup(
 	assigned_companions = new_assigned_companions
 	all_companions = new_all_companions
 
-
 	_create_companion_displays()
+	_create_requirement_indicator()
+	_create_companion_skill_indicators()
 	call_deferred("_run_skill_check")
 
 
 func _create_companion_displays() -> void:
 	for old_display in character_layer.get_children():
 		old_display.queue_free()
+
+	companion_displays.clear()
 
 	var spacing := 130.0
 	var first_x := -spacing * float(assigned_companions.size() - 1) / 2.0
@@ -70,63 +89,103 @@ func _create_companion_displays() -> void:
 		display_sprite.scale = Vector2(10, 10)
 		display_sprite.play()
 		character_layer.add_child(display_sprite)
+		companion_displays.append(display_sprite)
+
+
+func _create_requirement_indicator() -> void:
+	requirement_indicator = Node2D.new()
+	bar_area.add_child(requirement_indicator)
+
+	requirement_icon = AnimatedSprite2D.new()
+	requirement_icon.sprite_frames = skill_icon_1.sprite_frames
+	requirement_icon.scale = Vector2(1.5, 1.5)
+	requirement_indicator.add_child(requirement_icon)
+
+	requirement_number = Label.new()
+	requirement_number.position = Vector2(22, -23)
+	requirement_number.size = Vector2(70, 46)
+	requirement_number.add_theme_font_size_override("font_size", 30)
+	requirement_indicator.add_child(requirement_number)
+
+
+func _create_companion_skill_indicators() -> void:
+	companion_skill_icons.clear()
+	companion_skill_numbers.clear()
+
+	for display in companion_displays:
+		var indicator := Node2D.new()
+		indicator.position = Vector2(display.position.x, -40)
+		character_layer.add_child(indicator)
+
+		var icon := AnimatedSprite2D.new()
+		icon.sprite_frames = skill_icon_1.sprite_frames
+		icon.scale = Vector2(1.5, 1.5)
+		indicator.add_child(icon)
+		companion_skill_icons.append(icon)
+
+		var number := Label.new()
+		number.position = Vector2(22, -23)
+		number.size = Vector2(70, 46)
+		number.add_theme_font_size_override("font_size", 30)
+		indicator.add_child(number)
+		companion_skill_numbers.append(number)
+
+		indicator.hide()
 
 
 func _run_skill_check() -> void:
-	var skill_1: String = challenge_state["skill_1"]
-	var skill_2: String = challenge_state["skill_2"]
-	var requirement_1: int = challenge_state["skill_1_value"]
-	var requirement_2: int = challenge_state["skill_2_value"]
-	var total_requirement := requirement_1 + requirement_2
-	var companion_total := _get_companion_skill_total(skill_1, skill_2)
+	var skill_checks := _get_skill_checks()
+
+	if skill_checks.is_empty():
+		result_label.text = "No skills configured for this challenge."
+		continue_button.show()
+		continue_button.set_meta("success", false)
+		return
+
+	var total_requirement := 0
+	var highest_requirement := 1
+
+	for skill_check in skill_checks:
+		var requirement: int = skill_check["requirement"]
+		total_requirement += requirement
+		highest_requirement = maxi(highest_requirement, requirement)
+
+	bar_width = clampf(
+		float(total_requirement) * PIXELS_PER_REQUIREMENT_POINT,
+		MIN_BAR_WIDTH,
+		MAX_BAR_WIDTH
+	)
+
+	title_label.text = challenge_state["name"].capitalize() + " Challenge"
+	black_bar.size.x = 0.0
+	purple_fill.size.x = 0.0
+	ball.hide()
+
+	await _animate_requirement_chunks(skill_checks, total_requirement)
+
+	var weighted_requirement_total := _get_weighted_requirement_total(
+		skill_checks,
+		highest_requirement
+	)
+
+	var weighted_companion_total := await _animate_companion_chunks(
+		skill_checks,
+		highest_requirement,
+		weighted_requirement_total
+	)
+
 	var purple_ratio := clampf(
-		float(companion_total) / float(maxi(1, total_requirement)),
+		weighted_companion_total / maxf(1.0, weighted_requirement_total),
 		0.0,
 		1.0
 	)
 
-	title_label.text = challenge_state["name"].capitalize() + " Challenge"
-	skill_icon_1.play(skill_1.to_lower())
-	skill_icon_2.play(skill_2.to_lower())
-	black_bar.size.x = 0.0
-	purple_fill.size.x = 0.0
-	
-	skill_icon_requirement_1.text = str(requirement_1)
-	skill_icon_requirement_2.text = str(requirement_2)
-	
-	# Stage 1: reveal how long the black difficulty bar is.
-	var requirement_tween := create_tween()
-	requirement_tween.set_parallel(true)
-	requirement_tween.set_trans(Tween.TRANS_QUAD)
-	requirement_tween.set_ease(Tween.EASE_OUT)
-	requirement_tween.tween_property(black_bar, "size:x", BAR_WIDTH, 1.4)
-	requirement_tween.tween_method(
-		_update_requirement_count.bind(
-			skill_1,
-			requirement_1,
-			skill_2,
-			requirement_2
-		),
-		0.0,
-		1.0,
-		1.4
-	)
-	await requirement_tween.finished
+	result_label.text = "Weighted total: %.1f / %.1f" % [
+		weighted_companion_total,
+		weighted_requirement_total
+	]
 
-	# Stage 2: fill the amount covered by the companions in purple.
-	result_label.text = "Companion total: %d" % companion_total
-	var fill_tween := create_tween()
-	fill_tween.set_trans(Tween.TRANS_QUAD)
-	fill_tween.set_ease(Tween.EASE_OUT)
-	fill_tween.tween_property(
-		purple_fill,
-		"size:x",
-		BAR_WIDTH * purple_ratio,
-		1.2
-	)
-	await fill_tween.finished
-
-	# Stage 3: energetic rebounds followed by a long, slow final approach.
+	# The ball uses the actual variable width of this challenge's bar.
 	ball.show()
 	ball.pivot_offset = ball.size / 2.0
 	ball.position.x = 0.0
@@ -134,18 +193,175 @@ func _run_skill_check() -> void:
 	ball.rotation = 0.0
 	ball.modulate = Color.WHITE
 
-	var right_edge := BAR_WIDTH - ball.size.x
+	var right_edge := bar_width - ball.size.x
 	var stop_ratio := random.randf()
 	await _animate_ball(right_edge, right_edge * stop_ratio)
 
-	var ball_center_ratio := (ball.position.x + ball.size.x / 2.0) / BAR_WIDTH
+	var ball_center_ratio := (ball.position.x + ball.size.x / 2.0) / bar_width
 	var succeeded := ball_center_ratio <= purple_ratio
 	_resolve_result(succeeded)
 
 
+# This reads skill_1, skill_2, skill_3, and so on until the next numbered
+# skill is absent. Adding another numbered skill therefore requires no change
+# to the animation code.
+func _get_skill_checks() -> Array[Dictionary]:
+	var skill_checks: Array[Dictionary] = []
+	var skill_number := 1
+
+	while true:
+		var skill_key := "skill_" + str(skill_number)
+		var requirement_key := skill_key + "_value"
+
+		if not challenge_state.has(skill_key):
+			break
+
+		if not challenge_state.has(requirement_key):
+			break
+
+		if challenge_state[skill_key] == null:
+			break
+
+		var skill_check := {
+			"name": str(challenge_state[skill_key]),
+			"requirement": int(challenge_state[requirement_key])
+		}
+
+		skill_checks.append(skill_check)
+		skill_number += 1
+
+	return skill_checks
+
+
+func _animate_requirement_chunks(
+	skill_checks: Array[Dictionary],
+	total_requirement: int
+) -> void:
+	var current_width := 0.0
+
+	for skill_check in skill_checks:
+		var skill_name: String = skill_check["name"]
+		var requirement: int = skill_check["requirement"]
+		var chunk_width := bar_width * float(requirement) / float(total_requirement)
+		var target_width := current_width + chunk_width
+
+		requirement_icon.play(skill_name.to_lower())
+		requirement_number.text = "0"
+		requirement_indicator.position = Vector2(
+			black_bar.position.x + current_width + 20.0,
+			black_bar.position.y + 25.0
+		)
+		requirement_indicator.show()
+
+		var chunk_tween := create_tween()
+		chunk_tween.set_parallel(true)
+		chunk_tween.set_trans(Tween.TRANS_QUAD)
+		chunk_tween.set_ease(Tween.EASE_OUT)
+		chunk_tween.tween_property(
+			black_bar,
+			"size:x",
+			target_width,
+			CHUNK_ANIMATION_TIME
+		)
+		chunk_tween.tween_property(
+			requirement_indicator,
+			"position:x",
+			black_bar.position.x + target_width + 20.0,
+			CHUNK_ANIMATION_TIME
+		)
+		chunk_tween.tween_method(
+			_update_number.bind(requirement_number, requirement),
+			0.0,
+			1.0,
+			CHUNK_ANIMATION_TIME
+		)
+		await chunk_tween.finished
+
+		current_width = target_width
+		await get_tree().create_timer(0.15).timeout
+
+
+func _get_weighted_requirement_total(
+	skill_checks: Array[Dictionary],
+	highest_requirement: int
+) -> float:
+	var weighted_total := 0.0
+
+	for skill_check in skill_checks:
+		var requirement: int = skill_check["requirement"]
+		var weight := float(requirement) / float(highest_requirement)
+		weighted_total += float(requirement) * weight
+
+	return weighted_total
+
+
+func _animate_companion_chunks(
+	skill_checks: Array[Dictionary],
+	highest_requirement: int,
+	weighted_requirement_total: float
+) -> float:
+	var weighted_companion_total := 0.0
+
+	for skill_check in skill_checks:
+		var skill_name: String = skill_check["name"]
+		var requirement: int = skill_check["requirement"]
+		var weight := float(requirement) / float(highest_requirement)
+		var raw_skill_total := 0
+
+		for companion_index in assigned_companions.size():
+			var companion := assigned_companions[companion_index]
+			var skill_value: int = companion.get_stat_value(skill_name)
+			raw_skill_total += skill_value
+
+			var icon := companion_skill_icons[companion_index]
+			var number := companion_skill_numbers[companion_index]
+			icon.play(skill_name.to_lower())
+			number.text = "0"
+			icon.get_parent().show()
+
+		var weighted_chunk := float(raw_skill_total) * weight
+		weighted_companion_total += weighted_chunk
+
+		var purple_target := bar_width * clampf(
+			weighted_companion_total / maxf(1.0, weighted_requirement_total),
+			0.0,
+			1.0
+		)
+
+		var fill_tween := create_tween()
+		fill_tween.set_parallel(true)
+		fill_tween.set_trans(Tween.TRANS_QUAD)
+		fill_tween.set_ease(Tween.EASE_OUT)
+		fill_tween.tween_property(
+			purple_fill,
+			"size:x",
+			purple_target,
+			CHUNK_ANIMATION_TIME
+		)
+
+		for companion_index in assigned_companions.size():
+			var companion := assigned_companions[companion_index]
+			var skill_value: int = companion.get_stat_value(skill_name)
+			var number := companion_skill_numbers[companion_index]
+
+			fill_tween.tween_method(
+				_update_number.bind(number, skill_value),
+				0.0,
+				1.0,
+				CHUNK_ANIMATION_TIME
+			)
+
+		await fill_tween.finished
+		await get_tree().create_timer(0.15).timeout
+
+	return weighted_companion_total
+
+
+func _update_number(progress: float, label: Label, target_value: int) -> void:
+	label.text = str(roundi(float(target_value) * progress))
+
+
 # Rapid wall-to-wall arcs create the high-energy portion of the roll.
-# The bounce count is chosen so the final approach starts on the side opposite
-# the stopping point, guaranteeing a visible final movement.
 func _animate_ball(right_edge: float, stop_x: float) -> void:
 	var base_y := ball.position.y
 	var bounce_count := 6
@@ -153,7 +369,7 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 	for bounce_index in bounce_count:
 		var target_x := right_edge if bounce_index % 2 == 0 else 0.0
 		var bounce_progress := float(bounce_index) / float(maxi(1, bounce_count - 1))
-		var travel_time := lerpf(0.16, 0.28, bounce_progress) * BALL_TIME_SCALE
+		var travel_time := lerpf(0.16, 0.28, bounce_progress) * ball_time_scale
 		var hop_height := lerpf(10.0, 5.0, bounce_progress)
 		var start_x := ball.position.x
 
@@ -182,10 +398,8 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 
 		ball.position = Vector2(target_x, base_y)
 		await _play_ball_impact()
-		BALL_TIME_SCALE += 0.2
+		ball_time_scale += 0.2
 
-	# TRANS_EXPO with EASE_OUT moves quickly at first, then spends the final
-	# part creeping toward stop_x. This gives the requested logarithmic feel.
 	ball.scale = Vector2(1.16, 0.86)
 	var final_tween := create_tween()
 	final_tween.set_parallel(true)
@@ -193,19 +407,19 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 		ball,
 		"position:x",
 		stop_x,
-		2. * BALL_TIME_SCALE
+		2.0 * ball_time_scale
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	final_tween.tween_property(
 		ball,
 		"rotation",
 		roundf(ball.rotation / TAU) * TAU,
-		1.7 * BALL_TIME_SCALE
+		1.7 * ball_time_scale
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	final_tween.tween_property(
 		ball,
 		"scale",
 		Vector2.ONE,
-		0.06 * BALL_TIME_SCALE
+		0.06 * ball_time_scale
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	await final_tween.finished
 
@@ -220,7 +434,6 @@ func _move_ball_arc(
 	base_y: float,
 	hop_height: float
 ) -> void:
-	# The sine curve is zero at both ends and tallest in the middle.
 	var horizontal_progress := (1.0 - cos(progress * PI)) / 2.0
 	ball.position.x = lerpf(start_x, end_x, horizontal_progress)
 	ball.position.y = base_y - sin(progress * PI) * hop_height
@@ -279,70 +492,26 @@ func _play_final_pulse() -> void:
 	await pulse_tween.finished
 
 
-func _update_requirement_count(
-	progress: float,
-	skill_1: String,
-	requirement_1: int,
-	skill_2: String,
-	requirement_2: int
-) -> void:
-	var shown_1 := roundi(requirement_1 * progress)
-	var shown_2 := roundi(requirement_2 * progress)
-
-
-func _get_companion_skill_total(skill_1: String, skill_2: String) -> int:
-	var total := 0
-
-	for companion in assigned_companions:
-		total += companion.get_stat_value(skill_1)
-		total += companion.get_stat_value(skill_2)
-
-	return total
-
-
 func _resolve_result(succeeded: bool) -> void:
 	if succeeded:
 		result_label.text = "SUCCESS"
-		var i = 0
-		for companion in assigned_companions:
-			character_layer.get_child(i).play(companion.companion_name.to_lower() + "_success")
-			i += 1
-		if challenge_state["name"] == "hazard":
-			print("Hazard succeeded. Nothing happens.")
-		else:
-			print(
-				"Challenge reward: ",
-				challenge_state["reward_amount"],
-				" ",
-				challenge_state["reward"]
-			)
+
+		for index in assigned_companions.size():
+			var companion = assigned_companions[index]
+			var display = companion_displays[index]
+			display.play(companion.companion_name.to_lower() + "_success")
 	else:
 		result_label.text = "FAILURE"
 
-		if challenge_state["name"] == "hazard":
-			_apply_hazard_failure()
-		else:
-			var i = 0
-			for companion in assigned_companions:
-				companion.lose_sanity(1)
-				character_layer.get_child(i).play(companion.companion_name.to_lower() + "_hurt")
-				i += 1
-			print("Challenge failed. Assigned companions lose 1 sanity.")
+		for index in assigned_companions.size():
+			var companion = assigned_companions[index]
+			var display = companion_displays[index]
+			display.play(companion.companion_name.to_lower() + "_hurt")
 
+	# Rewards and penalties are intentionally not applied here. They are
+	# applied by the point of interest after this scene closes.
 	continue_button.show()
 	continue_button.set_meta("success", succeeded)
-
-
-func _apply_hazard_failure() -> void:
-	var penalty_amount: int = challenge_state["reward_amount"]
-
-	if challenge_state["reward"] == "steps":
-		global.steps = maxi(0, global.steps - penalty_amount)
-		print("Hazard failed. Lost ", penalty_amount, " steps. Steps remaining: ", global.steps)
-	else:
-		for companion in all_companions:
-			companion.lose_sanity(1)
-		print("Hazard failed. Every companion loses ", 1, " sanity.")
 
 
 func _close() -> void:
