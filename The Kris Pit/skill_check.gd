@@ -5,6 +5,14 @@ signal finished(success: bool)
 
 const BAR_WIDTH := 760.0
 
+# Ball motion tuning. Each bounce alternates around the chosen result while
+# BALL_DAMPING reduces its distance from that result.
+const BALL_BOUNCE_COUNT := 6
+const BALL_DAMPING := 0.65
+const BALL_FIRST_TRAVEL_TIME := 0.18
+const BALL_LAST_TRAVEL_TIME := 0.70
+const BALL_FINAL_APPROACH_TIME := 1.8
+
 @onready var title_label: Label = $Screen/Center/Panel/Margin/Layout/Title
 @onready var skill_label: Label = $Screen/Center/Panel/Margin/Layout/SkillLabel
 @onready var requirement_label: Label = $Screen/Center/Panel/Margin/Layout/RequirementLabel
@@ -20,8 +28,6 @@ var challenge_state: Dictionary
 var assigned_companions: Array[Node] = []
 var all_companions: Array[Node] = []
 var random := RandomNumberGenerator.new()
-
-var BALL_TIME_SCALE: float = 1
 
 func _ready() -> void:
 	random.randomize()
@@ -144,13 +150,27 @@ func _run_skill_check() -> void:
 # the stopping point, guaranteeing a visible final movement.
 func _animate_ball(right_edge: float, stop_x: float) -> void:
 	var base_y := ball.position.y
-	var bounce_count := 7 if stop_x < right_edge / 2.0 else 8
 
-	for bounce_index in bounce_count:
-		var target_x := right_edge if bounce_index % 2 == 0 else 0.0
-		var bounce_progress := float(bounce_index) / float(maxi(1, bounce_count - 1))
-		var travel_time := lerpf(0.16, 0.28, bounce_progress) * BALL_TIME_SCALE
-		var hop_height := lerpf(10.0, 5.0, bounce_progress)
+	for bounce_index in BALL_BOUNCE_COUNT:
+		var bounce_progress := (
+			float(bounce_index)
+			/ float(maxi(1, BALL_BOUNCE_COUNT - 1))
+		)
+
+		# The first target reaches the right edge. Every target after that is
+		# pulled toward stop_x, producing an alternating damped oscillation.
+		var edge_target := right_edge if bounce_index % 2 == 0 else 0.0
+		var distance_from_result := pow(BALL_DAMPING, bounce_index)
+		var target_x := lerpf(stop_x, edge_target, distance_from_result)
+
+		# Later bounces travel a shorter distance but take longer, so the ball
+		# visibly loses energy as it settles around its predetermined result.
+		var travel_time := lerpf(
+			BALL_FIRST_TRAVEL_TIME,
+			BALL_LAST_TRAVEL_TIME,
+			bounce_progress
+		)
+		var hop_height := lerpf(10.0, 3.0, bounce_progress)
 		var start_x := ball.position.x
 
 		ball.scale = Vector2(1.22, 0.82)
@@ -178,36 +198,34 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 
 		ball.position = Vector2(target_x, base_y)
 		await _play_ball_impact()
-		BALL_TIME_SCALE += 0.2
 
-	# TRANS_EXPO with EASE_OUT moves quickly at first, then spends the final
-	# part creeping toward stop_x. This gives the requested logarithmic feel.
-	ball.scale = Vector2(1.16, 0.86)
+	# The six bounces finish close to stop_x. This last tween completes the
+	# predetermined result with a slow exponential settle.
+	ball.scale = Vector2(1.10, 0.90)
 	var final_tween := create_tween()
 	final_tween.set_parallel(true)
 	final_tween.tween_property(
 		ball,
 		"position:x",
 		stop_x,
-		2. * BALL_TIME_SCALE
+		BALL_FINAL_APPROACH_TIME
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	final_tween.tween_property(
 		ball,
 		"rotation",
 		roundf(ball.rotation / TAU) * TAU,
-		1.7 * BALL_TIME_SCALE
+		BALL_FINAL_APPROACH_TIME
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	final_tween.tween_property(
 		ball,
 		"scale",
 		Vector2.ONE,
-		0.06 * BALL_TIME_SCALE
+		BALL_FINAL_APPROACH_TIME
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	await final_tween.finished
 
 	ball.position = Vector2(stop_x, base_y)
 	await _play_final_pulse()
-
 
 func _move_ball_arc(
 	progress: float,
