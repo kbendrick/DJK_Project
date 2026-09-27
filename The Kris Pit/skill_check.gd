@@ -121,25 +121,156 @@ func _run_skill_check() -> void:
 	)
 	await fill_tween.finished
 
-	# Stage 3: bounce the ball repeatedly, then stop at a random position.
+	# Stage 3: energetic rebounds followed by a long, slow final approach.
 	ball.show()
+	ball.pivot_offset = ball.size / 2.0
 	ball.position.x = 0.0
+	ball.scale = Vector2.ONE
+	ball.rotation = 0.0
+	ball.modulate = Color.WHITE
+
 	var right_edge := BAR_WIDTH - ball.size.x
-	var ball_tween := create_tween()
-	ball_tween.set_trans(Tween.TRANS_SINE)
-	ball_tween.set_ease(Tween.EASE_IN_OUT)
-
-	for bounce_index in 6:
-		var target_x := right_edge if bounce_index % 2 == 0 else 0.0
-		ball_tween.tween_property(ball,"position:x",target_x,0.20 + (bounce_index*5) * 0.06)
-
 	var stop_ratio := random.randf()
-	ball_tween.tween_property(ball, "position:x", right_edge * stop_ratio, 5)
-	await ball_tween.finished
+	await _animate_ball(right_edge, right_edge * stop_ratio)
 
 	var ball_center_ratio := (ball.position.x + ball.size.x / 2.0) / BAR_WIDTH
 	var succeeded := ball_center_ratio <= purple_ratio
 	_resolve_result(succeeded)
+
+
+# Rapid wall-to-wall arcs create the high-energy portion of the roll.
+# The bounce count is chosen so the final approach starts on the side opposite
+# the stopping point, guaranteeing a visible final movement.
+func _animate_ball(right_edge: float, stop_x: float) -> void:
+	var base_y := ball.position.y
+	var bounce_count := 7 if stop_x < right_edge / 2.0 else 8
+
+	for bounce_index in bounce_count:
+		var target_x := right_edge if bounce_index % 2 == 0 else 0.0
+		var bounce_progress := float(bounce_index) / float(maxi(1, bounce_count - 1))
+		var travel_time := lerpf(0.16, 0.28, bounce_progress)
+		var hop_height := lerpf(14.0, 7.0, bounce_progress)
+		var start_x := ball.position.x
+
+		ball.scale = Vector2(1.22, 0.82)
+		var travel_tween := create_tween()
+		travel_tween.set_parallel(true)
+		travel_tween.tween_method(
+			_move_ball_arc.bind(start_x, target_x, base_y, hop_height),
+			0.0,
+			1.0,
+			travel_time
+		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		travel_tween.tween_property(
+			ball,
+			"rotation",
+			ball.rotation + PI * (1.0 if target_x > start_x else -1.0),
+			travel_time
+		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		travel_tween.tween_property(
+			ball,
+			"scale",
+			Vector2.ONE,
+			travel_time
+		).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		await travel_tween.finished
+
+		ball.position = Vector2(target_x, base_y)
+		await _play_ball_impact()
+
+	# TRANS_EXPO with EASE_OUT moves quickly at first, then spends the final
+	# part creeping toward stop_x. This gives the requested logarithmic feel.
+	ball.scale = Vector2(1.16, 0.86)
+	var final_tween := create_tween()
+	final_tween.set_parallel(true)
+	final_tween.tween_property(
+		ball,
+		"position:x",
+		stop_x,
+		2.8
+	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	final_tween.tween_property(
+		ball,
+		"rotation",
+		roundf(ball.rotation / TAU) * TAU,
+		2.8
+	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	final_tween.tween_property(
+		ball,
+		"scale",
+		Vector2.ONE,
+		2.8
+	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	await final_tween.finished
+
+	ball.position = Vector2(stop_x, base_y)
+	await _play_final_pulse()
+
+
+func _move_ball_arc(
+	progress: float,
+	start_x: float,
+	end_x: float,
+	base_y: float,
+	hop_height: float
+) -> void:
+	# The sine curve is zero at both ends and tallest in the middle.
+	var horizontal_progress := (1.0 - cos(progress * PI)) / 2.0
+	ball.position.x = lerpf(start_x, end_x, horizontal_progress)
+	ball.position.y = base_y - sin(progress * PI) * hop_height
+
+
+func _play_ball_impact() -> void:
+	var squash_tween := create_tween()
+	squash_tween.set_parallel(true)
+	squash_tween.tween_property(
+		ball,
+		"scale",
+		Vector2(0.72, 1.30),
+		0.055
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	squash_tween.tween_property(
+		ball,
+		"modulate",
+		Color(0.92, 0.65, 1.0, 1.0),
+		0.055
+	)
+	await squash_tween.finished
+
+	var recover_tween := create_tween()
+	recover_tween.set_parallel(true)
+	recover_tween.tween_property(
+		ball,
+		"scale",
+		Vector2.ONE,
+		0.075
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	recover_tween.tween_property(ball, "modulate", Color.WHITE, 0.075)
+	await recover_tween.finished
+
+
+func _play_final_pulse() -> void:
+	var pulse_tween := create_tween()
+	pulse_tween.tween_property(
+		ball,
+		"scale",
+		Vector2(1.35, 1.35),
+		0.10
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	pulse_tween.parallel().tween_property(
+		ball,
+		"modulate",
+		Color(0.78, 0.48, 1.0, 1.0),
+		0.10
+	)
+	pulse_tween.tween_property(
+		ball,
+		"scale",
+		Vector2.ONE,
+		0.18
+	).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	pulse_tween.parallel().tween_property(ball, "modulate", Color.WHITE, 0.18)
+	await pulse_tween.finished
 
 
 func _update_requirement_count(
