@@ -149,7 +149,7 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 		var target_x := right_edge if bounce_index % 2 == 0 else 0.0
 		var bounce_progress := float(bounce_index) / float(maxi(1, bounce_count - 1))
 		var travel_time := lerpf(0.16, 0.28, bounce_progress)
-		var hop_height := lerpf(14.0, 7.0, bounce_progress)
+		var hop_height := lerpf(10.0, 5.0, bounce_progress)
 		var start_x := ball.position.x
 
 		ball.scale = Vector2(1.22, 0.82)
