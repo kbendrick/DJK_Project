@@ -21,6 +21,7 @@ var assigned_companions: Array[Node] = []
 var all_companions: Array[Node] = []
 var random := RandomNumberGenerator.new()
 
+var BALL_TIME_SCALE: float = 1
 
 func _ready() -> void:
 	random.randomize()
@@ -148,7 +149,7 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 	for bounce_index in bounce_count:
 		var target_x := right_edge if bounce_index % 2 == 0 else 0.0
 		var bounce_progress := float(bounce_index) / float(maxi(1, bounce_count - 1))
-		var travel_time := lerpf(0.16, 0.28, bounce_progress)
+		var travel_time := lerpf(0.16, 0.28, bounce_progress) * BALL_TIME_SCALE
 		var hop_height := lerpf(10.0, 5.0, bounce_progress)
 		var start_x := ball.position.x
 
@@ -177,6 +178,7 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 
 		ball.position = Vector2(target_x, base_y)
 		await _play_ball_impact()
+		BALL_TIME_SCALE += 0.2
 
 	# TRANS_EXPO with EASE_OUT moves quickly at first, then spends the final
 	# part creeping toward stop_x. This gives the requested logarithmic feel.
@@ -187,19 +189,19 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 		ball,
 		"position:x",
 		stop_x,
-		2.8
+		2. * BALL_TIME_SCALE
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	final_tween.tween_property(
 		ball,
 		"rotation",
 		roundf(ball.rotation / TAU) * TAU,
-		2.8
+		1.7 * BALL_TIME_SCALE
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	final_tween.tween_property(
 		ball,
 		"scale",
 		Vector2.ONE,
-		2.8
+		0.06 * BALL_TIME_SCALE
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	await final_tween.finished
 
