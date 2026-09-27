@@ -31,6 +31,7 @@ var ball_time_scale: float = 1.0
 var bar_width: float = MAX_BAR_WIDTH
 
 var companion_displays: Array[AnimatedSprite2D] = []
+var companion_skill_indicators: Array[Node2D] = []
 var companion_skill_icons: Array[AnimatedSprite2D] = []
 var companion_skill_numbers: Array[Label] = []
 
@@ -106,9 +107,11 @@ func _create_requirement_indicator() -> void:
 	requirement_number.size = Vector2(70, 46)
 	requirement_number.add_theme_font_size_override("font_size", 30)
 	requirement_indicator.add_child(requirement_number)
+	requirement_indicator.hide()
 
 
 func _create_companion_skill_indicators() -> void:
+	companion_skill_indicators.clear()
 	companion_skill_icons.clear()
 	companion_skill_numbers.clear()
 
@@ -116,6 +119,7 @@ func _create_companion_skill_indicators() -> void:
 		var indicator := Node2D.new()
 		indicator.position = Vector2(display.position.x, -40)
 		character_layer.add_child(indicator)
+		companion_skill_indicators.append(indicator)
 
 		var icon := AnimatedSprite2D.new()
 		icon.sprite_frames = skill_icon_1.sprite_frames
@@ -317,7 +321,7 @@ func _animate_companion_chunks(
 			var number := companion_skill_numbers[companion_index]
 			icon.play(skill_name.to_lower())
 			number.text = "0"
-			icon.get_parent().show()
+			companion_skill_indicators[companion_index].show()
 
 		var weighted_chunk := float(raw_skill_total) * weight
 		weighted_companion_total += weighted_chunk
