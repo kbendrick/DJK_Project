@@ -5,10 +5,12 @@ signal finished(success: bool)
 
 const BAR_WIDTH := 760.0
 
-# Ball motion tuning. Each bounce alternates around the chosen result while
-# BALL_DAMPING reduces its distance from that result.
+# Ball motion tuning. The settle curve keeps the early rebounds wide and
+# pulls the final rebounds sharply toward the chosen result.
 const BALL_BOUNCE_COUNT := 6
-const BALL_DAMPING := 0.65
+const BALL_SETTLE_CURVE := 2.4
+const BALL_FINAL_DISTANCE := 0.08
+const BALL_BOUNCE_VARIATION := 0.10
 const BALL_FIRST_TRAVEL_TIME := 0.18
 const BALL_LAST_TRAVEL_TIME := 0.70
 const BALL_FINAL_APPROACH_TIME := 1.8
@@ -156,10 +158,28 @@ func _animate_ball(right_edge: float, stop_x: float) -> void:
 			/ float(maxi(1, BALL_BOUNCE_COUNT - 1))
 		)
 
-		# The first target reaches the right edge. Every target after that is
-		# pulled toward stop_x, producing an alternating damped oscillation.
+		# Raising progress to a power greater than 1 creates an ease-in curve:
+		# early bounces remain wide, then the final bounces close in quickly.
+		var settle_progress := pow(bounce_progress, BALL_SETTLE_CURVE)
+		var distance_from_result := lerpf(
+			1.0,
+			BALL_FINAL_DISTANCE,
+			settle_progress
+		)
+
+		# Slightly vary each intermediate amplitude so players cannot reliably
+		# find stop_x by averaging the left and right endpoints.
+		var variation := random.randf_range(
+			1.0 - BALL_BOUNCE_VARIATION,
+			1.0 + BALL_BOUNCE_VARIATION
+		)
+		distance_from_result = clampf(
+			distance_from_result * variation,
+			BALL_FINAL_DISTANCE,
+			1.0
+		)
+
 		var edge_target := right_edge if bounce_index % 2 == 0 else 0.0
-		var distance_from_result := pow(BALL_DAMPING, bounce_index)
 		var target_x := lerpf(stop_x, edge_target, distance_from_result)
 
 		# Later bounces travel a shorter distance but take longer, so the ball
