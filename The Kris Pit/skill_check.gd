@@ -145,9 +145,8 @@ func _run_skill_check() -> void:
 	_resolve_result(succeeded)
 
 
-# Rapid wall-to-wall arcs create the high-energy portion of the roll.
-# The bounce count is chosen so the final approach starts on the side opposite
-# the stopping point, guaranteeing a visible final movement.
+# Six alternating arcs form a damped oscillation around stop_x.
+# The result is already fixed; only the displayed motion converges toward it.
 func _animate_ball(right_edge: float, stop_x: float) -> void:
 	var base_y := ball.position.y
 
