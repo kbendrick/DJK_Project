@@ -4,6 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://bents7punwvn5" path="res://The Kris Pit/Mystic RPG icon pack/Medieval Library A4 copy.png" id="2_aaj20"]
 [ext_resource type="Texture2D" uid="uid://dlj3ekgn05kii" path="res://The Kris Pit/Mystic RPG icon pack/bookshelf_front.png" id="2_tu187"]
 [ext_resource type="Texture2D" uid="uid://gluqi6hkrjpg" path="res://The Kris Pit/Mystic RPG icon pack/Medieval Library A5 copy.png" id="3_f2wab"]
+[ext_resource type="Texture2D" uid="uid://tar5ftrcw4ay" path="res://The Kris Pit/Mystic RPG icon pack/Charisma.png" id="4_02ujk"]
+[ext_resource type="Texture2D" uid="uid://clyrnlkv51e8y" path="res://The Kris Pit/Mystic RPG icon pack/Cult.png" id="5_7cakv"]
+[ext_resource type="Texture2D" uid="uid://dixd7jf7nkk4m" path="res://The Kris Pit/Mystic RPG icon pack/Medicine.png" id="6_4icsu"]
+[ext_resource type="Texture2D" uid="uid://bsep6lhuaiqil" path="res://The Kris Pit/Mystic RPG icon pack/Perception.png" id="7_vccyh"]
+[ext_resource type="Texture2D" uid="uid://b4qkldj0lyf05" path="res://The Kris Pit/Mystic RPG icon pack/Study.png" id="8_wv6yn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
 bg_color = Color(0.09, 0.075, 0.12, 0.98)
@@ -18,6 +23,69 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7dj0j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v8obl"]
+atlas = ExtResource("4_02ujk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hagmn"]
+atlas = ExtResource("5_7cakv")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2yb5t"]
+atlas = ExtResource("6_4icsu")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mhrph"]
+atlas = ExtResource("7_vccyh")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nmodi"]
+atlas = ExtResource("8_wv6yn")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gy53g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v8obl")
+}],
+"loop": 1,
+"name": &"charisma",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hagmn")
+}],
+"loop": 1,
+"name": &"cult",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2yb5t")
+}],
+"loop": 1,
+"name": &"medicine",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mhrph")
+}],
+"loop": 1,
+"name": &"perception",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nmodi")
+}],
+"loop": 1,
+"name": &"study",
+"speed": 5.0
+}]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_black_bar"]
 bg_color = Color(0.01, 0.01, 0.015, 1)
@@ -106,14 +174,39 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.78, 0.65, 0.94, 1)
 theme_override_font_sizes/font_size = 28
-text = "Skill + Skill"
 horizontal_alignment = 1
 
-[node name="RequirementLabel" type="Label" parent="Screen/Center/Panel/Margin/Layout" unique_id=1895207273]
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Requirements"
+[node name="SkillIcon1" type="AnimatedSprite2D" parent="Screen/Center/Panel/Margin/Layout" unique_id=406201960]
+position = Vector2(386.00006, 77)
+scale = Vector2(2, 1.936)
+sprite_frames = SubResource("SpriteFrames_gy53g")
+animation = &"cult"
+
+[node name="SkillRequirement1" type="Label" parent="Screen/Center/Panel/Margin/Layout/SkillIcon1" unique_id=1895207273]
+offset_left = 8.000027
+offset_top = -22.21074
+offset_right = 34.500027
+offset_bottom = 22.78926
+theme_override_font_sizes/font_size = 45
+text = "1"
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="SkillIcon2" type="AnimatedSprite2D" parent="Screen/Center/Panel/Margin/Layout" unique_id=185469086]
+position = Vector2(527, 77)
+scale = Vector2(2, 1.936)
+sprite_frames = SubResource("SpriteFrames_gy53g")
+animation = &"cult"
+
+[node name="SkillRequirement2" type="Label" parent="Screen/Center/Panel/Margin/Layout/SkillIcon2" unique_id=74546050]
+offset_left = 8.000027
+offset_top = -22.21074
+offset_right = 34.500027
+offset_bottom = 22.78926
+theme_override_font_sizes/font_size = 45
+text = "1"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="Stage" type="Control" parent="Screen/Center/Panel/Margin/Layout" unique_id=824724031]
 custom_minimum_size = Vector2(900, 480)

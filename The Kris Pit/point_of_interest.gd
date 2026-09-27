@@ -92,8 +92,9 @@ func _create_random_challenge() -> void:
 		current_state[key] = selected_poi_database[key]
 
 	if current_state["name"] == "hazard":
-		current_state["skill_1"] = _choose_random_value(current_state["skill_1"])
-		current_state["skill_2"] = _choose_random_value(current_state["skill_2"])
+		var i: int = rng.randi_range(0, 4)
+		current_state["skill_1"] = current_state["skill_1"][i]
+		current_state["skill_2"] = current_state["skill_2"][i]
 
 	current_state["skill_1_value"] = rng.randi_range(2, 8)
 	current_state["skill_2_value"] = rng.randi_range(2, 8)
@@ -251,9 +252,6 @@ func _get_assigned_companions() -> Array[Node]:
 
 	return companions
 
-
-# The prototype already uses a single scene-level interact button. This helper
-# finds it without requiring a new exported NodePath on every POI instance.
 func _find_button_recursive(current_node: Node) -> Button:
 	if current_node is Button:
 		return current_node

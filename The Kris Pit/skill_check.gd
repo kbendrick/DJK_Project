@@ -6,7 +6,7 @@ signal finished(success: bool)
 const BAR_WIDTH := 760.0
 
 @onready var title_label: Label = $Screen/Center/Panel/Margin/Layout/Title
-@onready var skill_label: Label = $Screen/Center/Panel/Margin/Layout/SkillLabel
+#@onready var skill_label: Label = $Screen/Center/Panel/Margin/Layout/SkillLabel
 @onready var requirement_label: Label = $Screen/Center/Panel/Margin/Layout/RequirementLabel
 #@onready var bookshelf: Sprite2D = $Screen/Center/Panel/Margin/Layout/Stage/Bookshelf
 @onready var character_layer: Node2D = $Screen/Center/Panel/Margin/Layout/Stage/CharacterLayer
@@ -15,6 +15,11 @@ const BAR_WIDTH := 760.0
 @onready var ball: Panel = $Screen/Center/Panel/Margin/Layout/BarArea/BlackBar/Ball
 @onready var result_label: Label = $Screen/Center/Panel/Margin/Layout/ResultLabel
 @onready var continue_button: Button = $Screen/Center/Panel/Margin/Layout/ContinueButton
+
+@onready var skill_icon_1: AnimatedSprite2D = $Screen/Center/Panel/Margin/Layout/SkillIcon1
+@onready var skill_icon_2: AnimatedSprite2D = $Screen/Center/Panel/Margin/Layout/SkillIcon2
+@onready var skill_icon_requirement_1: Label = $Screen/Center/Panel/Margin/Layout/SkillIcon1/SkillRequirement1
+@onready var skill_icon_requirement_2: Label = $Screen/Center/Panel/Margin/Layout/SkillIcon2/SkillRequirement2
 
 var challenge_state: Dictionary
 var assigned_companions: Array[Node] = []
@@ -81,15 +86,14 @@ func _run_skill_check() -> void:
 	)
 
 	title_label.text = challenge_state["name"].capitalize() + " Challenge"
-	skill_label.text = "%s + %s" % [skill_1.capitalize(), skill_2.capitalize()]
-
+	skill_icon_1.play(skill_1.to_lower())
+	skill_icon_2.play(skill_2.to_lower())
 	black_bar.size.x = 0.0
 	purple_fill.size.x = 0.0
-	requirement_label.text = "Requirements: %s 0/%d   •   %s 0/%d" % [
-		skill_1.capitalize(), requirement_1,
-		skill_2.capitalize(), requirement_2
-	]
-
+	
+	skill_icon_requirement_1.text = str(requirement_1)
+	skill_icon_requirement_2.text = str(requirement_2)
+	
 	# Stage 1: reveal how long the black difficulty bar is.
 	var requirement_tween := create_tween()
 	requirement_tween.set_parallel(true)
@@ -284,11 +288,6 @@ func _update_requirement_count(
 ) -> void:
 	var shown_1 := roundi(requirement_1 * progress)
 	var shown_2 := roundi(requirement_2 * progress)
-
-	requirement_label.text = "Requirements: %s %d/%d   •   %s %d/%d" % [
-		skill_1.capitalize(), shown_1, requirement_1,
-		skill_2.capitalize(), shown_2, requirement_2
-	]
 
 
 func _get_companion_skill_total(skill_1: String, skill_2: String) -> int:
