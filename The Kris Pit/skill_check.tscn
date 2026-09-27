@@ -241,6 +241,7 @@ mouse_filter = 2
 color = Color(0.45, 0.12, 0.72, 1)
 
 [node name="Ball" type="Panel" parent="Screen/Center/Panel/Margin/Layout/BarArea/BlackBar" unique_id=1250743815]
+z_index = 3
 layout_mode = 0
 offset_top = 36.0
 offset_right = 28.0
@@ -263,9 +264,3 @@ custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "CONTINUE"
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1825542145]
-offset_left = 702.0
-offset_top = 1251.0
-offset_right = 706.0
-offset_bottom = 1294.0
