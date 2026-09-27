@@ -203,6 +203,9 @@ animations = [{
 "speed": 3.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y6cje"]
+size = Vector2(40, 46.666668)
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l6wls"]
 texture = ExtResource("12_y6cje")
 
@@ -285,9 +288,15 @@ position = Vector2(0, -72)
 texture = ExtResource("2_q74n6")
 
 [node name="POI_Icon" type="AnimatedSprite2D" parent="." unique_id=251189446]
-position = Vector2(0, -49)
+position = Vector2(0.33333334, -49)
 sprite_frames = SubResource("SpriteFrames_7dj0j")
 animation = &"interact_ready"
+
+[node name="InteractClickArea" type="Area2D" parent="POI_Icon" unique_id=1867784965]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="POI_Icon/InteractClickArea" unique_id=1753668146]
+position = Vector2(-3.2782555e-07, 7.9999924)
+shape = SubResource("RectangleShape2D_y6cje")
 
 [node name="PanelContainer" type="PanelContainer" parent="POI_Icon" unique_id=1008814354]
 offset_left = -20.333334

@@ -21,7 +21,10 @@ enum shelf_types {FrontShelf, SideShelf}
 
 @onready var shelf_type_icon: AnimatedSprite2D = $POI_Icon
 
+@onready var interact_click_area: Area2D = $POI_Icon/InteractClickArea
+
 var interactables: Array
+var mouse_entered: bool = false
 
 var rng = RandomNumberGenerator.new()
 var possible_states: Array[String] = ["hazard", "currency", "heal", "mystery", "rest", "upgrade"]
@@ -37,6 +40,15 @@ var current_state: Dictionary = {
 }
 
 func _ready() -> void:
+	
+	var current_scene_root = get_tree().current_scene
+	var button = _find_button_recursive(current_scene_root)
+	
+	if button:
+		button.pressed.connect(_on_button_pressed)
+	
+	interact_click_area.mouse_entered.connect(_on_mouse_entered)
+	interact_click_area.mouse_exited.connect(_on_mouse_exited)
 	
 	match shelf_type:
 		shelf_types.FrontShelf:
@@ -54,7 +66,7 @@ func _ready() -> void:
 			var flip_multi = 1
 			if Flip_H:
 				flip_multi = -1
-			POI_Icon.position = Vector2(0,-125)
+			#POI_Icon.position = Vector2(0,-125)
 			interact1.position = Vector2(33*flip_multi, -9)
 			interact2.position = Vector2(33*flip_multi, -44)
 			interact3.position = Vector2(33*flip_multi, -79)
@@ -95,5 +107,45 @@ func _ready() -> void:
 	shelf_type_icon.play(current_state["name"])
 
 func _process(_delta: float) -> void:
-	if global.is_locked:
+	if mouse_entered:
+		if Input.is_action_just_pressed("left_click"):
+			pass
+
+
+func _on_button_pressed () -> void:
+	
+	var has_companions: bool = false
+	
+	for interactable in interactables:
+		if interactable.companion !=null:
+			has_companions = true
+			continue
+	
+	if has_companions:
 		shelf_type_icon.play("interact_ready")
+	else:
+		shelf_type_icon.visible = false
+		
+# Helper function to crawl the scene tree for a button
+func _find_button_recursive(current_node: Node) -> Button:
+	if current_node is Button:
+		return current_node
+	
+	for child in current_node.get_children():
+		var result = _find_button_recursive(child)
+		if result:
+			return result
+			
+	return null
+
+func _on_mouse_entered()->void:
+	if global.is_locked:
+		shelf_type_icon.modulate = Color.INDIAN_RED
+		shelf_type_icon.scale = Vector2(1.05,1.05)
+		mouse_entered = true
+		
+func _on_mouse_exited()->void:
+	if global.is_locked:
+		shelf_type_icon.modulate = Color.WHITE
+		shelf_type_icon.scale = Vector2(1,1)
+		mouse_entered = false
