@@ -526,14 +526,6 @@ region = Rect2(448, 96, 32, 32)
 atlas = ExtResource("3_nuovp")
 region = Rect2(480, 96, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8ouq1"]
-atlas = ExtResource("3_bpii4")
-region = Rect2(0, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7pw6h"]
-atlas = ExtResource("3_bpii4")
-region = Rect2(32, 32, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_or3ij"]
 atlas = ExtResource("3_bpii4")
 region = Rect2(64, 32, 32, 32)
@@ -1111,12 +1103,6 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 4.0,
-"texture": SubResource("AtlasTexture_8ouq1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7pw6h")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_or3ij")
 }, {
@@ -1182,9 +1168,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_or3ij")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7pw6h")
 }],
 "loop": 1,
 "name": &"jack_idle",
@@ -1336,7 +1319,7 @@ script = ExtResource("1_3svlm")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=845303022]
 scale = Vector2(10, 10)
 sprite_frames = SubResource("SpriteFrames_7dj0j")
-animation = &"impa_idle"
+animation = &"jack_idle"
 
 [node name="Area2D" type="Area2D" parent="." unique_id=326750926]
 

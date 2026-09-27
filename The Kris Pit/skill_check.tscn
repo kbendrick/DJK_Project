@@ -1,0 +1,150 @@
+[gd_scene format=3 uid="uid://boomv3bw8fff7"]
+
+[ext_resource type="Script" uid="uid://b0xm0k8lt1i1x" path="res://The Kris Pit/skill_check.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dlj3ekgn05kii" path="res://The Kris Pit/Mystic RPG icon pack/bookshelf_front.png" id="2_tu187"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+bg_color = Color(0.09, 0.075, 0.12, 0.98)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.46, 0.32, 0.58, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_black_bar"]
+bg_color = Color(0.01, 0.01, 0.015, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.35, 0.4, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_ball"]
+bg_color = Color(0.95, 0.91, 0.74, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="SkillCheck" type="CanvasLayer" unique_id=1811915415]
+layer = 100
+script = ExtResource("1_script")
+
+[node name="Screen" type="Control" parent="." unique_id=1755555304]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="Screen" unique_id=1720071385]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.012, 0.02, 0.94)
+
+[node name="Center" type="CenterContainer" parent="Screen" unique_id=1913890440]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Screen/Center" unique_id=347260460]
+custom_minimum_size = Vector2(1100, 1050)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="Margin" type="MarginContainer" parent="Screen/Center/Panel" unique_id=1142629102]
+layout_mode = 2
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 70
+theme_override_constants/margin_bottom = 50
+
+[node name="Layout" type="VBoxContainer" parent="Screen/Center/Panel/Margin" unique_id=1977012849]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Screen/Center/Panel/Margin/Layout" unique_id=657019847]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Skill Check"
+horizontal_alignment = 1
+
+[node name="SkillLabel" type="Label" parent="Screen/Center/Panel/Margin/Layout" unique_id=1454199754]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.65, 0.94, 1)
+theme_override_font_sizes/font_size = 28
+text = "Skill + Skill"
+horizontal_alignment = 1
+
+[node name="RequirementLabel" type="Label" parent="Screen/Center/Panel/Margin/Layout" unique_id=1895207273]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Requirements"
+horizontal_alignment = 1
+
+[node name="Stage" type="Control" parent="Screen/Center/Panel/Margin/Layout" unique_id=824724031]
+custom_minimum_size = Vector2(900, 480)
+layout_mode = 2
+
+[node name="Bookshelf" type="Sprite2D" parent="Screen/Center/Panel/Margin/Layout/Stage" unique_id=1218457357]
+position = Vector2(476, 300)
+scale = Vector2(5, 5)
+texture = ExtResource("2_tu187")
+
+[node name="CharacterLayer" type="Node2D" parent="Screen/Center/Panel/Margin/Layout/Stage" unique_id=832238891]
+position = Vector2(478, 477)
+
+[node name="BarArea" type="Control" parent="Screen/Center/Panel/Margin/Layout" unique_id=504971476]
+custom_minimum_size = Vector2(900, 90)
+layout_mode = 2
+
+[node name="BlackBar" type="Panel" parent="Screen/Center/Panel/Margin/Layout/BarArea" unique_id=492883427]
+clip_contents = true
+layout_mode = 0
+offset_left = 95.0
+offset_top = 112.0
+offset_right = 855.0
+offset_bottom = 162.0
+theme_override_styles/panel = SubResource("StyleBox_black_bar")
+
+[node name="PurpleFill" type="ColorRect" parent="Screen/Center/Panel/Margin/Layout/BarArea/BlackBar" unique_id=1423407987]
+layout_mode = 0
+offset_right = 1.0
+offset_bottom = 50.0
+mouse_filter = 2
+color = Color(0.45, 0.12, 0.72, 1)
+
+[node name="Ball" type="Panel" parent="Screen/Center/Panel/Margin/Layout/BarArea/BlackBar" unique_id=1250743815]
+layout_mode = 0
+offset_top = 11.0
+offset_right = 28.0
+offset_bottom = 39.0
+theme_override_styles/panel = SubResource("StyleBox_ball")
+
+[node name="ResultLabel" type="Label" parent="Screen/Center/Panel/Margin/Layout" unique_id=597944887]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="Screen/Center/Panel/Margin/Layout" unique_id=730168082]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "CONTINUE"
