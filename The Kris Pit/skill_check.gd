@@ -274,7 +274,7 @@ func _animate_requirement_chunks(skill_checks: Array[Dictionary], total_requirem
 		requirement_number.text = "0"
 		requirement_indicator.position = Vector2(
 			black_bar.position.x + current_width + 20.0,
-			black_bar.position.y + 25.0
+			black_bar.position.y + black_bar.size.y / 2.0
 		)
 		requirement_indicator.show()
 		
@@ -428,12 +428,13 @@ func _create_bar_skill_icon(
 	bar_skill_icon.z_index = 2
 	bar_area.add_child(bar_skill_icon)
 	
-	var icon_divider:= ColorRect.new()
-	icon_divider.size = Vector2(5, 48)
+	var icon_divider := ColorRect.new()
+	icon_divider.size = Vector2(5, black_bar.size.y - 4.0)
 	icon_divider.position = Vector2(
 		black_bar.position.x + purple_start,
-		black_bar.position.y + black_bar.size.y/20
+		black_bar.position.y + 2.0
 	)
+	icon_divider.z_index = 1
 	bar_area.add_child(icon_divider)
 
 	var output_array: Array = [bar_skill_icon, icon_divider]	
