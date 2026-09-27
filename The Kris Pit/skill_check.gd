@@ -7,6 +7,7 @@ const MAX_BAR_WIDTH := 760.0
 const MIN_BAR_WIDTH := 140.0
 const PIXELS_PER_REQUIREMENT_POINT := 45.0
 const CHUNK_ANIMATION_TIME := 2.5
+const PURPLE_SKILL_ICON_SCALE := 1.5
 
 @onready var title_label: Label = $Screen/Center/Panel/Margin/Layout/Title
 @onready var character_layer: Node2D = $Screen/Center/Panel/Margin/Layout/Stage/CharacterLayer
@@ -357,6 +358,15 @@ func _animate_companion_chunks(
 			1.0
 		)
 
+		# This icon rides the leading edge of this skill's purple chunk.
+		# It is not removed, so it remains at the chunk boundary afterward.
+		var purple_start := purple_fill.size.x
+		var bar_skill_icon := _create_bar_skill_icon(
+			skill_name,
+			weight,
+			purple_start
+		)
+
 		var fill_tween := create_tween()
 		fill_tween.set_parallel(true)
 		fill_tween.set_trans(Tween.TRANS_QUAD)
@@ -365,6 +375,12 @@ func _animate_companion_chunks(
 			purple_fill,
 			"size:x",
 			purple_target,
+			CHUNK_ANIMATION_TIME
+		)
+		fill_tween.tween_property(
+			bar_skill_icon,
+			"position:x",
+			black_bar.position.x + purple_target,
 			CHUNK_ANIMATION_TIME
 		)
 
@@ -387,6 +403,29 @@ func _animate_companion_chunks(
 		companion_skill_indicators[companion_index].hide()
 	
 	return weighted_companion_total
+
+
+func _create_bar_skill_icon(
+	skill_name: String,
+	weight: float,
+	purple_start: float
+) -> AnimatedSprite2D:
+	var bar_skill_icon := AnimatedSprite2D.new()
+	bar_skill_icon.sprite_frames = skill_icon_1.sprite_frames
+	bar_skill_icon.play(skill_name.to_lower())
+	bar_skill_icon.position = Vector2(
+		black_bar.position.x + purple_start,
+		black_bar.position.y + black_bar.size.y / 2.0
+	)
+
+	# Weight is between 0.0 and 1.0. The most important skill receives
+	# the full scale, while less important skills are proportionally smaller.
+	var icon_scale := PURPLE_SKILL_ICON_SCALE * weight
+	bar_skill_icon.scale = Vector2(icon_scale, icon_scale)
+	bar_skill_icon.z_index = 2
+	bar_area.add_child(bar_skill_icon)
+
+	return bar_skill_icon
 
 
 func _update_number(progress: float, label: Label, target_value: int) -> void:
