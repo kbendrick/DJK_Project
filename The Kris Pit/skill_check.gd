@@ -7,7 +7,7 @@ const MAX_BAR_WIDTH := 760.0
 const MIN_BAR_WIDTH := 140.0
 const PIXELS_PER_REQUIREMENT_POINT := 45.0
 const CHUNK_ANIMATION_TIME := 2.5
-const PURPLE_SKILL_ICON_SCALE := 1.5
+const PURPLE_SKILL_ICON_SCALE := 2
 
 @onready var title_label: Label = $Screen/Center/Panel/Margin/Layout/Title
 @onready var character_layer: Node2D = $Screen/Center/Panel/Margin/Layout/Stage/CharacterLayer
@@ -361,11 +361,7 @@ func _animate_companion_chunks(
 		# This icon rides the leading edge of this skill's purple chunk.
 		# It is not removed, so it remains at the chunk boundary afterward.
 		var purple_start := purple_fill.size.x
-		var bar_skill_icon := _create_bar_skill_icon(
-			skill_name,
-			weight,
-			purple_start
-		)
+		var bar_skill_icon: Array = _create_bar_skill_icon(skill_name,weight,purple_start)
 
 		var fill_tween := create_tween()
 		fill_tween.set_parallel(true)
@@ -378,11 +374,18 @@ func _animate_companion_chunks(
 			CHUNK_ANIMATION_TIME
 		)
 		fill_tween.tween_property(
-			bar_skill_icon,
+			bar_skill_icon[0],
 			"position:x",
 			black_bar.position.x + purple_target,
 			CHUNK_ANIMATION_TIME
 		)
+		fill_tween.tween_property(
+			bar_skill_icon[1],
+			"position:x",
+			black_bar.position.x + purple_target,
+			CHUNK_ANIMATION_TIME
+		)
+		
 
 		for companion_index in assigned_companions.size():
 			var companion := assigned_companions[companion_index]
@@ -409,7 +412,7 @@ func _create_bar_skill_icon(
 	skill_name: String,
 	weight: float,
 	purple_start: float
-) -> AnimatedSprite2D:
+) -> Array:
 	var bar_skill_icon := AnimatedSprite2D.new()
 	bar_skill_icon.sprite_frames = skill_icon_1.sprite_frames
 	bar_skill_icon.play(skill_name.to_lower())
@@ -424,8 +427,18 @@ func _create_bar_skill_icon(
 	bar_skill_icon.scale = Vector2(icon_scale, icon_scale)
 	bar_skill_icon.z_index = 2
 	bar_area.add_child(bar_skill_icon)
+	
+	var icon_divider:= ColorRect.new()
+	icon_divider.size = Vector2(5, 48)
+	icon_divider.position = Vector2(
+		black_bar.position.x + purple_start,
+		black_bar.position.y + black_bar.size.y/20
+	)
+	bar_area.add_child(icon_divider)
 
-	return bar_skill_icon
+	var output_array: Array = [bar_skill_icon, icon_divider]	
+	
+	return output_array
 
 
 func _update_number(progress: float, label: Label, target_value: int) -> void:
