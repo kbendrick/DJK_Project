@@ -1,9 +1,23 @@
+@tool
 extends RichTextEffect
 class_name RichTextHover
 
-var bbcode := "hover"
-func _process_custom_fx(char_fx):
-	
-	var speed = char_fx.env.get("speed", 5.0)
-	var transform = Vector2(1.5, 1.5)
-	char_fx.transform = transform
+var scale = 1
+
+# Define the BBCode tag name
+@export var bbcode := "hover"
+
+func _on_meta_hover_started(_meta: Variant) -> void:
+	scale = 1.2
+	# Add your custom logic here (e.g., showing a tooltip or changing text color)
+
+func _on_meta_hover_ended(_meta: Variant) -> void:
+	scale = 1
+	# Hide tooltip or reset effect
+
+func _process_custom_fx(char_fx: CharFXTransform):
+		
+		var scale_vector = Vector2(scale, scale)
+		char_fx.transform = char_fx.transform.scaled_local(scale_vector)
+		
+		return true
