@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://d3hpph5bq8156"]
+
+[ext_resource type="Script" uid="uid://ciofiflee4l56" path="res://words.gd" id="1_1b8nx"]
+[ext_resource type="Script" uid="uid://dtgfhy2lg0d6k" path="res://HoverZoom.gd" id="1_s8mwy"]
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_ynwrw"]
+script = ExtResource("1_s8mwy")
+metadata/_custom_type_script = "uid://dtgfhy2lg0d6k"
+
+[node name="Canvas" type="Control" unique_id=2102931067]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Words" type="RichTextLabel" parent="." unique_id=279184113]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+custom_effects = [SubResource("RichTextEffect_ynwrw")]
+script = ExtResource("1_1b8nx")
+
+[connection signal="meta_clicked" from="Words" to="Words" method="_on_meta_clicked"]
+[connection signal="meta_hover_ended" from="Words" to="Words" method="_on_meta_hover_ended"]
+[connection signal="meta_hover_started" from="Words" to="Words" method="_on_meta_hover_started"]
