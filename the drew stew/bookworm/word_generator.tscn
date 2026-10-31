@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dtspaoqos8jfk"]
+
+[ext_resource type="Script" uid="uid://ciofiflee4l56" path="res://the drew stew/bookworm/words.gd" id="1_s3ytx"]
+
+[node name="Words" type="RichTextLabel" unique_id=1616715096]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/underline_alpha = 0
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+script = ExtResource("1_s3ytx")
+
+[connection signal="meta_clicked" from="." to="." method="_on_meta_clicked"]
+[connection signal="meta_hover_ended" from="." to="." method="_on_meta_hover_ended"]
+[connection signal="meta_hover_started" from="." to="." method="_on_meta_hover_started"]
