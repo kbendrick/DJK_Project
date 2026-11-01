@@ -54,6 +54,7 @@ func make_spread():
 
 func setup(keywords: Array[Keyword])->void:
 	for keyword in keywords:
+		add_child(keyword)
 		available_keywords[keyword.tag] = keyword
 	make_spread()
 
@@ -89,7 +90,4 @@ func _on_meta_clicked(meta):
 	if not available_keywords[str(meta).rstrip("0123456789")].clickable:
 		return
 	
-	var on_click = available_keywords[str(meta).rstrip("0123456789")].on_click()
-	
-	if on_click == "make_spread":
-		make_spread()
+	available_keywords[str(meta).rstrip("0123456789")].on_click()
