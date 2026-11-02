@@ -14,3 +14,34 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_1gv35")
 word_generator = ExtResource("2_knkfa")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=690066270]
+custom_minimum_size = Vector2(640, 360)
+custom_maximum_size = Vector2(640, 360)
+layout_mode = 0
+offset_right = 641.0
+offset_bottom = 345.0
+
+[node name="DoorHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1897308482]
+custom_minimum_size = Vector2(640, 30)
+custom_maximum_size = Vector2(640, 30)
+layout_mode = 2
+
+[node name="ProgressBar1" type="ProgressBar" parent="VBoxContainer/DoorHBox" unique_id=1048702929]
+custom_minimum_size = Vector2(210, 60)
+custom_maximum_size = Vector2(640, 60)
+layout_mode = 2
+
+[node name="ProgressBar2" type="ProgressBar" parent="VBoxContainer/DoorHBox" unique_id=1715976500]
+custom_minimum_size = Vector2(210, 60)
+custom_maximum_size = Vector2(640, 60)
+layout_mode = 2
+
+[node name="ProgressBar3" type="ProgressBar" parent="VBoxContainer/DoorHBox" unique_id=1014157298]
+custom_minimum_size = Vector2(300, 60)
+custom_maximum_size = Vector2(640, 60)
+layout_mode = 2
+
+[node name="SpellHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=489432127]
+custom_minimum_size = Vector2(640, 60)
+layout_mode = 2

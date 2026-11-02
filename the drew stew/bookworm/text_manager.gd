@@ -22,5 +22,5 @@ func _ready() -> void:
 	
 	#Creates a words scene and passes in array of Keywords
 	var new_word_generator = word_generator.instantiate()
-	add_child(new_word_generator)
+	$VBoxContainer.add_child(new_word_generator)
 	new_word_generator.setup(available_keywords)

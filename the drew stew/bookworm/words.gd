@@ -14,11 +14,12 @@ func make_spread():
 
 	#Initialize output.
 	var output = ""
-	var i = 0
+	var output_check: String = ""
+	var output_not_enough:bool = true
 	var hover_index = 0
 	self.custom_effects = []
 	
-	while i <= 500:
+	while output_not_enough:
 		#Select a fillword from the dictionary and reverse it.
 		var rng = RandomNumberGenerator.new()
 		var unclean = fillwords.pick_random()
@@ -38,6 +39,7 @@ func make_spread():
 		#Append either keyword or fillword to output.
 		var selections := [fillword, keyword]
 		var selection = selections[rng.rand_weighted(fill_weights)]
+		var selection_check = selection
 			
 		if available_keywords.has(selection):
 			if available_keywords[selection].hoverable:
@@ -47,8 +49,16 @@ func make_spread():
 				hover_index += 1
 			else:
 				selection = "[url="+selection+"]"+available_keywords[selection].tag_code+"][/url]"
+				
+		if output_check.length() + selection_check.length() > 1660:
+			print("Output:" + str(output_check.length()))
+			print("Broke at: " + str(output_check.length() + selection_check.length()))
+			print("Selection: " + selection_check)
+			break
+			
+		output_check += selection_check
 		output += selection
-		i += 1
+			
 		
 	text = output
 
@@ -62,7 +72,7 @@ func _on_meta_hover_started(meta: Variant) -> void:
 	if str(meta) == "":
 		return
 	if not available_keywords.has(str(meta).rstrip("0123456789")):
-		return	
+		return
 	if not available_keywords[str(meta).rstrip("0123456789")].hoverable:
 		return
 	
@@ -75,6 +85,8 @@ func _on_meta_hover_ended(meta: Variant) -> void:
 	if not available_keywords.has(str(meta).rstrip("0123456789")):
 		return
 	if not available_keywords[str(meta).rstrip("0123456789")].hoverable:
+		return
+	if not str(meta).to_int() < self.custom_effects.size():
 		return
 
 	var hover_index = str(meta).to_int()
