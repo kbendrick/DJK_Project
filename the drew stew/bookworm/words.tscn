@@ -28,20 +28,49 @@ custom_maximum_size = Vector2(640, 30)
 layout_mode = 2
 
 [node name="ProgressBar1" type="ProgressBar" parent="VBoxContainer/DoorHBox" unique_id=1048702929]
-custom_minimum_size = Vector2(210, 60)
+custom_minimum_size = Vector2(213.333, 60)
 custom_maximum_size = Vector2(640, 60)
 layout_mode = 2
 
 [node name="ProgressBar2" type="ProgressBar" parent="VBoxContainer/DoorHBox" unique_id=1715976500]
-custom_minimum_size = Vector2(210, 60)
+custom_minimum_size = Vector2(213.333, 60)
 custom_maximum_size = Vector2(640, 60)
 layout_mode = 2
 
 [node name="ProgressBar3" type="ProgressBar" parent="VBoxContainer/DoorHBox" unique_id=1014157298]
-custom_minimum_size = Vector2(300, 60)
+custom_minimum_size = Vector2(213.333, 60)
 custom_maximum_size = Vector2(640, 60)
 layout_mode = 2
 
 [node name="SpellHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=489432127]
-custom_minimum_size = Vector2(640, 60)
+custom_minimum_size = Vector2(640, 30)
+custom_maximum_size = Vector2(-1, 30)
 layout_mode = 2
+
+[node name="Word1" type="Button" parent="VBoxContainer/SpellHBox" unique_id=194874572]
+custom_minimum_size = Vector2(213.333, 0)
+layout_mode = 2
+
+[node name="Word2" type="Button" parent="VBoxContainer/SpellHBox" unique_id=2077206395]
+custom_minimum_size = Vector2(213.333, 0)
+layout_mode = 2
+
+[node name="Word3" type="Button" parent="VBoxContainer/SpellHBox" unique_id=1972144691]
+custom_minimum_size = Vector2(213.333, 0)
+layout_mode = 2
+
+[node name="SpellHBox2" type="HBoxContainer" parent="VBoxContainer" unique_id=1388426621]
+custom_minimum_size = Vector2(640, 30)
+layout_mode = 2
+
+[node name="Spell Details" type="Label" parent="VBoxContainer/SpellHBox2" unique_id=61809355]
+custom_minimum_size = Vector2(426.66, 0)
+layout_mode = 2
+
+[node name="Cast" type="Button" parent="VBoxContainer/SpellHBox2" unique_id=845266850]
+custom_minimum_size = Vector2(213.333, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "CAST SPELL"
+autowrap_mode = 1
+icon_alignment = 1

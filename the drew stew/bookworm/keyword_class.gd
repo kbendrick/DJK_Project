@@ -7,6 +7,8 @@ var tag_code: String
 var modifier: int
 var element: String
 var ability: Variant
+var spell_word_type: int
+
 var on_click_function: Callable
 
 var key_weight: int
