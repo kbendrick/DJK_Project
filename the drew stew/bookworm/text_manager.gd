@@ -72,3 +72,9 @@ func spell_word_pressed(button: Button)-> void:
 		chosen_spell_words[1] = Keyword.new()
 	if button == $VBoxContainer/SpellHBox/Word3:
 		chosen_spell_words[2] = Keyword.new()
+	if button == $VBoxContainer/SpellHBox2/Cast:
+		cast_spell()
+		
+func cast_spell()-> void:
+	for keyword in chosen_spell_words.size():
+		chosen_spell_words[keyword] = Keyword.new()

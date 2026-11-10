@@ -51,9 +51,9 @@ func make_spread():
 				selection = "[url="+selection+"]"+available_keywords[selection].tag_code+"][/url]"
 				
 		if output_check.length() + selection_check.length() > 1660:
-			print("Output:" + str(output_check.length()))
-			print("Broke at: " + str(output_check.length() + selection_check.length()))
-			print("Selection: " + selection_check)
+			#print("Output:" + str(output_check.length()))
+			#print("Broke at: " + str(output_check.length() + selection_check.length()))
+			#print("Selection: " + selection_check)
 			break
 			
 		output_check += selection_check

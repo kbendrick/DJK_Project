@@ -22,24 +22,45 @@ layout_mode = 0
 offset_right = 641.0
 offset_bottom = 345.0
 
-[node name="DoorHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1897308482]
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer" unique_id=1697069744]
+layout_mode = 2
+
+[node name="HealthHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1897308482]
 custom_minimum_size = Vector2(640, 30)
 custom_maximum_size = Vector2(640, 30)
 layout_mode = 2
 
-[node name="ProgressBar1" type="ProgressBar" parent="VBoxContainer/DoorHBox" unique_id=1048702929]
+[node name="ProgressBar1" type="ProgressBar" parent="VBoxContainer/HealthHBox" unique_id=1048702929]
 custom_minimum_size = Vector2(213.333, 60)
 custom_maximum_size = Vector2(640, 60)
 layout_mode = 2
+max_value = 1.0
 
-[node name="ProgressBar2" type="ProgressBar" parent="VBoxContainer/DoorHBox" unique_id=1715976500]
+[node name="ProgressBar2" type="ProgressBar" parent="VBoxContainer/HealthHBox" unique_id=1715976500]
 custom_minimum_size = Vector2(213.333, 60)
 custom_maximum_size = Vector2(640, 60)
 layout_mode = 2
+max_value = 1.0
 
-[node name="ProgressBar3" type="ProgressBar" parent="VBoxContainer/DoorHBox" unique_id=1014157298]
+[node name="ProgressBar3" type="ProgressBar" parent="VBoxContainer/HealthHBox" unique_id=1014157298]
 custom_minimum_size = Vector2(213.333, 60)
 custom_maximum_size = Vector2(640, 60)
+layout_mode = 2
+max_value = 1.0
+
+[node name="LaneHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1618954400]
+layout_mode = 2
+
+[node name="Lane1" type="Label" parent="VBoxContainer/LaneHBox" unique_id=335169273]
+custom_minimum_size = Vector2(213.333, 0)
+layout_mode = 2
+
+[node name="Lane2" type="Label" parent="VBoxContainer/LaneHBox" unique_id=208490483]
+custom_minimum_size = Vector2(213.333, 0)
+layout_mode = 2
+
+[node name="Lane3" type="Label" parent="VBoxContainer/LaneHBox" unique_id=606667454]
+custom_minimum_size = Vector2(213.333, 0)
 layout_mode = 2
 
 [node name="SpellHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=489432127]
@@ -58,19 +79,3 @@ layout_mode = 2
 [node name="Word3" type="Button" parent="VBoxContainer/SpellHBox" unique_id=1972144691]
 custom_minimum_size = Vector2(213.333, 0)
 layout_mode = 2
-
-[node name="SpellHBox2" type="HBoxContainer" parent="VBoxContainer" unique_id=1388426621]
-custom_minimum_size = Vector2(640, 30)
-layout_mode = 2
-
-[node name="Spell Details" type="Label" parent="VBoxContainer/SpellHBox2" unique_id=61809355]
-custom_minimum_size = Vector2(426.66, 0)
-layout_mode = 2
-
-[node name="Cast" type="Button" parent="VBoxContainer/SpellHBox2" unique_id=845266850]
-custom_minimum_size = Vector2(213.333, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 15
-text = "CAST SPELL"
-autowrap_mode = 1
-icon_alignment = 1
