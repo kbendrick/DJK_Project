@@ -9,11 +9,18 @@ var scale = 1
 
 func _on_meta_hover_started(_meta: Variant) -> void:
 	scale = 1.2
+	print(bbcode)
 	# Add your custom logic here (e.g., showing a tooltip or changing text color)
 
 func _on_meta_hover_ended(_meta: Variant) -> void:
 	scale = 1
+	print(bbcode)
 	# Hide tooltip or reset effect
+
+func disabled() -> void:
+	print(bbcode)
+	bbcode = "disabled"
+	scale = 1
 
 func _process_custom_fx(char_fx: CharFXTransform):
 		

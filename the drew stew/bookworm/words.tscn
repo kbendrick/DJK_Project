@@ -3,6 +3,30 @@
 [ext_resource type="Script" uid="uid://lywqqegi0ics" path="res://the drew stew/bookworm/text_manager.gd" id="1_1gv35"]
 [ext_resource type="PackedScene" uid="uid://dtspaoqos8jfk" path="res://the drew stew/bookworm/word_generator.tscn" id="2_knkfa"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_knkfa"]
+bg_color = Color(0.39215687, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a4phl"]
+bg_color = Color(0.39215687, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_el5td"]
+bg_color = Color(0.39215687, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tt1hj"]
+bg_color = Color(0, 0.39215687, 0, 1)
+
 [node name="Canvas" type="Control" unique_id=2102931067]
 layout_mode = 3
 anchors_preset = 15
@@ -23,45 +47,125 @@ offset_right = 641.0
 offset_bottom = 345.0
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer" unique_id=1697069744]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+show_percentage = false
 
 [node name="HealthHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1897308482]
 custom_minimum_size = Vector2(640, 30)
 custom_maximum_size = Vector2(640, 30)
 layout_mode = 2
 
-[node name="ProgressBar1" type="ProgressBar" parent="VBoxContainer/HealthHBox" unique_id=1048702929]
+[node name="Threat_Bar1" type="ProgressBar" parent="VBoxContainer/HealthHBox" unique_id=1048702929]
 custom_minimum_size = Vector2(213.333, 60)
 custom_maximum_size = Vector2(640, 60)
 layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_knkfa")
 max_value = 1.0
+show_percentage = false
 
-[node name="ProgressBar2" type="ProgressBar" parent="VBoxContainer/HealthHBox" unique_id=1715976500]
-custom_minimum_size = Vector2(213.333, 60)
-custom_maximum_size = Vector2(640, 60)
-layout_mode = 2
-max_value = 1.0
+[node name="Name_health" type="Label" parent="VBoxContainer/HealthHBox/Threat_Bar1" unique_id=572030960]
+custom_minimum_size = Vector2(213.333, 30)
+layout_mode = 0
+offset_right = 106.0
+offset_bottom = 30.0
+text = "Fist"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="ProgressBar3" type="ProgressBar" parent="VBoxContainer/HealthHBox" unique_id=1014157298]
+[node name="Threat_Bar2" type="ProgressBar" parent="VBoxContainer/HealthHBox" unique_id=1715976500]
 custom_minimum_size = Vector2(213.333, 60)
 custom_maximum_size = Vector2(640, 60)
 layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_a4phl")
 max_value = 1.0
+show_percentage = false
+
+[node name="Name_health" type="Label" parent="VBoxContainer/HealthHBox/Threat_Bar2" unique_id=1125849963]
+custom_minimum_size = Vector2(213.333, 30)
+layout_mode = 0
+offset_right = 106.0
+offset_bottom = 30.0
+text = "Fist"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Threat_Bar3" type="ProgressBar" parent="VBoxContainer/HealthHBox" unique_id=1014157298]
+custom_minimum_size = Vector2(213.333, 60)
+custom_maximum_size = Vector2(640, 60)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_el5td")
+max_value = 1.0
+show_percentage = false
+
+[node name="Name_health" type="Label" parent="VBoxContainer/HealthHBox/Threat_Bar3" unique_id=1608881311]
+custom_minimum_size = Vector2(213.333, 30)
+layout_mode = 0
+offset_right = 106.0
+offset_bottom = 30.0
+text = "Fist"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=834288160]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="PlayerHealth" type="ProgressBar" parent="VBoxContainer/HBoxContainer" unique_id=1439908035]
+custom_minimum_size = Vector2(480, 30)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_tt1hj")
+show_percentage = false
+
+[node name="TurnCount" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=396568426]
+custom_minimum_size = Vector2(160, 30)
+layout_mode = 2
+horizontal_alignment = 1
 
 [node name="LaneHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1618954400]
 layout_mode = 2
 
-[node name="Lane1" type="Label" parent="VBoxContainer/LaneHBox" unique_id=335169273]
+[node name="Effect1" type="HBoxContainer" parent="VBoxContainer/LaneHBox" unique_id=304960584]
 custom_minimum_size = Vector2(213.333, 0)
 layout_mode = 2
 
-[node name="Lane2" type="Label" parent="VBoxContainer/LaneHBox" unique_id=208490483]
+[node name="Effect" type="Label" parent="VBoxContainer/LaneHBox/Effect1" unique_id=335169273]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+
+[node name="Timer" type="Label" parent="VBoxContainer/LaneHBox/Effect1" unique_id=819825024]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+horizontal_alignment = 1
+
+[node name="Effect2" type="HBoxContainer" parent="VBoxContainer/LaneHBox" unique_id=1984564110]
 custom_minimum_size = Vector2(213.333, 0)
 layout_mode = 2
 
-[node name="Lane3" type="Label" parent="VBoxContainer/LaneHBox" unique_id=606667454]
+[node name="Effect" type="Label" parent="VBoxContainer/LaneHBox/Effect2" unique_id=45212693]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+
+[node name="Timer" type="Label" parent="VBoxContainer/LaneHBox/Effect2" unique_id=782684235]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+horizontal_alignment = 1
+
+[node name="Effect3" type="HBoxContainer" parent="VBoxContainer/LaneHBox" unique_id=603718180]
 custom_minimum_size = Vector2(213.333, 0)
 layout_mode = 2
+
+[node name="Effect" type="Label" parent="VBoxContainer/LaneHBox/Effect3" unique_id=446018582]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+
+[node name="Timer" type="Label" parent="VBoxContainer/LaneHBox/Effect3" unique_id=696241146]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+horizontal_alignment = 1
 
 [node name="SpellHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=489432127]
 custom_minimum_size = Vector2(640, 30)

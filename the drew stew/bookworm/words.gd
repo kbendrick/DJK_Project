@@ -10,6 +10,8 @@ var available_keywords: Dictionary[String, Keyword]
 
 var fill_weights := [10, 1]
 
+var hovered_meta: String = ""
+
 func make_spread():
 
 	#Initialize output.
@@ -77,7 +79,11 @@ func _on_meta_hover_started(meta: Variant) -> void:
 		return
 	
 	var hover_index = str(meta).to_int()
+	if custom_effects[hover_index].bbcode == "disabled":
+		return
 	self.custom_effects[hover_index]._on_meta_hover_started(meta)
+	self.get_parent().get_parent().hover_text = available_keywords[str(meta).rstrip("0123456789")]
+	hovered_meta = meta
 
 func _on_meta_hover_ended(meta: Variant) -> void:
 	if str(meta) == "":
@@ -90,7 +96,11 @@ func _on_meta_hover_ended(meta: Variant) -> void:
 		return
 
 	var hover_index = str(meta).to_int()
+	if custom_effects[hover_index].bbcode == "disabled":
+		return
 	self.custom_effects[hover_index]._on_meta_hover_ended(meta)
+	self.get_parent().get_parent().hover_text = null
+	hovered_meta = ""
 
 #Output a spread on click of "flip."
 func _on_meta_clicked(meta):
@@ -103,3 +113,17 @@ func _on_meta_clicked(meta):
 		return
 	
 	available_keywords[str(meta).rstrip("0123456789")].on_click()
+
+func meta_disabled():
+	if str(hovered_meta) == "":
+		return
+	if not available_keywords.has(str(hovered_meta).rstrip("0123456789")):
+		return
+	if not available_keywords[str(hovered_meta).rstrip("0123456789")].hoverable:
+		return
+	
+	var hover_index = str(hovered_meta).to_int()
+	if custom_effects[hover_index].bbcode == "disabled":
+		return
+	self.custom_effects[hover_index].disabled()
+	
