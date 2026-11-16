@@ -51,6 +51,15 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 show_percentage = false
 
+[node name="HealthLabel" type="Label" parent="VBoxContainer/ProgressBar" unique_id=171714481]
+custom_minimum_size = Vector2(640, 30)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "20/20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="HealthHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1897308482]
 custom_minimum_size = Vector2(640, 30)
 custom_maximum_size = Vector2(640, 30)
@@ -106,21 +115,6 @@ offset_bottom = 30.0
 text = "Fist"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=834288160]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-
-[node name="PlayerHealth" type="ProgressBar" parent="VBoxContainer/HBoxContainer" unique_id=1439908035]
-custom_minimum_size = Vector2(480, 30)
-layout_mode = 2
-theme_override_styles/fill = SubResource("StyleBoxFlat_tt1hj")
-show_percentage = false
-
-[node name="TurnCount" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=396568426]
-custom_minimum_size = Vector2(160, 30)
-layout_mode = 2
-horizontal_alignment = 1
 
 [node name="LaneHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1618954400]
 layout_mode = 2
@@ -183,3 +177,27 @@ layout_mode = 2
 [node name="Word3" type="Button" parent="VBoxContainer/SpellHBox" unique_id=1972144691]
 custom_minimum_size = Vector2(213.333, 0)
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=834288160]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="PlayerHealth" type="ProgressBar" parent="VBoxContainer/HBoxContainer" unique_id=1439908035]
+custom_minimum_size = Vector2(480, 30)
+layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_tt1hj")
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="VBoxContainer/HBoxContainer/PlayerHealth" unique_id=297333781]
+custom_minimum_size = Vector2(480, 30)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "20/20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TurnCount" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=396568426]
+custom_minimum_size = Vector2(160, 30)
+layout_mode = 2
+horizontal_alignment = 1

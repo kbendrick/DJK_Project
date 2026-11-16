@@ -1,13 +1,15 @@
 extends Node
 class_name Threat
 
-var threat_name: String
-var effect_desc: String
-var max_timer: int
-var current_timer: int
-var effect_func: Callable
-var max_health: int
-var current_health: int
+@export var threat_name: String
+@export var effect_desc: String
+@export var max_timer: int
+@export var current_timer: int
+@export var effect_func: Callable
+@export var max_health: int
+@export var current_health: int
+@export var freeze_timer: int = 0
+
 
 func _init(i_threat_name: String = "",
 i_effect_desc: String = "",

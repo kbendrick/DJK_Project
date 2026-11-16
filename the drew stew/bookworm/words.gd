@@ -112,7 +112,7 @@ func _on_meta_clicked(meta):
 	if not available_keywords[str(meta).rstrip("0123456789")].clickable:
 		return
 	
-	available_keywords[str(meta).rstrip("0123456789")].on_click()
+	#available_keywords[str(meta).rstrip("0123456789")].on_click()
 
 func meta_disabled():
 	if str(hovered_meta) == "":
