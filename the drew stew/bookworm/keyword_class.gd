@@ -1,19 +1,21 @@
 extends Node
 class_name Keyword
 
-var tag: String
-var tag_code: String
+@export var tag: String
+@export var tag_code: String
+@export var bbcode_tag: String
 
-var modifier: int
-var element: String
-var ability: String
-var spell_word: bool
+@export var modifier: int
+@export var element: String
+@export var ability: String
+@export var spell_word: bool
 
-var on_click_function: Callable
+@export var on_click_function: Callable
 
-var key_weight: int
-var hoverable: bool
-var clickable: bool
+@export var key_weight: int
+@export var hoverable: bool
+@export var clickable: bool
+@export var disabled: bool = false
 
 #Constructor for Keyword Class
 func _init(i_tag: String = "", 

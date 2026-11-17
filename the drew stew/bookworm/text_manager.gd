@@ -64,7 +64,7 @@ func _ready() -> void:
 	available_keywords.append(Keyword.new(
 		"explosion",
 		"[pulse freq=0.2 color=orange ease=2]explosive[/pulse]",
-		5, true, true
+		5, true, false
 	))
 	available_keywords[4].spell_word = true
 	available_keywords[4].modifier = 3
@@ -79,7 +79,7 @@ func _ready() -> void:
 	available_keywords.append(Keyword.new(
 		"sparkles",
 		"[pulse freq=0.2 color=hotpink ease=2]sparkles[/pulse]",
-		5, true, true
+		5, true, false
 	))
 	available_keywords[5].spell_word = true
 	available_keywords[5].modifier = 2
@@ -94,7 +94,7 @@ func _ready() -> void:
 	available_keywords.append(Keyword.new(
 		"freeze",
 		"[pulse freq=0.2 color=deepskyblue ease=2]freeze[/pulse]",
-		5, true, true
+		5, true, false
 	))
 	available_keywords[6].spell_word = true
 	
@@ -119,18 +119,21 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("1"):
 		if hover_text != null:
 			if hover_text.spell_word:
-				chosen_spell_words[0] = hover_text
-				self.get_node("VBoxContainer/Words").meta_disabled()
+				if not hover_text.disabled:
+					chosen_spell_words[0] = hover_text
+					self.get_node("VBoxContainer/Words").meta_disabled(hover_text.bbcode_tag)
 	if Input.is_action_just_pressed("2"):
 		if hover_text != null:
 			if hover_text.spell_word:
-				chosen_spell_words[1] = hover_text
-				self.get_node("VBoxContainer/Words").meta_disabled()
+				if not hover_text.disabled:
+					chosen_spell_words[1] = hover_text
+					self.get_node("VBoxContainer/Words").meta_disabled(hover_text.bbcode_tag)
 	if Input.is_action_just_pressed("3"):
 		if hover_text != null:
 			if hover_text.spell_word:
-				chosen_spell_words[2] = hover_text
-				self.get_node("VBoxContainer/Words").meta_disabled()
+				if not hover_text.disabled:
+					chosen_spell_words[2] = hover_text
+					self.get_node("VBoxContainer/Words").meta_disabled(hover_text.bbcode_tag)
 				
 			
 	
@@ -227,7 +230,6 @@ func cast_spells()-> void:
 	for keyword in chosen_spell_words.size():
 		cast_lane_helper = keyword
 		if chosen_spell_words[keyword].tag != "":
-			@warning_ignore("standalone_expression")
 			chosen_spell_words[keyword].on_click_function.call()
 			chosen_spell_words[keyword] = Keyword.new()
 		var process_timer = get_tree().create_timer(0.75)

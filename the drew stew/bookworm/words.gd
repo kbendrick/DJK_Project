@@ -7,6 +7,7 @@ var dump = file.get_as_text()
 var fillwords : Array = dump.split("\n")
 
 var available_keywords: Dictionary[String, Keyword]
+var spread_keywords: Dictionary[String, Keyword]
 
 var fill_weights := [10, 1]
 
@@ -47,9 +48,18 @@ func make_spread():
 			if available_keywords[selection].hoverable:
 				self.custom_effects.append(RichTextHover.new())
 				self.custom_effects[hover_index].bbcode = "hover" + str(hover_index)
+				
+				var keyword_holder: Keyword = available_keywords[selection].duplicate()
+				keyword_holder.bbcode_tag = selection+str(hover_index)
+				spread_keywords[selection+str(hover_index)] = keyword_holder
+				
 				selection = "[url="+selection+str(hover_index)+"][hover"+str(hover_index)+"]"+available_keywords[selection].tag_code+"[/hover"+str(hover_index)+"][/url]"
 				hover_index += 1
 			else:
+				var keyword_holder: Keyword = available_keywords[selection].duplicate()
+				keyword_holder.bbcode_tag = selection+str(hover_index)
+				spread_keywords[selection+str(hover_index)] = keyword_holder
+				
 				selection = "[url="+selection+"]"+available_keywords[selection].tag_code+"][/url]"
 				
 		if output_check.length() + selection_check.length() > 1660:
@@ -79,11 +89,10 @@ func _on_meta_hover_started(meta: Variant) -> void:
 		return
 	
 	var hover_index = str(meta).to_int()
-	if custom_effects[hover_index].bbcode == "disabled":
+	if spread_keywords[str(meta)].disabled:
 		return
 	self.custom_effects[hover_index]._on_meta_hover_started(meta)
-	self.get_parent().get_parent().hover_text = available_keywords[str(meta).rstrip("0123456789")]
-	hovered_meta = meta
+	self.get_parent().get_parent().hover_text = spread_keywords[str(meta)]
 
 func _on_meta_hover_ended(meta: Variant) -> void:
 	if str(meta) == "":
@@ -96,11 +105,10 @@ func _on_meta_hover_ended(meta: Variant) -> void:
 		return
 
 	var hover_index = str(meta).to_int()
-	if custom_effects[hover_index].bbcode == "disabled":
+	if spread_keywords[str(meta)].disabled:
 		return
 	self.custom_effects[hover_index]._on_meta_hover_ended(meta)
 	self.get_parent().get_parent().hover_text = null
-	hovered_meta = ""
 
 #Output a spread on click of "flip."
 func _on_meta_clicked(meta):
@@ -112,18 +120,14 @@ func _on_meta_clicked(meta):
 	if not available_keywords[str(meta).rstrip("0123456789")].clickable:
 		return
 	
-	#available_keywords[str(meta).rstrip("0123456789")].on_click()
+	available_keywords[str(meta).rstrip("0123456789")].on_click()
 
-func meta_disabled():
-	if str(hovered_meta) == "":
+func meta_disabled(meta):
+	if str(meta) == "":
 		return
-	if not available_keywords.has(str(hovered_meta).rstrip("0123456789")):
+	if not available_keywords.has(str(meta).rstrip("0123456789")):
 		return
-	if not available_keywords[str(hovered_meta).rstrip("0123456789")].hoverable:
+	if not available_keywords[str(meta).rstrip("0123456789")].hoverable:
 		return
 	
-	var hover_index = str(hovered_meta).to_int()
-	if custom_effects[hover_index].bbcode == "disabled":
-		return
-	self.custom_effects[hover_index].disabled()
-	
+	spread_keywords[str(meta)].disabled = true
