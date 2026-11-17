@@ -37,7 +37,7 @@ func _ready() -> void:
 		"Slap",
 		"Slap deals 3 damage",
 		3,
-		func fist(): Player.current_health -= 3,
+		func slap(): Player.current_health -= 3,
 		10
 	))
 	
@@ -45,7 +45,7 @@ func _ready() -> void:
 		"Poke",
 		"Poke deals 1 damage",
 		1,
-		func fist(): Player.current_health -= 1,
+		func poke(): Player.current_health -= 1,
 		5
 	))
 	
@@ -230,10 +230,8 @@ func cast_spells()-> void:
 			@warning_ignore("standalone_expression")
 			chosen_spell_words[keyword].on_click_function.call()
 			chosen_spell_words[keyword] = Keyword.new()
-		var timer = Timer.new()
-		timer.wait_time = 0.75
-		timer.start()
-		await timer.timeout
+		var process_timer = get_tree().create_timer(0.75)
+		await process_timer.timeout
 		
 
 func check_lanes()-> void:
@@ -246,9 +244,7 @@ func check_lanes()-> void:
 		add_threat(threat_pool[rng.randi_range(0,2)].duplicate())
 		add_threat(threat_pool[rng.randi_range(0,2)].duplicate())
 	
-	var timer = Timer.new()
-	timer.wait_time = 0.55
-	timer.start()
+	var timer = get_tree().create_timer(0.55)
 	await timer.timeout
 		
 	
@@ -262,18 +258,14 @@ func damage_lane(lane_number: int, damage: int)->void:
 
 func end_turn()-> void:
 	cast_spells()
-	
-	var timer = Timer.new()
-	
+		
 	for index in (threat_lanes.size()):
 		
 		if threat_lanes[index].current_health <= 0:
 			threat_lanes[index] = Threat.new()
 			
-			timer = Timer.new()
-			timer.wait_time = 0.75
-			timer.start()
-			await timer.timeout
+			var threat_death_timer = get_tree().create_timer(0.75)
+			await threat_death_timer.timeout
 			
 			continue
 		
@@ -284,27 +276,37 @@ func end_turn()-> void:
 		if threat_lanes[index].current_timer > 0:
 			threat_lanes[index].current_timer -= 1
 			if threat_lanes[index].current_timer > 0:
-				timer = Timer.new()
-				timer.wait_time = 0.75
-				timer.start()
-				await timer.timeout
+				var threat_continue_timer = get_tree().create_timer(0.75)
+				await threat_continue_timer.timeout
 				continue
 		
 		threat_lanes[index].effect_func.call()
+		health_check()
 		
-		timer = Timer.new()
-		timer.wait_time = 0.5
-		timer.start()
+		var timer = get_tree().create_timer(0.5)
 		await timer.timeout
 		
 		threat_lanes[index] = Threat.new()
 		
-		timer = Timer.new()
-		timer.wait_time = 0.55
-		timer.start()
+		timer = get_tree().create_timer(0.55)
 		await timer.timeout
-		
 		
 	check_lanes()
 	lock = false
 	return
+
+func game_over()-> void:
+	return
+
+func health_check()-> void:
+	if Player.current_health <= 0:
+		game_over()
+	else:
+		var health_percentage = float(Player.current_health) / float(Player.max_health)
+		var healthbar_fill = $VBoxContainer/HBoxContainer/PlayerHealth.get_theme_stylebox("fill")
+		if health_percentage <= 0.25:
+			healthbar_fill.bg_color= Color("640000")
+		elif health_percentage <= 0.5:
+			healthbar_fill.bg_color = Color("646400")
+		else:
+			healthbar_fill.bg_color = Color("006400")
