@@ -9,6 +9,10 @@ var lock: bool = false
 var main_threat_max_health: int = 70
 var main_threat_current_health: int = 70
 
+var hovered_ability: String
+
+var casting_timer: float
+
 var test_keywords: Array[String] = [ 
 	"flip",
 	"madness",
@@ -22,6 +26,7 @@ var chosen_spell_words: Array[Keyword] = [Keyword.new(),Keyword.new(),Keyword.ne
 var threat_lanes: Array[Threat] = [Threat.new(), Threat.new(), Threat.new()]
 
 var cast_lane_helper: int
+var chosen_spell_hover: String
 
 func _ready() -> void:
 	
@@ -63,45 +68,102 @@ func _ready() -> void:
 	
 	available_keywords.append(Keyword.new(
 		"explosion",
-		"[pulse freq=0.2 color=orange ease=2]explosive[/pulse]",
+		"[pulse freq=0.8 color=orange ease=2]explosive[/pulse]",
 		5, true, false
 	))
 	available_keywords[4].spell_word = true
-	available_keywords[4].modifier = 3
+	available_keywords[4].damage = 3
 	
-	available_keywords[4].on_click_function = func aoe_damage(
-		damage:int = chosen_spell_words[cast_lane_helper].modifier): 
+	available_keywords[4].interact_function = func aoe_damage(
+		damage:int = chosen_spell_words[cast_lane_helper].damage, damage_modifier:int = chosen_spell_words[cast_lane_helper].damage_modifier): 
 			for threats in threat_lanes:
-				threats.current_health -= damage
+				threats.current_health -= damage + damage_modifier
 	
-	available_keywords[4].ability = "Deal" + str(chosen_spell_words[cast_lane_helper].modifier) + "damage to each threat"
+	available_keywords[4].ability = func ability()-> String: 
+		return "Deal " + str(hover_text.damage + hover_text.damage_modifier) + " damage to each threat"
 	
 	available_keywords.append(Keyword.new(
 		"sparkles",
-		"[pulse freq=0.2 color=hotpink ease=2]sparkles[/pulse]",
+		"[pulse freq=0.8 color=hotpink ease=2]sparkles[/pulse]",
 		5, true, false
 	))
 	available_keywords[5].spell_word = true
-	available_keywords[5].modifier = 2
+	available_keywords[5].damage = 1
 	
-	available_keywords[5].on_click_function = func multihit_damage(
-		damage:int = chosen_spell_words[cast_lane_helper].modifier): 
-			for i in range(3):
-				threat_lanes[cast_lane_helper].current_health -= damage
+	available_keywords[5].interact_function = func multihit_damage(
+		damage:int = chosen_spell_words[cast_lane_helper].damage, damage_modifier:int = chosen_spell_words[cast_lane_helper].damage_modifier): 
+			for i in range(5):
+				threat_lanes[cast_lane_helper].current_health -= damage + damage_modifier
+				var cast_time = get_tree().create_timer(0.25)
+				await cast_time.timeout
 	
-	available_keywords[5].ability = "Deal" + str(chosen_spell_words[cast_lane_helper].modifier) + "damage 3 times the threat in this lane"
+	available_keywords[5].ability = func ability()->String: 
+		return "Deal " + str(hover_text.damage + hover_text.damage_modifier) + " damage 5 times to the threat in this lane"
 	
 	available_keywords.append(Keyword.new(
 		"freeze",
-		"[pulse freq=0.2 color=deepskyblue ease=2]freeze[/pulse]",
+		"[pulse freq=0.8 color=deepskyblue ease=2]freeze[/pulse]",
 		5, true, false
 	))
 	available_keywords[6].spell_word = true
 	
-	available_keywords[6].on_click_function = func freeze(): 
+	available_keywords[6].interact_function = func freeze(): 
 		threat_lanes[cast_lane_helper].freeze_timer += 2
 	
-	available_keywords[6].ability = "Freeze the threat in this lane for 2 turns"
+	available_keywords[6].ability = func ability()->String: 
+		return "Freeze the threat in this lane for 2 turns"
+	
+	available_keywords.append(Keyword.new(
+		"heal",
+		"[pulse freq=0.8 color=green ease=2]heal[/pulse]",
+		5, true, false
+	))
+	
+	available_keywords[7].spell_word = true
+	
+	available_keywords[7].heal = 2
+	
+	available_keywords[7].interact_function = func heal():
+		Player.current_health += chosen_spell_words[cast_lane_helper].heal + chosen_spell_words[cast_lane_helper].heal_modifier
+		
+	available_keywords[7].ability = func ability()->String: 
+		return "Heal " + str(hover_text.heal + hover_text.heal_modifier)
+	
+	available_keywords.append(Keyword.new(
+		"enhance",
+		"[pulse freq=0.8 color=yellow ease=2]enhance[/pulse]",
+		5, true, false
+	))
+	
+	available_keywords[8].spell_word = true
+	
+	available_keywords[8].modifier_value = 2
+	
+	available_keywords[8].modify_function = func enhance(lane:int = 0):
+		if lane + 1 < 3:
+			chosen_spell_words[lane+1].damage_modifier = chosen_spell_words[lane].modifier_value
+		if lane - 1 > -1:
+			chosen_spell_words[lane-1].damage_modifier = chosen_spell_words[lane].modifier_value
+			
+	available_keywords[8].ability = func ability()->String: 
+		return "Adjacent spells deal +" + str(hover_text.modifier_value) + " damage"
+	
+	available_keywords.append(Keyword.new(
+		"blast",
+		"[pulse freq=0.8 color=red ease=2]blast[/pulse]",
+		5, true, false
+	))
+	available_keywords[9].spell_word = true
+	available_keywords[9].damage = 9
+	
+	available_keywords[9].interact_function = func single_target_damage(
+		damage:int = chosen_spell_words[cast_lane_helper].damage, damage_modifier:int = chosen_spell_words[cast_lane_helper].damage_modifier): 
+			threat_lanes[cast_lane_helper].current_health -= damage + damage_modifier
+	
+	available_keywords[9].ability = func ability()->String:
+		return "Deal " + str(hover_text.damage + hover_text.damage_modifier) + " damage to the threat in this lane"
+	
+	
 	
 	#Creates a words scene and passes in array of Keywords
 	var new_word_generator = word_generator.instantiate()
@@ -112,30 +174,60 @@ func _ready() -> void:
 	$VBoxContainer/SpellHBox/Word2.pressed.connect(spell_word_pressed.call.bind($VBoxContainer/SpellHBox/Word2))
 	$VBoxContainer/SpellHBox/Word3.pressed.connect(spell_word_pressed.call.bind($VBoxContainer/SpellHBox/Word3))
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("spacebar") and not lock:
 		lock = true
 		end_turn()
-	if Input.is_action_just_pressed("1"):
+	if Input.is_action_just_pressed("1") and not lock:
 		if hover_text != null:
 			if hover_text.spell_word:
 				if not hover_text.disabled:
 					chosen_spell_words[0] = hover_text
 					self.get_node("VBoxContainer/Words").meta_disabled(hover_text.bbcode_tag)
-	if Input.is_action_just_pressed("2"):
+	if Input.is_action_just_pressed("2") and not lock:
 		if hover_text != null:
 			if hover_text.spell_word:
 				if not hover_text.disabled:
 					chosen_spell_words[1] = hover_text
 					self.get_node("VBoxContainer/Words").meta_disabled(hover_text.bbcode_tag)
-	if Input.is_action_just_pressed("3"):
+	if Input.is_action_just_pressed("3") and not lock:
 		if hover_text != null:
 			if hover_text.spell_word:
 				if not hover_text.disabled:
 					chosen_spell_words[2] = hover_text
 					self.get_node("VBoxContainer/Words").meta_disabled(hover_text.bbcode_tag)
 				
-			
+	
+	$Casting_spells.visible = lock
+	casting_timer += delta
+	$Casting_spells.visible_ratio = 0.882 + ((casting_timer)*0.125)
+	if casting_timer > 1.25:
+		casting_timer = 0
+	if not lock:
+		for i in chosen_spell_words.size():
+				chosen_spell_words[i].modify(i)
+	
+	if hover_text != null:
+		$Ability_text.visible = true
+		$Ability_text.text = hover_text.get_ability()
+	elif chosen_spell_hover != "":
+		match chosen_spell_hover:
+			"Word1": hover_text = chosen_spell_words[0]
+			"Word2": hover_text = chosen_spell_words[1]
+			"Word3": hover_text = chosen_spell_words[2]
+		
+		$Ability_text.text = hover_text.get_ability()
+		
+		if $Ability_text.text == "":
+			$Ability_text.visible = false
+			hover_text = null
+		else:
+			$Ability_text.visible = true
+	else:
+		$Ability_text.visible = false
+
+		
+	$Ability_text.global_position = get_global_mouse_position() - Vector2(0, 40)
 	
 	$VBoxContainer/HBoxContainer/PlayerHealth.max_value = Player.max_health
 	$VBoxContainer/HBoxContainer/PlayerHealth.value = Player.current_health
@@ -230,7 +322,7 @@ func cast_spells()-> void:
 	for keyword in chosen_spell_words.size():
 		cast_lane_helper = keyword
 		if chosen_spell_words[keyword].tag != "":
-			chosen_spell_words[keyword].on_click_function.call()
+			chosen_spell_words[keyword].interact()
 			chosen_spell_words[keyword] = Keyword.new()
 		var process_timer = get_tree().create_timer(0.75)
 		await process_timer.timeout
@@ -248,8 +340,6 @@ func check_lanes()-> void:
 	
 	var timer = get_tree().create_timer(0.55)
 	await timer.timeout
-		
-	
 	return
 
 func damage_lane(lane_number: int, damage: int)->void:

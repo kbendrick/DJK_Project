@@ -120,7 +120,7 @@ func _on_meta_clicked(meta):
 	if not available_keywords[str(meta).rstrip("0123456789")].clickable:
 		return
 	
-	available_keywords[str(meta).rstrip("0123456789")].on_click()
+	available_keywords[str(meta).rstrip("0123456789")].interact()
 
 func meta_disabled(meta):
 	if str(meta) == "":
@@ -131,3 +131,4 @@ func meta_disabled(meta):
 		return
 	
 	spread_keywords[str(meta)].disabled = true
+	self.get_parent().get_parent().hover_text = null
