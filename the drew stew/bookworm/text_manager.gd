@@ -76,8 +76,11 @@ func _ready() -> void:
 	
 	available_keywords[4].interact_function = func aoe_damage(
 		damage:int = chosen_spell_words[cast_lane_helper].damage, damage_modifier:int = chosen_spell_words[cast_lane_helper].damage_modifier): 
-			for threats in threat_lanes:
-				threats.current_health -= damage + damage_modifier
+			for threat in threat_lanes:
+				if threat.threat_name != "":
+					threat.current_health -= damage + damage_modifier
+				else:
+					main_threat_current_health -= damage + damage_modifier
 	
 	available_keywords[4].ability = func ability()-> String: 
 		return "Deal " + str(hover_text.damage + hover_text.damage_modifier) + " damage to each threat"
@@ -93,8 +96,12 @@ func _ready() -> void:
 	available_keywords[5].interact_function = func multihit_damage(
 		damage:int = chosen_spell_words[cast_lane_helper].damage, damage_modifier:int = chosen_spell_words[cast_lane_helper].damage_modifier): 
 			for i in range(5):
-				threat_lanes[cast_lane_helper].current_health -= damage + damage_modifier
-				var cast_time = get_tree().create_timer(0.25)
+				if threat_lanes[cast_lane_helper].threat_name != "":
+					threat_lanes[cast_lane_helper].current_health -= damage + damage_modifier
+				else:
+					main_threat_current_health -= damage + damage_modifier
+				
+				var cast_time = get_tree().create_timer(0.1)
 				await cast_time.timeout
 	
 	available_keywords[5].ability = func ability()->String: 
@@ -158,7 +165,11 @@ func _ready() -> void:
 	
 	available_keywords[9].interact_function = func single_target_damage(
 		damage:int = chosen_spell_words[cast_lane_helper].damage, damage_modifier:int = chosen_spell_words[cast_lane_helper].damage_modifier): 
-			threat_lanes[cast_lane_helper].current_health -= damage + damage_modifier
+			
+			if threat_lanes[cast_lane_helper].threat_name != "":
+				threat_lanes[cast_lane_helper].current_health -= damage + damage_modifier
+			else:
+				main_threat_current_health -= damage + damage_modifier
 	
 	available_keywords[9].ability = func ability()->String:
 		return "Deal " + str(hover_text.damage + hover_text.damage_modifier) + " damage to the threat in this lane"
@@ -349,7 +360,7 @@ func damage_lane(lane_number: int, damage: int)->void:
 		threat_lanes[lane_number].current_health -= damage
 
 func end_turn()-> void:
-	cast_spells()
+	await cast_spells()
 		
 	for index in (threat_lanes.size()):
 		
@@ -384,11 +395,20 @@ func end_turn()-> void:
 		await timer.timeout
 		
 	check_lanes()
+	
+	if main_threat_current_health < 1:
+		you_win()
+	
 	lock = false
 	return
 
+func you_win() -> void:
+	$Win.text = "YOU WIN!"
+	$Win.visible = true
+
 func game_over()-> void:
-	return
+	$Win.text = "YOU LOSE"
+	$Win.visible = true
 
 func health_check()-> void:
 	if Player.current_health <= 0:
